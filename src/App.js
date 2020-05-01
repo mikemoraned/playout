@@ -45,6 +45,7 @@ const initialState = {
     seats: [],
     occupied: [],
   },
+  undos: [],
 };
 
 function addRandomSeats(grid) {
@@ -95,15 +96,35 @@ function teamListWithReplacedTeam(list, team) {
   });
 }
 
+function togglePlaceMemberAction(position) {
+  return {
+    type: "toggle_place_member",
+    position,
+    undoable: true,
+  };
+}
+
 function reducer(state, action) {
   console.dir(action);
-  const { grid, teams } = state;
+  const { grid, teams, undos } = state;
 
   switch (action.type) {
     case "toggle_place_member":
       let { occupied } = grid;
       const { seats } = grid;
       const { position } = action;
+
+      const hasSeat = seats.indexOf(position) !== -1;
+
+      const newUndos = action.undoable
+        ? undos.concat([
+            {
+              type: "toggle_place_member",
+              position,
+              undoable: false,
+            },
+          ])
+        : undos;
 
       const currentOccupancy = occupied.find((o) => o.position === position);
       if (currentOccupancy) {
@@ -113,6 +134,7 @@ function reducer(state, action) {
         const team = teams.list.find(
           (t) => t.name === currentOccupancy.member.team
         );
+
         return {
           ...state,
           teams: {
@@ -127,6 +149,8 @@ function reducer(state, action) {
             ...grid,
             occupied,
           },
+
+          undos: newUndos,
         };
       } else {
         const hasNextTeam = teams.next !== null;
@@ -134,29 +158,36 @@ function reducer(state, action) {
           let nextTeam = teams.list.find((t) => t.name === teams.next);
           const member = memberFor(nextTeam.name, nextTeam.next);
 
-          if (nextTeam.remaining > 0 && seats.indexOf(position) !== -1) {
+          if (nextTeam.remaining > 0 && hasSeat) {
             const newOccupancy = {
               position,
               member,
             };
             occupied = occupied.concat([newOccupancy]);
             nextTeam = teamWithMemberPlaced(nextTeam, member);
+
+            return {
+              ...state,
+              teams: {
+                ...teams,
+                list: teamListWithReplacedTeam(teams.list, nextTeam),
+              },
+              grid: {
+                ...grid,
+                occupied,
+              },
+              undos: newUndos,
+            };
           }
-          return {
-            ...state,
-            teams: {
-              ...teams,
-              list: teamListWithReplacedTeam(teams.list, nextTeam),
-            },
-            grid: {
-              ...grid,
-              occupied,
-            },
-          };
         }
       }
 
       return state;
+
+    case "undo":
+      const withUndoRemoved = [...undos];
+      const undoAction = withUndoRemoved.pop();
+      return reducer({ ...state, undos: withUndoRemoved }, undoAction);
 
     case "select_team":
       const { name } = action;
@@ -209,7 +240,7 @@ function Grid({ grid, dispatch }) {
                   return (
                     <td
                       onClick={() =>
-                        dispatch({ type: "toggle_place_member", position })
+                        dispatch(togglePlaceMemberAction(position))
                       }
                       key={key}
                       style={style}
@@ -270,7 +301,7 @@ function AddRemoveMembers() {
   );
 }
 
-function TeamsMini({ teams, dispatch }) {
+function TeamsMini({ teams, undos, dispatch }) {
   return (
     <div className="field is-horizontal">
       <div className="field-label is-normal">
@@ -299,7 +330,11 @@ function TeamsMini({ teams, dispatch }) {
             </div>
           </div>
           <div className="control">
-            <button className="button is-small">
+            <button
+              className="button is-small"
+              disabled={undos.length === 0}
+              onClick={() => dispatch({ type: "undo" })}
+            >
               <span className="icon">
                 <i className="fas fa-undo"></i>
               </span>
@@ -391,7 +426,11 @@ function App() {
             <section className="section">
               <h1 className="title is-4">Layout</h1>
               <p className="subtitle is-6">Place Team Members in Seats</p>
-              <TeamsMini teams={state.teams} dispatch={dispatch} />
+              <TeamsMini
+                teams={state.teams}
+                undos={state.undos}
+                dispatch={dispatch}
+              />
               <Grid grid={state.grid} dispatch={dispatch} />
             </section>
           </div>

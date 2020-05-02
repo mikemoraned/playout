@@ -5,7 +5,7 @@ export function positionFor(x, y) {
   return `${x}_${y}`;
 }
 
-function memberFor(teamName, index) {
+export function memberFor(teamName, index) {
   return {
     id: `${teamName}_${index}`,
     team: teamName,

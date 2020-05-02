@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext, selectTeamAction } from "./store.js";
+import { StoreContext, selectTeamAction, undoAction } from "./store.js";
 
 export function TeamsMini() {
   const { state, dispatch } = useContext(StoreContext);
@@ -40,7 +40,7 @@ export function TeamsMini() {
             <button
               className="button is-small"
               disabled={undos.length === 0}
-              onClick={() => dispatch({ type: "undo" })}
+              onClick={() => dispatch(undoAction())}
             >
               <span className="icon">
                 <i className="fas fa-undo"></i>

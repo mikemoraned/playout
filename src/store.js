@@ -1,38 +1,54 @@
 import React from "react";
 import { useReducer } from "react";
 
-const initialState = {
-  teams: {
-    list: [
-      {
-        name: "A",
-        next: 0,
-        placed: [false, false, false],
-        remaining: 3,
-      },
-      {
-        name: "B",
-        next: 0,
-        placed: [false, false],
-        remaining: 2,
-      },
-      {
-        name: "C",
-        next: 0,
-        placed: [false, false, false, false],
-        remaining: 4,
-      },
-    ],
-    next: "A",
-  },
-  grid: {
-    width: 10,
-    height: 10,
+export function positionFor(x, y) {
+  return `${x}_${y}`;
+}
+
+export function memberFor(teamName, index) {
+  return {
+    id: `${teamName}_${index}`,
+    team: teamName,
+    index,
+  };
+}
+
+export function teamFor(name, size) {
+  const placed = new Array(size);
+  for (let index = 0; index < placed.length; index++) {
+    placed[index] = false;
+  }
+  return {
+    name,
+    next: 0,
+    placed,
+    remaining: size,
+  };
+}
+
+export function teamsFor(teams) {
+  return {
+    list: teams,
+    next: teams[0].name,
+  };
+}
+
+export function gridFor(width, height) {
+  return {
+    width,
+    height,
     seats: [],
     occupied: [],
-  },
-  undos: [],
-};
+  };
+}
+
+export function storeFor(teams, grid) {
+  return {
+    teams,
+    grid,
+    undos: [],
+  };
+}
 
 function addRandomSeats(grid) {
   for (let x = 0; x < grid.width; x++) {
@@ -43,8 +59,6 @@ function addRandomSeats(grid) {
     }
   }
 }
-
-addRandomSeats(initialState.grid);
 
 function teamWithMemberPlaced(team, member) {
   const placed = [...team.placed];
@@ -82,8 +96,7 @@ function teamListWithReplacedTeam(list, team) {
   });
 }
 
-function reducer(state, action) {
-  console.dir(action);
+export function reducer(state, action) {
   const { grid, teams, undos } = state;
 
   switch (action.type) {
@@ -169,13 +182,18 @@ function reducer(state, action) {
 
     case "select_team":
       const { name } = action;
-      return {
-        ...state,
-        teams: {
-          ...teams,
-          next: name,
-        },
-      };
+      const teamExists = teams.list.findIndex((t) => t.name === name) !== -1;
+      if (teamExists) {
+        return {
+          ...state,
+          teams: {
+            ...teams,
+            next: name,
+          },
+        };
+      } else {
+        throw new Error(`unknown team: ${name}`);
+      }
 
     default:
       throw new Error();
@@ -185,6 +203,13 @@ function reducer(state, action) {
 export const StoreContext = React.createContext(null);
 
 export const StoreProvider = ({ children }) => {
+  const initialState = storeFor(
+    teamsFor([teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)]),
+    gridFor(10, 10)
+  );
+
+  addRandomSeats(initialState.grid);
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
@@ -209,14 +234,6 @@ export function selectTeamAction(name) {
   };
 }
 
-export function positionFor(x, y) {
-  return `${x}_${y}`;
-}
-
-function memberFor(teamName, index) {
-  return {
-    id: `${teamName}_${index}`,
-    team: teamName,
-    index,
-  };
+export function undoAction() {
+  return { type: "undo" };
 }

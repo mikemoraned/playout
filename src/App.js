@@ -267,11 +267,11 @@ function AddRemoveMembersHeader() {
   return (
     <div>
       <span className="icon">
-        <i className="fas fa-plus"></i>
+        <i className="fas fa-user-plus"></i>
       </span>
       /
       <span className="icon">
-        <i className="fas fa-minus"></i>
+        <i className="fas fa-user-minus"></i>
       </span>
     </div>
   );
@@ -283,12 +283,12 @@ function AddRemoveMembers() {
       <div className="buttons are-small has-addons">
         <button className="button" disabled>
           <span className="icon">
-            <i className="fas fa-plus"></i>
+            <i className="fas fa-user-plus"></i>
           </span>
         </button>
         <button className="button" disabled>
           <span className="icon">
-            <i className="fas fa-minus"></i>
+            <i className="fas fa-user-minus"></i>
           </span>
         </button>
       </div>
@@ -300,7 +300,13 @@ function TeamsMini({ teams, undos, dispatch }) {
   return (
     <div className="field is-horizontal">
       <div className="field-label is-normal">
-        <label className="label">Next from:</label>
+        <label className="label">
+          Next{" "}
+          <span className="icon">
+            <i className="fas fa-user"></i>
+          </span>{" "}
+          from:
+        </label>
       </div>
       <div className="field-body">
         <div className="field is-grouped">
@@ -402,7 +408,10 @@ function TeamsFull({ teams, dispatch }) {
       <div className="field">
         <div className="control">
           <button className="button is-primary" disabled>
-            Add Team
+            <span className="icon">
+              <i className="fas fa-users"></i>
+            </span>
+            <span>Add Team</span>
           </button>
         </div>
       </div>
@@ -437,7 +446,12 @@ function App() {
           <div className="column">
             <section className="section">
               <h1 className="title is-4">Teams</h1>
-              <p className="subtitle is-6">Add / Remove Teams</p>
+              <p className="subtitle is-6">
+                <span className="icon">
+                  <i className="fas fa-user-edit"></i>
+                </span>{" "}
+                Add / Remove Teams
+              </p>
               <TeamsFull teams={state.teams} dispatch={dispatch} />
             </section>
           </div>

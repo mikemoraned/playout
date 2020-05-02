@@ -8,6 +8,7 @@ import {
   reducer,
   selectTeamAction,
   togglePlaceMemberAction,
+  undoAction,
 } from "./store";
 
 let state = {};
@@ -89,5 +90,25 @@ describe("team member placement", () => {
     );
     expect(stateAfterToggle.teams).toEqual(state.teams);
     expect(stateAfterToggle.grid).toEqual(state.grid);
+  });
+});
+
+describe("undo", () => {
+  test("undo toggle", () => {
+    expect(state.grid.occupied).toEqual([]);
+    expect(state.undos).toEqual([]);
+
+    const stateAfterToggle = reducer(
+      state,
+      togglePlaceMemberAction(positionFor(0, 0))
+    );
+    expect(stateAfterToggle.undos).toEqual([
+      { position: "0_0", type: "toggle_place_member", undoable: false },
+    ]);
+
+    const stateAfterUndo = reducer(stateAfterToggle, undoAction());
+    expect(stateAfterUndo.teams).toEqual(state.teams);
+    expect(stateAfterUndo.grid).toEqual(state.grid);
+    expect(stateAfterUndo.undos).toEqual([]);
   });
 });

@@ -233,3 +233,7 @@ export function selectTeamAction(name) {
     name,
   };
 }
+
+export function undoAction() {
+  return { type: "undo" };
+}

@@ -2,6 +2,19 @@ import React from "react";
 import { useContext } from "react";
 import { positionFor, StoreContext, togglePlaceMemberAction } from "./store.js";
 
+function Desktop({ visibility }) {
+  return (
+    <span
+      className="icon is-small"
+      style={{
+        visibility,
+      }}
+    >
+      <i className="fas fa-desktop"></i>
+    </span>
+  );
+}
+
 export function Grid() {
   const { state, dispatch } = useContext(StoreContext);
   const { width, height, seats, occupied } = state.grid;
@@ -31,25 +44,31 @@ export function Grid() {
                         border: "1px solid black",
                       }}
                     >
-                      <span
-                        className="icon is-hidden-mobile"
-                        style={{
-                          visibility: `${has_seat ? "visible" : "hidden"}`,
-                        }}
-                      >
-                        <i className="fas fa-desktop"></i>
+                      <span className="is-hidden-mobile">
+                        <Desktop visibility={has_seat ? "visible" : "hidden"} />{" "}
+                        {occupancy && (
+                          <span>
+                            {occupancy.member.team}
+                            <sub>{occupancy.member.index + 1}</sub>
+                          </span>
+                        )}
+                        {!occupancy && (
+                          <span style={{ visibility: "hidden" }}>
+                            A<sub>1</sub>
+                          </span>
+                        )}
                       </span>
-                      {occupancy && (
-                        <span>
-                          {occupancy.member.team}
-                          <sub>{occupancy.member.index + 1}</sub>
-                        </span>
-                      )}
-                      {!occupancy && (
-                        <span style={{ visibility: "hidden" }}>
-                          A<sub>1</sub>
-                        </span>
-                      )}
+                      <span className="is-hidden-tablet">
+                        {has_seat && !occupancy && (
+                          <Desktop visibility={"visible"} />
+                        )}
+                        {occupancy && (
+                          <span>
+                            {occupancy.member.team}
+                            <sub>{occupancy.member.index + 1}</sub>
+                          </span>
+                        )}
+                      </span>
                     </td>
                   );
                 })}

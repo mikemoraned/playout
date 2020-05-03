@@ -131,6 +131,11 @@ function addTeamMember(teams, name) {
   };
 }
 
+function findMemberToBeRemoved(teams, name) {
+  const team = teams.list.find((t) => t.name === name);
+  return memberFor(name, team.placed.length - 1);
+}
+
 function removeTeamMember(teams, name) {
   const team = teams.list.find((t) => t.name === name);
   const placed = [...team.placed];
@@ -155,6 +160,10 @@ function teamListWithReplacedTeam(list, team) {
 
 function findCurrentOccupancyByPosition(grid, position) {
   return grid.occupied.find((o) => o.position === position);
+}
+
+function findCurrentOccupancyByMember(grid, member) {
+  return grid.occupied.find((o) => o.member.id === member.id);
 }
 
 function gridWithOccupancyRemoved(grid, occupancy) {
@@ -277,16 +286,35 @@ export function reducer(state, action) {
       };
 
     case "remove_team_member":
-      return {
-        ...state,
-        teams: {
-          ...teams,
-          list: teamListWithReplacedTeam(
-            teams.list,
-            removeTeamMember(teams, action.name)
-          ),
-        },
-      };
+      const memberOccupancy = findCurrentOccupancyByMember(
+        grid,
+        findMemberToBeRemoved(teams, action.name)
+      );
+      console.dir(memberOccupancy);
+      if (memberOccupancy) {
+        return {
+          ...state,
+          teams: {
+            ...teams,
+            list: teamListWithReplacedTeam(
+              teams.list,
+              removeTeamMember(teams, action.name)
+            ),
+          },
+          grid: gridWithOccupancyRemoved(grid, memberOccupancy),
+        };
+      } else {
+        return {
+          ...state,
+          teams: {
+            ...teams,
+            list: teamListWithReplacedTeam(
+              teams.list,
+              removeTeamMember(teams, action.name)
+            ),
+          },
+        };
+      }
 
     default:
       throw new Error();

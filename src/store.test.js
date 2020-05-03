@@ -116,9 +116,55 @@ describe("team member editing", () => {
     expectedAfterRemoval.next = 1;
     expectedAfterRemoval.remaining = 1;
     expectedAfterRemoval.placed[0] = true;
-    expect(stateWithOccupancyOfDifferentMember.teams.list[1]).toEqual(
+    expect(stateAfter.teams.list[1]).toEqual(expectedAfterRemoval);
+  });
+
+  test("can remove team member which has an occupancy", () => {
+    const stateWithOverlappingOccupancy = chainActions(state, [
+      selectTeamAction("B"),
+      togglePlaceMemberAction(positionFor(0, 0)),
+      togglePlaceMemberAction(positionFor(1, 1)),
+    ]);
+
+    const expectedBeforeRemoval = teamFor("B", 3);
+    expectedBeforeRemoval.next = 2;
+    expectedBeforeRemoval.remaining = 1;
+    expectedBeforeRemoval.placed[0] = true;
+    expectedBeforeRemoval.placed[1] = true;
+    expect(stateWithOverlappingOccupancy.teams.list[1]).toEqual(
       expectedBeforeRemoval
     );
+
+    expect(stateWithOverlappingOccupancy.grid.occupied).toEqual([
+      {
+        member: memberFor("B", 0),
+        position: positionFor(0, 0),
+      },
+      {
+        member: memberFor("B", 1),
+        position: positionFor(1, 1),
+      },
+    ]);
+
+    const stateAfter = chainActions(stateWithOverlappingOccupancy, [
+      removeTeamMemberAction("B"),
+      removeTeamMemberAction("B"),
+    ]);
+
+    expect(stateAfter.grid.occupied).toEqual([
+      {
+        member: memberFor("B", 0),
+        position: positionFor(0, 0),
+      },
+    ]);
+
+    expect(stateAfter.teams.list.length).toEqual(state.teams.list.length);
+    expect(stateAfter.teams.list[0]).toEqual(state.teams.list[0]);
+
+    const expectedAfterRemoval = teamFor("B", 1);
+    expectedAfterRemoval.next = 1;
+    expectedAfterRemoval.remaining = 0;
+    expectedAfterRemoval.placed[0] = true;
 
     expect(stateAfter.teams.list[1]).toEqual(expectedAfterRemoval);
   });

@@ -11,15 +11,18 @@ import {
   undoAction,
   addTeamAction,
   templateFor,
+  addTeamMemberAction,
 } from "./store";
 
 let state = {};
 
 beforeEach(() => {
+  const defaultSize = 3;
+  const maximumSize = 4;
   state = storeFor(
     teamsFor(
       [teamFor("A", 2), teamFor("B", 3)],
-      templateFor(["A", "B", "C"], 3)
+      templateFor(["A", "B", "C"], defaultSize, maximumSize)
     ),
     gridFor(2, 2)
   );
@@ -66,6 +69,30 @@ describe("team editing", () => {
   });
 });
 
+describe("team member editing", () => {
+  test("can add team member", () => {
+    const stateAfter = reducer(state, addTeamMemberAction("B"));
+    expect(stateAfter.teams.list.length).toEqual(state.teams.list.length);
+    expect(stateAfter.teams.list[0]).toEqual(state.teams.list[0]);
+    const expected = teamFor("B", 4);
+    expected.canAdd = false;
+    expect(stateAfter.teams.list[1]).toEqual(expected);
+  });
+
+  test("indicates cannot add team member when at limit", () => {
+    expect(state.teams.list[1].canAdd).toEqual(true);
+    const stateAfter = reducer(state, addTeamMemberAction("B"));
+    expect(stateAfter.teams.list[1].canAdd).toEqual(false);
+  });
+
+  test("cannot add team member when at limit", () => {
+    const stateWhenAtLimit = reducer(state, addTeamMemberAction("B"));
+    expect(() => {
+      reducer(stateWhenAtLimit, addTeamMemberAction("B"));
+    }).toThrowError(/^cannot add team member$/);
+  });
+});
+
 describe("team member placement", () => {
   test("no seat is occupied by default", () => {
     expect(state.grid.occupied).toEqual([]);
@@ -79,12 +106,14 @@ describe("team member placement", () => {
     );
     expect(stateAfterToggle.teams.list).toEqual([
       {
+        canAdd: true,
         name: "A",
         next: 1,
         placed: [true, false],
         remaining: 1,
       },
       {
+        canAdd: true,
         name: "B",
         next: 0,
         placed: [false, false, false],

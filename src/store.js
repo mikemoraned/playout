@@ -23,13 +23,15 @@ export function teamFor(name, size) {
     next: 0,
     placed,
     remaining: size,
+    canAdd: true,
   };
 }
 
-export function templateFor(names, size) {
+export function templateFor(names, defaultSize, maximumSize) {
   return {
     names,
-    size,
+    defaultSize,
+    maximumSize,
   };
 }
 
@@ -101,8 +103,24 @@ function addNewTeamFromTemplate(teams) {
   });
   return {
     ...teams,
-    list: teams.list.concat([teamFor(remaining[0], teams.template.size)]),
+    list: teams.list.concat([
+      teamFor(remaining[0], teams.template.defaultSize),
+    ]),
     canAdd: remaining.length > 1,
+  };
+}
+
+function addTeamMember(teams, name) {
+  const team = teams.list.find((t) => t.name === name);
+  if (team.placed.length === teams.template.maximumSize) {
+    throw new Error("cannot add team member");
+  }
+  const placed = team.placed.concat([false]);
+  return {
+    ...team,
+    placed,
+    remaining: team.remaining + 1,
+    canAdd: placed.length < teams.template.maximumSize,
   };
 }
 
@@ -225,6 +243,18 @@ export function reducer(state, action) {
         throw new Error(`cannot add team`);
       }
 
+    case "add_team_member":
+      return {
+        ...state,
+        teams: {
+          ...teams,
+          list: teamListWithReplacedTeam(
+            teams.list,
+            addTeamMember(teams, action.name)
+          ),
+        },
+      };
+
     default:
       throw new Error();
   }
@@ -233,10 +263,12 @@ export function reducer(state, action) {
 export const StoreContext = React.createContext(null);
 
 export const StoreProvider = ({ children }) => {
+  const defaultSize = 5;
+  const maximumSize = 10;
   const initialState = storeFor(
     teamsFor(
       [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
-      templateFor(["A", "B", "C", "D", "E"], 5)
+      templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
     ),
     gridFor(10, 10)
   );
@@ -269,6 +301,10 @@ export function selectTeamAction(name) {
 
 export function addTeamAction() {
   return { type: "add_team" };
+}
+
+export function addTeamMemberAction(name) {
+  return { type: "add_team_member", name };
 }
 
 export function undoAction() {

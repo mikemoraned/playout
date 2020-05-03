@@ -9,12 +9,20 @@ import {
   selectTeamAction,
   togglePlaceMemberAction,
   undoAction,
+  addTeamAction,
+  templateFor,
 } from "./store";
 
 let state = {};
 
 beforeEach(() => {
-  state = storeFor(teamsFor([teamFor("A", 2), teamFor("B", 3)]), gridFor(2, 2));
+  state = storeFor(
+    teamsFor(
+      [teamFor("A", 2), teamFor("B", 3)],
+      templateFor(["A", "B", "C"], 3)
+    ),
+    gridFor(2, 2)
+  );
   state.grid.seats = [positionFor(0, 0), positionFor(1, 1)];
 });
 
@@ -32,6 +40,29 @@ describe("team selection", () => {
     expect(() => {
       reducer(state, selectTeamAction("C"));
     }).toThrowError(/^unknown team: C$/);
+  });
+});
+
+describe("team editing", () => {
+  test("can add new team when below limit", () => {
+    const stateAfter = reducer(state, addTeamAction());
+    expect(stateAfter.teams.next).toBe("A");
+    expect(stateAfter.teams.list.length).toEqual(3);
+    expect(stateAfter.teams.list[2]).toEqual(teamFor("C", 3));
+    expect(stateAfter.teams.list.slice(0, 2)).toEqual(state.teams.list);
+  });
+
+  test("indicates cannot add team when at limit", () => {
+    expect(state.teams.canAdd).toEqual(true);
+    const stateAfter = reducer(state, addTeamAction());
+    expect(stateAfter.teams.canAdd).toEqual(false);
+  });
+
+  test("cannot add team when at limit", () => {
+    const stateWhenAtLimit = reducer(state, addTeamAction());
+    expect(() => {
+      reducer(stateWhenAtLimit, addTeamAction());
+    }).toThrowError(/^cannot add team$/);
   });
 });
 

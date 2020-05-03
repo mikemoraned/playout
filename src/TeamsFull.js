@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import "./App.scss";
-import { StoreContext, selectTeamAction } from "./store.js";
+import { StoreContext, selectTeamAction, addTeamAction } from "./store.js";
 
 function AddRemoveMembersHeader() {
   return (
@@ -90,7 +90,11 @@ export function TeamsFull() {
       </div>
       <div className="field">
         <div className="control">
-          <button className="button is-primary" disabled>
+          <button
+            className="button is-primary"
+            disabled={!teams.canAdd}
+            onClick={() => dispatch(addTeamAction())}
+          >
             <span className="icon">
               <i className="fas fa-users"></i>
             </span>

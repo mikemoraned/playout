@@ -26,10 +26,19 @@ export function teamFor(name, size) {
   };
 }
 
-export function teamsFor(teams) {
+export function templateFor(names, size) {
+  return {
+    names,
+    size,
+  };
+}
+
+export function teamsFor(teams, template) {
   return {
     list: teams,
     next: teams[0].name,
+    template,
+    canAdd: true,
   };
 }
 
@@ -83,6 +92,17 @@ function teamWithMemberReturned(team, member) {
     placed,
     next,
     remaining: team.remaining + 1,
+  };
+}
+
+function addNewTeamFromTemplate(teams) {
+  const remaining = teams.template.names.filter((n) => {
+    return teams.list.findIndex((t) => t.name === n) === -1;
+  });
+  return {
+    ...teams,
+    list: teams.list.concat([teamFor(remaining[0], teams.template.size)]),
+    canAdd: remaining.length > 1,
   };
 }
 
@@ -195,6 +215,16 @@ export function reducer(state, action) {
         throw new Error(`unknown team: ${name}`);
       }
 
+    case "add_team":
+      if (teams.canAdd) {
+        return {
+          ...state,
+          teams: addNewTeamFromTemplate(teams),
+        };
+      } else {
+        throw new Error(`cannot add team`);
+      }
+
     default:
       throw new Error();
   }
@@ -204,7 +234,10 @@ export const StoreContext = React.createContext(null);
 
 export const StoreProvider = ({ children }) => {
   const initialState = storeFor(
-    teamsFor([teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)]),
+    teamsFor(
+      [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
+      templateFor(["A", "B", "C", "D", "E"], 5)
+    ),
     gridFor(10, 10)
   );
 
@@ -232,6 +265,10 @@ export function selectTeamAction(name) {
     type: "select_team",
     name,
   };
+}
+
+export function addTeamAction() {
+  return { type: "add_team" };
 }
 
 export function undoAction() {

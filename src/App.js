@@ -34,7 +34,7 @@ function App() {
                   <span className="icon">
                     <i className="fas fa-user-edit"></i>
                   </span>{" "}
-                  Add / Remove Teams
+                  Edit Teams
                 </p>
                 <TeamsFull />
               </section>

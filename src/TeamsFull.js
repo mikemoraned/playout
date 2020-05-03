@@ -15,10 +15,6 @@ function AddRemoveMembersHeader() {
       <span className="icon">
         <i className="fas fa-user-plus"></i>
       </span>
-      /
-      <span className="icon">
-        <i className="fas fa-user-minus"></i>
-      </span>
     </div>
   );
 }
@@ -35,11 +31,6 @@ function AddRemoveMembers({ team }) {
         >
           <span className="icon">
             <i className="fas fa-user-plus"></i>
-          </span>
-        </button>
-        <button className="button" disabled>
-          <span className="icon">
-            <i className="fas fa-user-minus"></i>
           </span>
         </button>
       </div>

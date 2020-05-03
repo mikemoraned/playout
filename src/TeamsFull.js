@@ -6,6 +6,7 @@ import {
   selectTeamAction,
   addTeamAction,
   addTeamMemberAction,
+  removeTeamMemberAction,
 } from "./store.js";
 
 function AddRemoveMembersHeader() {
@@ -36,7 +37,10 @@ function AddRemoveMembers({ team }) {
             <i className="fas fa-user-plus"></i>
           </span>
         </button>
-        <button className="button" disabled>
+        <button
+          className="button"
+          onClick={() => dispatch(removeTeamMemberAction(team.name))}
+        >
           <span className="icon">
             <i className="fas fa-user-minus"></i>
           </span>

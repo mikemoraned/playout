@@ -131,6 +131,18 @@ function addTeamMember(teams, name) {
   };
 }
 
+function removeTeamMember(teams, name) {
+  const team = teams.list.find((t) => t.name === name);
+  const placed = [...team.placed];
+  placed.pop();
+  return {
+    ...team,
+    placed,
+    remaining: team.remaining - 1,
+    canAdd: placed.length < teams.template.maximumSize,
+  };
+}
+
 function teamListWithReplacedTeam(list, team) {
   return list.map((t) => {
     if (t.name === team.name) {
@@ -264,6 +276,18 @@ export function reducer(state, action) {
         },
       };
 
+    case "remove_team_member":
+      return {
+        ...state,
+        teams: {
+          ...teams,
+          list: teamListWithReplacedTeam(
+            teams.list,
+            removeTeamMember(teams, action.name)
+          ),
+        },
+      };
+
     default:
       throw new Error();
   }
@@ -314,6 +338,10 @@ export function addTeamAction() {
 
 export function addTeamMemberAction(name) {
   return { type: "add_team_member", name };
+}
+
+export function removeTeamMemberAction(name) {
+  return { type: "remove_team_member", name };
 }
 
 export function undoAction() {

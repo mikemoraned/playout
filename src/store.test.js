@@ -12,6 +12,7 @@ import {
   addTeamAction,
   templateFor,
   addTeamMemberAction,
+  removeTeamMemberAction,
 } from "./store";
 
 let state = {};
@@ -77,6 +78,49 @@ describe("team member editing", () => {
     const expected = teamFor("B", 4);
     expected.canAdd = false;
     expect(stateAfter.teams.list[1]).toEqual(expected);
+  });
+
+  test("can remove team member with no team occupancies", () => {
+    const stateAfter = reducer(state, removeTeamMemberAction("B"));
+    expect(stateAfter.teams.list.length).toEqual(state.teams.list.length);
+    expect(stateAfter.teams.list[0]).toEqual(state.teams.list[0]);
+    expect(stateAfter.teams.list[1]).toEqual(teamFor("B", 2));
+    expect(stateAfter.grid).toEqual(state.grid);
+  });
+
+  test("can remove team member with different team member occupancy", () => {
+    const stateWithOccupancyOfDifferentMember = chainActions(state, [
+      selectTeamAction("B"),
+      togglePlaceMemberAction(positionFor(0, 0)),
+    ]);
+
+    const expectedBeforeRemoval = teamFor("B", 3);
+    expectedBeforeRemoval.next = 1;
+    expectedBeforeRemoval.remaining = 2;
+    expectedBeforeRemoval.placed[0] = true;
+    expect(stateWithOccupancyOfDifferentMember.teams.list[1]).toEqual(
+      expectedBeforeRemoval
+    );
+
+    const stateAfter = reducer(
+      stateWithOccupancyOfDifferentMember,
+      removeTeamMemberAction("B")
+    );
+
+    expect(stateAfter.grid).toEqual(stateWithOccupancyOfDifferentMember.grid);
+
+    expect(stateAfter.teams.list.length).toEqual(state.teams.list.length);
+    expect(stateAfter.teams.list[0]).toEqual(state.teams.list[0]);
+
+    const expectedAfterRemoval = teamFor("B", 2);
+    expectedAfterRemoval.next = 1;
+    expectedAfterRemoval.remaining = 1;
+    expectedAfterRemoval.placed[0] = true;
+    expect(stateWithOccupancyOfDifferentMember.teams.list[1]).toEqual(
+      expectedBeforeRemoval
+    );
+
+    expect(stateAfter.teams.list[1]).toEqual(expectedAfterRemoval);
   });
 
   test("indicates cannot add team member when at limit", () => {
@@ -172,3 +216,12 @@ describe("undo", () => {
     expect(stateAfterUndo.undos).toEqual([]);
   });
 });
+
+function chainActions(state, actions) {
+  if (actions.length === 0) {
+    return state;
+  } else {
+    const [first, rest] = [actions[0], actions.slice(1)];
+    return chainActions(reducer(state, first), rest);
+  }
+}

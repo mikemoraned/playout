@@ -5,11 +5,12 @@ import { Grid } from "./Grid";
 import { TeamsMini } from "./TeamsMini";
 import { TeamsFull } from "./TeamsFull";
 import { StoreProvider } from "./store.js";
+import { version } from "../package.json";
 
 function App() {
   return (
     <div className="App">
-      <Navigation />
+      <Navigation version={version} />
       <StoreProvider>
         <div className="container">
           <div className="columns">

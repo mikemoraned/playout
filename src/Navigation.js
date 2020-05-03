@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Navigation() {
+export function Navigation({ version }) {
   return (
     <nav
       className="navbar is-light"
@@ -16,6 +16,18 @@ export function Navigation() {
             }}
           >
             P L A Y O U T
+          </span>
+        </a>
+        <div className="navbar-item">
+          <span className="tag is-info is-medium">v{version}</span>
+        </div>
+
+        <a
+          className="navbar-item"
+          href="https://github.com/mikemoraned/playout"
+        >
+          <span className="icon is-medium">
+            <i className="fab fa-github-square fa-2x"></i>
           </span>
         </a>
       </div>

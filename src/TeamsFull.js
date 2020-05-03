@@ -57,10 +57,10 @@ export function TeamsFull() {
             <thead>
               <tr>
                 <th>Team</th>
-                <th>Members</th>
                 <th>
                   <AddRemoveMembersHeader />
                 </th>
+                <th>Members</th>
               </tr>
             </thead>
             <tbody>
@@ -72,6 +72,9 @@ export function TeamsFull() {
                   >
                     <td onClick={() => dispatch(selectTeamAction(t.name))}>
                       {t.name}
+                    </td>
+                    <td>
+                      <AddRemoveMembers team={t} />
                     </td>
                     <td onClick={() => dispatch(selectTeamAction(t.name))}>
                       {t.placed.map((taken, index) => {
@@ -87,9 +90,6 @@ export function TeamsFull() {
                           </span>
                         );
                       })}
-                    </td>
-                    <td>
-                      <AddRemoveMembers team={t} />
                     </td>
                   </tr>
                 );

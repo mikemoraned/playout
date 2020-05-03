@@ -1,5 +1,6 @@
 import React from "react";
 import { useContext } from "react";
+import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { positionFor, StoreContext, togglePlaceMemberAction } from "./store.js";
 
 function Desktop({ visibility }) {
@@ -47,26 +48,22 @@ export function Grid() {
                       <span className="is-hidden-mobile">
                         <Desktop visibility={has_seat ? "visible" : "hidden"} />{" "}
                         {occupancy && (
-                          <span>
-                            {occupancy.member.team}
-                            <sub>{occupancy.member.index + 1}</sub>
-                          </span>
+                          <TeamMember
+                            teamName={occupancy.member.team}
+                            number={occupancy.member.index + 1}
+                          />
                         )}
-                        {!occupancy && (
-                          <span style={{ visibility: "hidden" }}>
-                            A<sub>1</sub>
-                          </span>
-                        )}
+                        {!occupancy && <TeamMemberPlaceholder />}
                       </span>
                       <span className="is-hidden-tablet">
                         {has_seat && !occupancy && (
                           <Desktop visibility={"visible"} />
                         )}
                         {occupancy && (
-                          <span>
-                            {occupancy.member.team}
-                            <sub>{occupancy.member.index + 1}</sub>
-                          </span>
+                          <TeamMember
+                            teamName={occupancy.member.team}
+                            number={occupancy.member.index + 1}
+                          />
                         )}
                       </span>
                     </td>

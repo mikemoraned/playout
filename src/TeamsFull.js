@@ -7,6 +7,7 @@ import {
   addTeamAction,
   addTeamMemberAction,
 } from "./store.js";
+import { TeamMember } from "./TeamMember";
 
 function AddRemoveMembersHeader() {
   return (
@@ -84,8 +85,7 @@ export function TeamsFull() {
                             key={index}
                             className={taken ? "has-text-grey-light" : ""}
                           >
-                            {t.name}
-                            <sub>{index + 1}</sub>
+                            <TeamMember teamName={t.name} number={index + 1} />
                             {!isLast && ", "}
                           </span>
                         );

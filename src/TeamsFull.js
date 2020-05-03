@@ -1,7 +1,12 @@
 import React from "react";
 import { useContext } from "react";
 import "./App.scss";
-import { StoreContext, selectTeamAction, addTeamAction } from "./store.js";
+import {
+  StoreContext,
+  selectTeamAction,
+  addTeamAction,
+  addTeamMemberAction,
+} from "./store.js";
 
 function AddRemoveMembersHeader() {
   return (
@@ -17,11 +22,16 @@ function AddRemoveMembersHeader() {
   );
 }
 
-function AddRemoveMembers() {
+function AddRemoveMembers({ team }) {
+  const { dispatch } = useContext(StoreContext);
   return (
     <div className="field is-grouped">
       <div className="buttons are-small has-addons">
-        <button className="button" disabled>
+        <button
+          className="button"
+          disabled={!team.canAdd}
+          onClick={() => dispatch(addTeamMemberAction(team.name))}
+        >
           <span className="icon">
             <i className="fas fa-user-plus"></i>
           </span>
@@ -79,7 +89,7 @@ export function TeamsFull() {
                       })}
                     </td>
                     <td>
-                      <AddRemoveMembers />
+                      <AddRemoveMembers team={t} />
                     </td>
                   </tr>
                 );

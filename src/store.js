@@ -53,6 +53,13 @@ export function gridFor(width, height) {
   };
 }
 
+export function occupancyFor(member, position) {
+  return {
+    position,
+    member,
+  };
+}
+
 export function storeFor(teams, grid) {
   return {
     teams,
@@ -134,12 +141,33 @@ function teamListWithReplacedTeam(list, team) {
   });
 }
 
+function findCurrentOccupancyByPosition(grid, position) {
+  return grid.occupied.find((o) => o.position === position);
+}
+
+function gridWithOccupancyRemoved(grid, occupancy) {
+  return {
+    ...grid,
+    occupied: grid.occupied.filter((o) => o.member.id !== occupancy.member.id),
+  };
+}
+
+function gridWithNewOccupancy(grid, occupancy) {
+  return {
+    ...grid,
+    occupied: grid.occupied.concat([occupancy]),
+  };
+}
+
+function findTeamByName(teams, name) {
+  return teams.list.find((t) => t.name === name);
+}
+
 export function reducer(state, action) {
   const { grid, teams, undos } = state;
 
   switch (action.type) {
     case "toggle_place_member":
-      let { occupied } = grid;
       const { seats } = grid;
       const { position } = action;
 
@@ -155,14 +183,9 @@ export function reducer(state, action) {
           ])
         : undos;
 
-      const currentOccupancy = occupied.find((o) => o.position === position);
+      const currentOccupancy = findCurrentOccupancyByPosition(grid, position);
       if (currentOccupancy) {
-        occupied = occupied.filter(
-          (o) => o.member.id !== currentOccupancy.member.id
-        );
-        const team = teams.list.find(
-          (t) => t.name === currentOccupancy.member.team
-        );
+        const team = findTeamByName(teams, currentOccupancy.member.team);
 
         return {
           ...state,
@@ -174,40 +197,26 @@ export function reducer(state, action) {
             ),
           },
 
-          grid: {
-            ...grid,
-            occupied,
-          },
+          grid: gridWithOccupancyRemoved(grid, currentOccupancy),
 
           undos: newUndos,
         };
       } else {
-        const hasNextTeam = teams.next !== null;
-        if (hasNextTeam) {
-          let nextTeam = teams.list.find((t) => t.name === teams.next);
-          const member = memberFor(nextTeam.name, nextTeam.next);
+        let nextTeam = teams.list.find((t) => t.name === teams.next);
+        const member = memberFor(nextTeam.name, nextTeam.next);
 
-          if (nextTeam.remaining > 0 && hasSeat) {
-            const newOccupancy = {
-              position,
-              member,
-            };
-            occupied = occupied.concat([newOccupancy]);
-            nextTeam = teamWithMemberPlaced(nextTeam, member);
+        if (nextTeam.remaining > 0 && hasSeat) {
+          nextTeam = teamWithMemberPlaced(nextTeam, member);
 
-            return {
-              ...state,
-              teams: {
-                ...teams,
-                list: teamListWithReplacedTeam(teams.list, nextTeam),
-              },
-              grid: {
-                ...grid,
-                occupied,
-              },
-              undos: newUndos,
-            };
-          }
+          return {
+            ...state,
+            teams: {
+              ...teams,
+              list: teamListWithReplacedTeam(teams.list, nextTeam),
+            },
+            grid: gridWithNewOccupancy(grid, occupancyFor(member, position)),
+            undos: newUndos,
+          };
         }
       }
 

@@ -12,13 +12,22 @@ export function Progress() {
   const completed = done === total;
   return (
     <div className="box">
-      <progress
-        className={`progress is-small ${completed ? "is-success" : ""}`}
-        value={done}
-        max={total}
-      >
-        {percentageDone}%
-      </progress>
+      <div className="columns is-mobile is-vcentered">
+        <div className="column is-10">
+          <progress
+            className={`progress is-small ${completed ? "is-success" : ""}`}
+            value={done}
+            max={total}
+          >
+            {percentageDone}%
+          </progress>
+        </div>
+        <div className="column is-2 has-text-centered">
+          <span className="icon is-medium">
+            <i className="fas fa-home"></i>
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

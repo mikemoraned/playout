@@ -4,8 +4,10 @@ import { Navigation } from "./Navigation";
 import { Grid } from "./Grid";
 import { TeamsMini } from "./TeamsMini";
 import { TeamsFull } from "./TeamsFull";
+import { Progress } from "./Progress";
 import { StoreProvider } from "./store.js";
 import { version } from "../package.json";
+import { Biases } from "./Biases";
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
                   </span>{" "}
                   Place Team Members in Seats
                 </p>
+                <Progress />
                 <TeamsMini />
                 <Grid />
               </section>
@@ -37,6 +40,16 @@ function App() {
                   Edit Teams
                 </p>
                 <TeamsFull />
+              </section>
+              <section className="section">
+                <h1 className="title is-4">Biases</h1>
+                <p className="subtitle is-6">
+                  <span className="icon">
+                    <i className="fas fa-star"></i>
+                  </span>{" "}
+                  Who wants what?
+                </p>
+                <Biases />
               </section>
             </div>
           </div>

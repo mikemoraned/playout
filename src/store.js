@@ -267,7 +267,8 @@ export const StoreProvider = ({ children }) => {
   const maximumSize = 10;
   const initialState = storeFor(
     teamsFor(
-      [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
+      //   [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
+      [teamFor("A", 3)],
       templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
     ),
     gridFor(10, 10)

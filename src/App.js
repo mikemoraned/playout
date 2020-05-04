@@ -4,6 +4,7 @@ import { Navigation } from "./Navigation";
 import { Grid } from "./Grid";
 import { TeamsMini } from "./TeamsMini";
 import { TeamsFull } from "./TeamsFull";
+import { Progress } from "./Progress";
 import { StoreProvider } from "./store.js";
 import { version } from "../package.json";
 
@@ -23,6 +24,7 @@ function App() {
                   </span>{" "}
                   Place Team Members in Seats
                 </p>
+                <Progress />
                 <TeamsMini />
                 <Grid />
               </section>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext, biasKey, BiasKind } from "./store.js";
+import { StoreContext, biasKey, BiasKind, rotateBiasAction } from "./store.js";
 
 const iconForBiasKind = {};
 iconForBiasKind[BiasKind.DISTANT] = "fas fa-user-slash";
@@ -8,9 +8,13 @@ iconForBiasKind[BiasKind.NONE] = "";
 iconForBiasKind[BiasKind.NEARBY] = "fas fa-user-friends fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
 
-function Bias({ biasKind, key }) {
+function Bias({ biasKind, biasKey }) {
+  const { dispatch } = useContext(StoreContext);
   return (
-    <button className="button is-small">
+    <button
+      className="button is-small"
+      onClick={() => dispatch(rotateBiasAction(biasKey))}
+    >
       <span className="icon">
         <i className={`${iconForBiasKind[biasKind]}`}></i>
       </span>
@@ -35,7 +39,7 @@ export function Biases() {
     <table className="table is-narrow" style={{ tableLayout: "fixed" }}>
       <thead>
         <tr>
-          <th colSpan={teams.length + 1}>Proximity:</th>
+          <th colSpan={teams.list.length + 1}>Proximity:</th>
         </tr>
         <tr>
           <th>from:</th>
@@ -61,7 +65,7 @@ export function Biases() {
                 } else {
                   return (
                     <td key={key}>
-                      <Bias biasKind={bias} key={key} />
+                      <Bias biasKind={bias} biasKey={key} />
                     </td>
                   );
                 }

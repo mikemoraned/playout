@@ -61,6 +61,12 @@ export const BiasKind = Object.freeze({
   NEXT_TO: "next_to",
 });
 
+const nextBias = {};
+nextBias[BiasKind.DISTANT] = BiasKind.NONE;
+nextBias[BiasKind.NONE] = BiasKind.NEARBY;
+nextBias[BiasKind.NEARBY] = BiasKind.NEXT_TO;
+nextBias[BiasKind.NEXT_TO] = BiasKind.DISTANT;
+
 export function biasKey(fromTeam, toTeam) {
   return `${fromTeam.name}.${toTeam.name}`;
 }
@@ -149,6 +155,16 @@ function addTeamMember(teams, name) {
     remaining: team.remaining + 1,
     canAdd: placed.length < teams.template.maximumSize,
   };
+}
+
+function rotateBias(biases, biasKey) {
+  const newBiases = {
+    ...biases,
+  };
+  if (biases[biasKey] !== null) {
+    newBiases[biasKey] = nextBias[biases[biasKey]];
+  }
+  return newBiases;
 }
 
 function teamListWithReplacedTeam(list, team) {
@@ -282,6 +298,15 @@ export function reducer(state, action) {
         },
       };
 
+    case "rotate_bias":
+      return {
+        ...state,
+        teams: {
+          ...teams,
+          biases: rotateBias(teams.biases, action.biasKey),
+        },
+      };
+
     default:
       throw new Error();
   }
@@ -332,6 +357,13 @@ export function addTeamAction() {
 
 export function addTeamMemberAction(name) {
   return { type: "add_team_member", name };
+}
+
+export function rotateBiasAction(biasKey) {
+  return {
+    type: "rotate_bias",
+    biasKey,
+  };
 }
 
 export function undoAction() {

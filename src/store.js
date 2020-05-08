@@ -72,7 +72,7 @@ export function biasKey(fromTeam, toTeam) {
 }
 
 export function biasesFor(teamList) {
-  const biases = [];
+  const biases = {};
   for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
     for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
       const key = biasKey(teamList[fromIndex], teamList[toIndex]);
@@ -84,6 +84,25 @@ export function biasesFor(teamList) {
     }
   }
   return biases;
+}
+
+function expandBiases(biases, teamList) {
+  const newBiases = { ...biases };
+  for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
+    for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
+      const key = biasKey(teamList[fromIndex], teamList[toIndex]);
+      if (fromIndex === toIndex) {
+        newBiases[key] = null;
+      } else {
+        if (biases[key]) {
+          newBiases[key] = biases[key];
+        } else {
+          newBiases[key] = BiasKind.NONE;
+        }
+      }
+    }
+  }
+  return newBiases;
 }
 
 export function storeFor(teams, grid) {
@@ -134,12 +153,14 @@ function addNewTeamFromTemplate(teams) {
   const remaining = teams.template.names.filter((n) => {
     return teams.list.findIndex((t) => t.name === n) === -1;
   });
+  const newList = teams.list.concat([
+    teamFor(remaining[0], teams.template.defaultSize),
+  ]);
   return {
     ...teams,
-    list: teams.list.concat([
-      teamFor(remaining[0], teams.template.defaultSize),
-    ]),
+    list: newList,
     canAdd: remaining.length > 1,
+    biases: expandBiases(teams.biases, newList),
   };
 }
 

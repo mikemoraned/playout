@@ -1,29 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
+import { useContext } from "react";
+import { StoreContext, biasKey, BiasKind } from "./store.js";
 
-const preferenceChoices = [
-  "fas fa-user-slash",
-  "",
-  "fas fa-user-friends fa-lg",
-  "fas fa-users fa-lg",
-];
+const iconForBiasKind = {};
+iconForBiasKind[BiasKind.DISTANT] = "fas fa-user-slash";
+iconForBiasKind[BiasKind.NONE] = "";
+iconForBiasKind[BiasKind.NEARBY] = "fas fa-user-friends fa-lg";
+iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
 
-function Preference({ initialChoiceIndex }) {
-  const [choiceIndex, setChoiceIndex] = useState(initialChoiceIndex);
-  const choice = preferenceChoices[choiceIndex];
-  const next = () => {
-    setChoiceIndex((choiceIndex + 1) % preferenceChoices.length);
-  };
+function Bias({ biasKind, key }) {
   return (
-    <button className="button is-small" onClick={() => next()}>
+    <button className="button is-small">
       <span className="icon">
-        <i className={`${choice}`}></i>
+        <i className={`${iconForBiasKind[biasKind]}`}></i>
       </span>
     </button>
   );
-}
-
-function randomChoiceIndex() {
-  return Math.floor(Math.random() * 0.99 * preferenceChoices.length);
 }
 
 function Self() {
@@ -34,24 +26,11 @@ function Self() {
   );
 }
 
-function randomBiases(teams) {
-  const biases = {};
-  for (let fromIndex = 0; fromIndex < teams.length; fromIndex++) {
-    for (let toIndex = 0; toIndex < teams.length; toIndex++) {
-      const key = `${fromIndex}.${toIndex}`;
-      if (fromIndex === toIndex) {
-        biases[key] = -1;
-      } else {
-        biases[key] = randomChoiceIndex();
-      }
-    }
-  }
-  return biases;
-}
-
 export function Biases() {
-  const teams = ["A", "B", "C", "D", "E"];
-  const [biases] = useState(randomBiases(teams));
+  const { state } = useContext(StoreContext);
+  const { teams } = state;
+  const { biases } = teams;
+
   return (
     <table className="table is-narrow" style={{ tableLayout: "fixed" }}>
       <thead>
@@ -60,20 +39,20 @@ export function Biases() {
         </tr>
         <tr>
           <th>from:</th>
-          {teams.map((t) => {
-            return <th key={t}>{t}</th>;
+          {teams.list.map((fromTeam) => {
+            return <th key={fromTeam.name}>{fromTeam.name}</th>;
           })}
         </tr>
       </thead>
       <tbody>
-        {teams.map((t, toIndex) => {
+        {teams.list.map((toTeam) => {
           return (
-            <tr key={t}>
-              <td>to {t}:</td>
-              {teams.map((_, fromIndex) => {
-                const key = `${fromIndex}.${toIndex}`;
-                const initialChoiceIndex = biases[key];
-                if (initialChoiceIndex === -1) {
+            <tr key={toTeam.name}>
+              <td>to {toTeam.name}:</td>
+              {teams.list.map((fromTeam) => {
+                const key = biasKey(fromTeam, toTeam);
+                const bias = biases[key];
+                if (bias === null) {
                   return (
                     <td key={key}>
                       <Self />
@@ -82,7 +61,7 @@ export function Biases() {
                 } else {
                   return (
                     <td key={key}>
-                      <Preference initialChoiceIndex={initialChoiceIndex} />
+                      <Bias biasKind={bias} key={key} />
                     </td>
                   );
                 }

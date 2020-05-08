@@ -41,6 +41,7 @@ export function teamsFor(teams, template) {
     next: teams[0].name,
     template,
     canAdd: true,
+    biases: biasesFor(teams),
   };
 }
 
@@ -51,6 +52,32 @@ export function gridFor(width, height) {
     seats: [],
     occupied: [],
   };
+}
+
+export const BiasKind = Object.freeze({
+  DISTANT: "distant",
+  NONE: "none",
+  NEARBY: "nearby",
+  NEXT_TO: "next_to",
+});
+
+export function biasKey(fromTeam, toTeam) {
+  return `${fromTeam.name}.${toTeam.name}`;
+}
+
+export function biasesFor(teamList) {
+  const biases = [];
+  for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
+    for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
+      const key = biasKey(teamList[fromIndex], teamList[toIndex]);
+      if (fromIndex === toIndex) {
+        biases[key] = null;
+      } else {
+        biases[key] = BiasKind.NONE;
+      }
+    }
+  }
+  return biases;
 }
 
 export function storeFor(teams, grid) {

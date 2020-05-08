@@ -15,7 +15,11 @@ export function Navigation({ version }) {
               font: "small-caps bold 25px monospace",
             }}
           >
-            P L A Y O U T
+            P L A Y{" "}
+            <span className="icon is-small">
+              <i className={`far fa-smile fa-xs`}></i>
+            </span>{" "}
+            U T
           </span>
         </a>
         <div className="navbar-item">

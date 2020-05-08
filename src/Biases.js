@@ -8,12 +8,12 @@ iconForBiasKind[BiasKind.NONE] = "";
 iconForBiasKind[BiasKind.NEARBY] = "fas fa-user-friends fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
 
-function Bias({ biasKind, biasKey }) {
+function Bias({ biasKind, fromTeamName, toTeamName }) {
   const { dispatch } = useContext(StoreContext);
   return (
     <button
       className="button is-small"
-      onClick={() => dispatch(rotateBiasAction(biasKey))}
+      onClick={() => dispatch(rotateBiasAction(fromTeamName, toTeamName))}
     >
       <span className="icon">
         <i className={`${iconForBiasKind[biasKind]}`}></i>
@@ -54,7 +54,7 @@ export function Biases() {
             <tr key={toTeam.name}>
               <td>to {toTeam.name}:</td>
               {teams.list.map((fromTeam) => {
-                const key = biasKey(fromTeam, toTeam);
+                const key = biasKey(fromTeam.name, toTeam.name);
                 const bias = biases[key];
                 if (bias === null) {
                   return (
@@ -65,7 +65,11 @@ export function Biases() {
                 } else {
                   return (
                     <td key={key}>
-                      <Bias biasKind={bias} biasKey={key} />
+                      <Bias
+                        biasKind={bias}
+                        fromTeamName={fromTeam.name}
+                        toTeamName={toTeam.name}
+                      />
                     </td>
                   );
                 }

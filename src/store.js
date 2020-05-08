@@ -67,15 +67,15 @@ nextBias[BiasKind.NONE] = BiasKind.NEARBY;
 nextBias[BiasKind.NEARBY] = BiasKind.NEXT_TO;
 nextBias[BiasKind.NEXT_TO] = BiasKind.DISTANT;
 
-export function biasKey(fromTeam, toTeam) {
-  return `${fromTeam.name}.${toTeam.name}`;
+export function biasKey(fromTeamName, toTeamName) {
+  return `${fromTeamName}.${toTeamName}`;
 }
 
 export function biasesFor(teamList) {
   const biases = {};
   for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
     for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
-      const key = biasKey(teamList[fromIndex], teamList[toIndex]);
+      const key = biasKey(teamList[fromIndex].name, teamList[toIndex].name);
       if (fromIndex === toIndex) {
         biases[key] = null;
       } else {
@@ -90,7 +90,7 @@ function expandBiases(biases, teamList) {
   const newBiases = { ...biases };
   for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
     for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
-      const key = biasKey(teamList[fromIndex], teamList[toIndex]);
+      const key = biasKey(teamList[fromIndex].name, teamList[toIndex].name);
       if (fromIndex === toIndex) {
         newBiases[key] = null;
       } else {
@@ -178,12 +178,17 @@ function addTeamMember(teams, name) {
   };
 }
 
-function rotateBias(biases, biasKey) {
+function rotateBias(biases, fromTeamName, toTeamName) {
   const newBiases = {
     ...biases,
   };
-  if (biases[biasKey] !== null) {
-    newBiases[biasKey] = nextBias[biases[biasKey]];
+  const forwardKey = biasKey(fromTeamName, toTeamName);
+  const backwardKey = biasKey(toTeamName, fromTeamName);
+
+  if (biases[forwardKey] !== null && biases[backwardKey] !== null) {
+    const next = nextBias[biases[forwardKey]];
+    newBiases[forwardKey] = next;
+    newBiases[backwardKey] = next;
   }
   return newBiases;
 }
@@ -324,7 +329,11 @@ export function reducer(state, action) {
         ...state,
         teams: {
           ...teams,
-          biases: rotateBias(teams.biases, action.biasKey),
+          biases: rotateBias(
+            teams.biases,
+            action.fromTeamName,
+            action.toTeamName
+          ),
         },
       };
 
@@ -380,10 +389,11 @@ export function addTeamMemberAction(name) {
   return { type: "add_team_member", name };
 }
 
-export function rotateBiasAction(biasKey) {
+export function rotateBiasAction(fromTeamName, toTeamName) {
   return {
     type: "rotate_bias",
-    biasKey,
+    fromTeamName,
+    toTeamName,
   };
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { StoreContext, biasKey, BiasKind, rotateBiasAction } from "./store.js";
+import { ScoreFaceIcon } from "./Evaluation";
 
 const iconForBiasKind = {};
 iconForBiasKind[BiasKind.DISTANT] = "fas fa-user-slash";
@@ -34,6 +35,7 @@ export function Biases() {
   const { state } = useContext(StoreContext);
   const { teams } = state;
   const { biases } = teams;
+  const { evaluation } = state;
 
   return (
     <table className="table is-narrow" style={{ tableLayout: "fixed" }}>
@@ -44,7 +46,12 @@ export function Biases() {
         <tr>
           <th>from:</th>
           {teams.list.map((fromTeam) => {
-            return <th key={fromTeam.name}>{fromTeam.name}</th>;
+            const score = evaluation.score.teams[fromTeam.name];
+            return (
+              <th key={fromTeam.name}>
+                {fromTeam.name} <ScoreFaceIcon {...score} size="small" />{" "}
+              </th>
+            );
           })}
         </tr>
       </thead>

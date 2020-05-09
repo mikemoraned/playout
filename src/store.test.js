@@ -12,6 +12,9 @@ import {
   addTeamAction,
   templateFor,
   addTeamMemberAction,
+  rotateBiasAction,
+  BiasKind,
+  biasKey,
 } from "./store";
 
 let state = {};
@@ -66,6 +69,24 @@ describe("team editing", () => {
     expect(() => {
       reducer(stateWhenAtLimit, addTeamAction());
     }).toThrowError(/^cannot add team$/);
+  });
+
+  test("can expand biases", () => {
+    const stateAfter = reducer(state, addTeamAction());
+    const expectedBiases = {};
+    expectedBiases[biasKey("A", "A")] = null;
+    expectedBiases[biasKey("A", "B")] = BiasKind.NONE;
+    expectedBiases[biasKey("A", "C")] = BiasKind.NONE;
+
+    expectedBiases[biasKey("B", "A")] = BiasKind.NONE;
+    expectedBiases[biasKey("B", "B")] = null;
+    expectedBiases[biasKey("B", "C")] = BiasKind.NONE;
+
+    expectedBiases[biasKey("C", "A")] = BiasKind.NONE;
+    expectedBiases[biasKey("C", "B")] = BiasKind.NONE;
+    expectedBiases[biasKey("C", "C")] = null;
+
+    expect(stateAfter.teams.biases).toEqual(expectedBiases);
   });
 });
 
@@ -150,6 +171,29 @@ describe("team member placement", () => {
     );
     expect(stateAfterToggle.teams).toEqual(state.teams);
     expect(stateAfterToggle.grid).toEqual(state.grid);
+  });
+});
+
+describe("team member biases", () => {
+  test("no bias by default", () => {
+    const expectedBiases = {};
+    expectedBiases[biasKey("A", "A")] = null;
+    expectedBiases[biasKey("A", "B")] = BiasKind.NONE;
+    expectedBiases[biasKey("B", "A")] = BiasKind.NONE;
+    expectedBiases[biasKey("B", "B")] = null;
+
+    expect(state.teams.biases).toEqual(expectedBiases);
+  });
+
+  test("rotate bias symetrically for each team", () => {
+    const stateAfter = reducer(state, rotateBiasAction("A", "B"));
+    const expectedBiases = {};
+    expectedBiases[biasKey("A", "A")] = null;
+    expectedBiases[biasKey("A", "B")] = BiasKind.NEARBY;
+    expectedBiases[biasKey("B", "A")] = BiasKind.NEARBY;
+    expectedBiases[biasKey("B", "B")] = null;
+
+    expect(stateAfter.teams.biases).toEqual(expectedBiases);
   });
 });
 

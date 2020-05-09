@@ -1,6 +1,5 @@
 import React from "react";
 import { useContext } from "react";
-import "./App.scss";
 import {
   StoreContext,
   selectTeamAction,

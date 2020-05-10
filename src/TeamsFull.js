@@ -1,11 +1,11 @@
 import React from "react";
 import { useContext } from "react";
+import { StoreContext } from "./model/store.js";
 import {
-  StoreContext,
   selectTeamAction,
   addTeamAction,
   addTeamMemberAction,
-} from "./store.js";
+} from "./model/action";
 import { TeamMember } from "./TeamMember";
 
 function AddRemoveMembersHeader() {

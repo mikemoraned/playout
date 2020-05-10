@@ -1,6 +1,7 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext, selectTeamAction, undoAction } from "./store.js";
+import { StoreContext } from "./model/store.js";
+import { selectTeamAction, undoAction } from "./model/action";
 
 export function TeamsMini() {
   const { state, dispatch } = useContext(StoreContext);

@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext } from "./store.js";
+import { StoreContext } from "./model/store.js";
 
 function Progress() {
   const { state } = useContext(StoreContext);

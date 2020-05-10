@@ -5,7 +5,7 @@ import { Grid } from "./Grid";
 import { TeamsMini } from "./TeamsMini";
 import { TeamsFull } from "./TeamsFull";
 import { Evaluation } from "./Evaluation";
-import { StoreProvider } from "./store.js";
+import { StoreProvider } from "./model/store.js";
 import { version } from "../package.json";
 import { Biases } from "./Biases";
 

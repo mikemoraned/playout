@@ -1,6 +1,8 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext, biasKey, BiasKind, rotateBiasAction } from "./store.js";
+import { StoreContext } from "./model/store.js";
+import { rotateBiasAction } from "./model/action";
+import { biasKey, BiasKind } from "./model/bias";
 import { ScoreFaceIcon } from "./Evaluation";
 
 const iconForBiasKind = {};

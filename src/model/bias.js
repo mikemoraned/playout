@@ -1,15 +1,24 @@
 export const BiasKind = Object.freeze({
   DISTANT: "distant",
-  NONE: "none",
+  NO_BIAS: "no_bias",
   NEARBY: "nearby",
   NEXT_TO: "next_to",
+  NEXT_TO_SAME_TEAM: "next_to_same_team",
 });
 
+// export const nextBias = {};
+// nextBias[BiasKind.DISTANT] = BiasKind.NO_BIAS;
+// nextBias[BiasKind.NO_BIAS] = BiasKind.NEARBY;
+// nextBias[BiasKind.NEARBY] = BiasKind.NEXT_TO;
+// nextBias[BiasKind.NEXT_TO] = BiasKind.DISTANT;
+
 export const nextBias = {};
-nextBias[BiasKind.DISTANT] = BiasKind.NONE;
-nextBias[BiasKind.NONE] = BiasKind.NEARBY;
-nextBias[BiasKind.NEARBY] = BiasKind.NEXT_TO;
-nextBias[BiasKind.NEXT_TO] = BiasKind.DISTANT;
+nextBias[BiasKind.NO_BIAS] = BiasKind.NEXT_TO;
+nextBias[BiasKind.NEXT_TO] = BiasKind.NO_BIAS;
+
+export function canRotate(biasKind) {
+  return biasKind === BiasKind.NEXT_TO || biasKind === BiasKind.NO_BIAS;
+}
 
 export function biasKey(fromTeamName, toTeamName) {
   return `${fromTeamName}.${toTeamName}`;
@@ -21,9 +30,9 @@ export function biasesFor(teamList) {
     for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
       const key = biasKey(teamList[fromIndex].name, teamList[toIndex].name);
       if (fromIndex === toIndex) {
-        biases[key] = null;
+        biases[key] = BiasKind.NEXT_TO_SAME_TEAM;
       } else {
-        biases[key] = BiasKind.NONE;
+        biases[key] = BiasKind.NO_BIAS;
       }
     }
   }
@@ -36,12 +45,12 @@ export function expandBiases(biases, teamList) {
     for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
       const key = biasKey(teamList[fromIndex].name, teamList[toIndex].name);
       if (fromIndex === toIndex) {
-        newBiases[key] = null;
+        newBiases[key] = BiasKind.NEXT_TO_SAME_TEAM;
       } else {
         if (biases[key]) {
           newBiases[key] = biases[key];
         } else {
-          newBiases[key] = BiasKind.NONE;
+          newBiases[key] = BiasKind.NO_BIAS;
         }
       }
     }

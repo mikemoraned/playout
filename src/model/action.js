@@ -32,3 +32,12 @@ export function rotateBiasAction(fromTeamName, toTeamName) {
 export function undoAction() {
   return { type: "undo" };
 }
+
+export function chainActions(reducer, state, actions) {
+  if (actions.length === 0) {
+    return state;
+  } else {
+    const [first, rest] = [actions[0], actions.slice(1)];
+    return chainActions(reducer, reducer(state, first), rest);
+  }
+}

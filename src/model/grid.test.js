@@ -1,7 +1,7 @@
 import { reducer } from "./reducer";
 import { togglePlaceMemberAction } from "./action";
 import { memberFor } from "./team";
-import { positionFor } from "./grid";
+import { positionFor, expandToNextToArea } from "./grid";
 import { testStore } from "./testStore";
 
 let state = {};
@@ -67,5 +67,32 @@ describe("team member placement", () => {
     );
     expect(stateAfterToggle.teams).toEqual(state.teams);
     expect(stateAfterToggle.grid).toEqual(state.grid);
+  });
+});
+
+describe("positions and areas", () => {
+  test("can expand to next_to area", () => {
+    const position = positionFor(1, 1);
+    const expanded = expandToNextToArea(position, { width: 3, height: 3 });
+    expect(expanded).toEqual([
+      positionFor(0, 0),
+      positionFor(0, 1),
+      positionFor(0, 2),
+      positionFor(1, 0),
+      positionFor(1, 2),
+      positionFor(2, 0),
+      positionFor(2, 1),
+      positionFor(2, 2),
+    ]);
+  });
+
+  test("can expand to next_to area, excluding outside area", () => {
+    const position = positionFor(0, 2);
+    const expanded = expandToNextToArea(position, { width: 3, height: 3 });
+    expect(expanded).toEqual([
+      positionFor(0, 1),
+      positionFor(1, 1),
+      positionFor(1, 2),
+    ]);
   });
 });

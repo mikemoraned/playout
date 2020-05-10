@@ -5,11 +5,15 @@ export const BiasKind = Object.freeze({
   NEXT_TO: "next_to",
 });
 
+// export const nextBias = {};
+// nextBias[BiasKind.DISTANT] = BiasKind.NONE;
+// nextBias[BiasKind.NONE] = BiasKind.NEARBY;
+// nextBias[BiasKind.NEARBY] = BiasKind.NEXT_TO;
+// nextBias[BiasKind.NEXT_TO] = BiasKind.DISTANT;
+
 export const nextBias = {};
-nextBias[BiasKind.DISTANT] = BiasKind.NONE;
 nextBias[BiasKind.NONE] = BiasKind.NEARBY;
-nextBias[BiasKind.NEARBY] = BiasKind.NEXT_TO;
-nextBias[BiasKind.NEXT_TO] = BiasKind.DISTANT;
+nextBias[BiasKind.NEARBY] = BiasKind.NONE;
 
 export function biasKey(fromTeamName, toTeamName) {
   return `${fromTeamName}.${toTeamName}`;

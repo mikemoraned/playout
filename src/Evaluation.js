@@ -6,7 +6,7 @@ function Progress() {
   const { state } = useContext(StoreContext);
   const { progress } = state.evaluation;
   const fractionDone = progress.value / (progress.max - progress.min);
-  const completed = progress.value === progress.done;
+  const completed = progress.value === progress.max;
 
   return (
     <progress

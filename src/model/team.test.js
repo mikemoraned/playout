@@ -52,17 +52,17 @@ describe("team editing", () => {
   test("can expand biases", () => {
     const stateAfter = reducer(state, addTeamAction());
     const expectedBiases = {};
-    expectedBiases[biasKey("A", "A")] = null;
-    expectedBiases[biasKey("A", "B")] = BiasKind.NONE;
-    expectedBiases[biasKey("A", "C")] = BiasKind.NONE;
+    expectedBiases[biasKey("A", "A")] = BiasKind.NEXT_TO_SAME_TEAM;
+    expectedBiases[biasKey("A", "B")] = BiasKind.NO_BIAS;
+    expectedBiases[biasKey("A", "C")] = BiasKind.NO_BIAS;
 
-    expectedBiases[biasKey("B", "A")] = BiasKind.NONE;
-    expectedBiases[biasKey("B", "B")] = null;
-    expectedBiases[biasKey("B", "C")] = BiasKind.NONE;
+    expectedBiases[biasKey("B", "A")] = BiasKind.NO_BIAS;
+    expectedBiases[biasKey("B", "B")] = BiasKind.NEXT_TO_SAME_TEAM;
+    expectedBiases[biasKey("B", "C")] = BiasKind.NO_BIAS;
 
-    expectedBiases[biasKey("C", "A")] = BiasKind.NONE;
-    expectedBiases[biasKey("C", "B")] = BiasKind.NONE;
-    expectedBiases[biasKey("C", "C")] = null;
+    expectedBiases[biasKey("C", "A")] = BiasKind.NO_BIAS;
+    expectedBiases[biasKey("C", "B")] = BiasKind.NO_BIAS;
+    expectedBiases[biasKey("C", "C")] = BiasKind.NEXT_TO_SAME_TEAM;
 
     expect(stateAfter.teams.biases).toEqual(expectedBiases);
   });

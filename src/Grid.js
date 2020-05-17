@@ -1,7 +1,9 @@
 import React from "react";
 import { useContext } from "react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
-import { positionFor, StoreContext, togglePlaceMemberAction } from "./store.js";
+import { StoreContext } from "./model/store.js";
+import { togglePlaceMemberAction } from "./model/action";
+import { positionFor } from "./model/grid";
 
 function Desktop({ visibility }) {
   return (

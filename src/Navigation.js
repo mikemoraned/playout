@@ -90,7 +90,7 @@ export function Navigation({ version }) {
           activeMobile ? "navbar-menu-mobile-active" : ""
         }`}
       >
-        <div className="navbar-end">
+        <div className="navbar-start">
           <div
             className={`navbar-item has-dropdown ${
               activeDesktop ? "is-active" : ""
@@ -104,7 +104,7 @@ export function Navigation({ version }) {
               </span>
             </a>
 
-            <div className="navbar-dropdown is-right">
+            <div className="navbar-dropdown is-left">
               <div className="navbar-item">
                 <Summary />
               </div>

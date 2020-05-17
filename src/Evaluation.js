@@ -19,7 +19,7 @@ function Progress() {
   );
 }
 
-export function ScoreFaceIcon({ min, max, value, size }) {
+export function ScoreFaceIcon({ min, max, value, size, success }) {
   const faces = [
     // "sad-cry",
     // "frown",
@@ -31,7 +31,7 @@ export function ScoreFaceIcon({ min, max, value, size }) {
   const fractionDone = value / (max - min);
   const face = faces[Math.floor(fractionDone * (faces.length - 1))];
   return (
-    <span className={`icon is-${size}`}>
+    <span className={`icon is-${size} ${success ? "has-text-success" : ""}`}>
       <i className={`far fa-${face} ${size === "medium" ? "fa-2x" : ""}`}></i>
     </span>
   );
@@ -40,8 +40,10 @@ export function ScoreFaceIcon({ min, max, value, size }) {
 function ScoreFace() {
   const { state } = useContext(StoreContext);
   const { score } = state.evaluation;
+  const { progress } = state.evaluation;
+  const completed = progress.value === progress.max;
 
-  return <ScoreFaceIcon {...score} size="medium" />;
+  return <ScoreFaceIcon {...score} size="medium" success={completed} />;
 }
 
 export function Evaluation() {

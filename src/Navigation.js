@@ -15,7 +15,11 @@ export function Navigation({ version }) {
               font: "small-caps bold 25px monospace",
             }}
           >
-            P L A Y{" "}
+            P L{" "}
+            <span className="icon">
+              <i className="far fa-user fa-xs"></i>
+            </span>{" "}
+            Y{" "}
             <span className="icon is-small">
               <i className={`far fa-smile fa-xs`}></i>
             </span>{" "}

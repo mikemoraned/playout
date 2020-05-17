@@ -6,7 +6,7 @@ function Progress() {
   const { state } = useContext(StoreContext);
   const { progress } = state.evaluation;
   const fractionDone = progress.value / (progress.max - progress.min);
-  const completed = progress.value === progress.done;
+  const completed = progress.value === progress.max;
 
   return (
     <progress
@@ -19,7 +19,7 @@ function Progress() {
   );
 }
 
-export function ScoreFaceIcon({ min, max, value, size }) {
+export function ScoreFaceIcon({ min, max, value, size, success }) {
   const faces = [
     // "sad-cry",
     // "frown",
@@ -31,7 +31,7 @@ export function ScoreFaceIcon({ min, max, value, size }) {
   const fractionDone = value / (max - min);
   const face = faces[Math.floor(fractionDone * (faces.length - 1))];
   return (
-    <span className={`icon is-${size}`}>
+    <span className={`icon is-${size} ${success ? "has-text-success" : ""}`}>
       <i className={`far fa-${face} ${size === "medium" ? "fa-2x" : ""}`}></i>
     </span>
   );
@@ -40,15 +40,33 @@ export function ScoreFaceIcon({ min, max, value, size }) {
 function ScoreFace() {
   const { state } = useContext(StoreContext);
   const { score } = state.evaluation;
+  const { progress } = state.evaluation;
+  const completed = progress.value === progress.max;
 
-  return <ScoreFaceIcon {...score} size="medium" />;
+  return <ScoreFaceIcon {...score} size="medium" success={completed} />;
 }
 
 export function Evaluation() {
+  const { state } = useContext(StoreContext);
+  const { progress } = state.evaluation;
+  const percentDone = (
+    (100 * progress.value) /
+    (progress.max - progress.min)
+  ).toFixed(0);
+  const nonBreakingSpace = "\xa0";
   return (
     <div className="box">
       <div className="columns is-mobile is-vcentered">
-        <div className="column is-10">
+        <div className="column is-2 has-text-right">
+          <span
+            style={{
+              fontFamily: "monospace",
+            }}
+          >
+            {percentDone.padStart(3, nonBreakingSpace)}%
+          </span>
+        </div>
+        <div className="column is-8">
           <Progress />
         </div>
         <div className="column is-2 has-text-centered">

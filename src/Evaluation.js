@@ -47,10 +47,26 @@ function ScoreFace() {
 }
 
 export function Evaluation() {
+  const { state } = useContext(StoreContext);
+  const { progress } = state.evaluation;
+  const percentDone = (
+    (100 * progress.value) /
+    (progress.max - progress.min)
+  ).toFixed(0);
+  const nonBreakingSpace = "\xa0";
   return (
     <div className="box">
       <div className="columns is-mobile is-vcentered">
-        <div className="column is-10">
+        <div className="column is-2 has-text-right">
+          <span
+            style={{
+              fontFamily: "monospace",
+            }}
+          >
+            {percentDone.padStart(3, nonBreakingSpace)}%
+          </span>
+        </div>
+        <div className="column is-8">
           <Progress />
         </div>
         <div className="column is-2 has-text-centered">

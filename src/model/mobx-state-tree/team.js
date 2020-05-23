@@ -8,7 +8,7 @@ export const Team = types.model({
 export const Teams = types
   .model({
     teams: types.array(Team),
-    next: types.string, // TODO: change to be a reference
+    selected: types.string, // TODO: change to be a reference
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -16,7 +16,12 @@ export const Teams = types
       if (!teamExists) {
         throw new Error(`unknown team: ${name}`);
       }
-      self.next = name;
+      self.selected = name;
+    },
+  }))
+  .views((self) => ({
+    get next() {
+      return self.selected;
     },
   }));
 
@@ -25,7 +30,7 @@ export function teamFor(name, size) {
 }
 
 export function teamsFor(teams) {
-  return Teams.create({ teams, next: teams[0].name });
+  return Teams.create({ teams, selected: teams[0].name });
 }
 
 // export function teamFor(name, size) {

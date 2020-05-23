@@ -24,6 +24,9 @@ export const Teams = types
     get next() {
       return self.selected.name;
     },
+    get list() {
+      return self.teams;
+    },
   }));
 
 export function teamFor(name, size) {

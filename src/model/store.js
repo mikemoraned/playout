@@ -16,6 +16,7 @@ export function storeFor(teams, grid) {
 }
 
 export const StoreContext = React.createContext(null);
+export const MobXStoreContext = React.createContext(null);
 
 export const StoreProvider = ({ children }) => {
   const defaultSize = 5;
@@ -36,9 +37,11 @@ export const StoreProvider = ({ children }) => {
   const mappedDispatch = mobXActionMapper(dispatch, mobXStore);
 
   return (
-    <StoreContext.Provider value={{ state, dispatch: mappedDispatch }}>
-      {children}
-    </StoreContext.Provider>
+    <MobXStoreContext.Provider value={{ store: mobXStore }}>
+      <StoreContext.Provider value={{ state, dispatch: mappedDispatch }}>
+        {children}
+      </StoreContext.Provider>
+    </MobXStoreContext.Provider>
   );
 };
 

@@ -12,6 +12,10 @@ export const Teams = types
   })
   .actions((self) => ({
     selectTeam(name) {
+      const teamExists = self.teams.findIndex((t) => t.name === name) !== -1;
+      if (!teamExists) {
+        throw new Error(`unknown team: ${name}`);
+      }
       self.next = name;
     },
   }));

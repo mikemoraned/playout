@@ -12,15 +12,13 @@ describe("team selection", () => {
   });
 
   test("can select team by name", () => {
-    // const stateAfter = reducer(state, selectTeamAction("B"));
-    // expect(stateAfter.teams.next).toBe("B");
     store.selectTeam("B");
     expect(store.teams.next).toBe("B");
   });
 
-  //     test("select unknown team throws Error", () => {
-  //       expect(() => {
-  //         reducer(state, selectTeamAction("C"));
-  //       }).toThrowError(/^unknown team: C$/);
-  //     });
+  test("select unknown team throws Error", () => {
+    expect(() => {
+      store.selectTeam("C");
+    }).toThrowError(/^unknown team: C$/);
+  });
 });

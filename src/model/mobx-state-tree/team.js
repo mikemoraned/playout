@@ -1,6 +1,7 @@
 import { types } from "mobx-state-tree";
 
 export const Team = types.model({
+  id: types.identifier,
   name: types.string,
   size: types.number,
 });
@@ -8,25 +9,25 @@ export const Team = types.model({
 export const Teams = types
   .model({
     teams: types.array(Team),
-    selected: types.string, // TODO: change to be a reference
+    selected: types.reference(Team),
   })
   .actions((self) => ({
     selectTeam(name) {
-      const teamExists = self.teams.findIndex((t) => t.name === name) !== -1;
-      if (!teamExists) {
+      const team = self.teams.find((t) => t.name === name);
+      if (team === undefined) {
         throw new Error(`unknown team: ${name}`);
       }
-      self.selected = name;
+      self.selected = team;
     },
   }))
   .views((self) => ({
     get next() {
-      return self.selected;
+      return self.selected.name;
     },
   }));
 
 export function teamFor(name, size) {
-  return Team.create({ name, size });
+  return Team.create({ id: name, name, size });
 }
 
 export function teamsFor(teams) {

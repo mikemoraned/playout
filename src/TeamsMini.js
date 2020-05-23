@@ -1,11 +1,14 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext } from "./model/store.js";
+import { observer } from "mobx-react";
+import { StoreContext, MobXStoreContext } from "./model/store.js";
 import { selectTeamAction, undoAction } from "./model/action";
 
-export function TeamsMini() {
+export const TeamsMini = observer(() => {
   const { state, dispatch } = useContext(StoreContext);
-  const { teams, undos } = state;
+  const { store } = useContext(MobXStoreContext);
+  const teams = store.teams;
+  const { undos } = state;
   return (
     <div className="field is-horizontal">
       <div className="field-label is-normal">
@@ -52,4 +55,4 @@ export function TeamsMini() {
       </div>
     </div>
   );
-}
+});

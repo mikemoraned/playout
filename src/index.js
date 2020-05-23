@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { observerBatching } from "mobx-react-lite";
 import "./index.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+observerBatching(ReactDOM.unstable_batchedUpdates);
 
 ReactDOM.render(
   <React.StrictMode>

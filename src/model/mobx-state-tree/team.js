@@ -5,10 +5,16 @@ export const Team = types.model({
   size: types.number,
 });
 
-export const Teams = types.model({
-  teams: types.array(Team),
-  next: types.string, // TODO: change to be a reference
-});
+export const Teams = types
+  .model({
+    teams: types.array(Team),
+    next: types.string, // TODO: change to be a reference
+  })
+  .actions((self) => ({
+    selectTeam(name) {
+      self.next = name;
+    },
+  }));
 
 export function teamFor(name, size) {
   return Team.create({ name, size });

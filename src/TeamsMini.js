@@ -1,11 +1,10 @@
 import React from "react";
 import { useContext } from "react";
+import { observer } from "mobx-react";
 import { StoreContext } from "./model/store.js";
-import { selectTeamAction, undoAction } from "./model/action";
 
-export function TeamsMini() {
-  const { state, dispatch } = useContext(StoreContext);
-  const { teams, undos } = state;
+export const TeamsMini = observer(() => {
+  const { store } = useContext(StoreContext);
   return (
     <div className="field is-horizontal">
       <div className="field-label is-normal">
@@ -21,13 +20,13 @@ export function TeamsMini() {
         <div className="field is-grouped">
           <div className="control">
             <div className="buttons are-small has-addons">
-              {teams.list.map((t) => {
-                const isNext = teams.next === t.name;
+              {store.teams.list.map((t) => {
+                const isNext = store.teams.next === t.name;
                 return (
                   <button
                     key={t.name}
                     className={`button ${isNext ? "is-primary" : ""}`}
-                    onClick={() => dispatch(selectTeamAction(t.name))}
+                    onClick={() => store.selectTeam(t.name)}
                   >
                     <span>
                       {t.name} ({t.remaining})
@@ -40,8 +39,8 @@ export function TeamsMini() {
           <div className="control">
             <button
               className="button is-small"
-              disabled={undos.length === 0}
-              onClick={() => dispatch(undoAction())}
+              disabled={!store.canUndo()}
+              onClick={() => store.undo()}
             >
               <span className="icon">
                 <i className="fas fa-undo"></i>
@@ -52,4 +51,4 @@ export function TeamsMini() {
       </div>
     </div>
   );
-}
+});

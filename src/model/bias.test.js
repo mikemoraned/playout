@@ -1,33 +1,31 @@
-import { reducer } from "./reducer";
-import { rotateBiasAction } from "./action";
-import { biasKey, BiasKind } from "./bias";
 import { testStore } from "./testStore";
+import { BiasKind } from "./bias";
 
-let state = {};
+let store = null;
 
 beforeEach(() => {
-  state = testStore();
+  store = testStore();
 });
 
 describe("team member biases", () => {
   test("no bias by default", () => {
-    const expectedBiases = {};
-    expectedBiases[biasKey("A", "A")] = BiasKind.NEXT_TO_SAME_TEAM;
-    expectedBiases[biasKey("A", "B")] = BiasKind.NO_BIAS;
-    expectedBiases[biasKey("B", "A")] = BiasKind.NO_BIAS;
-    expectedBiases[biasKey("B", "B")] = BiasKind.NEXT_TO_SAME_TEAM;
+    const biases = store.teams.biases;
 
-    expect(state.teams.biases).toEqual(expectedBiases);
+    expect(store.teams.biases.getBias("A", "A")).toEqual(
+      BiasKind.NEXT_TO_SAME_TEAM
+    );
+    expect(biases.getBias("A", "B")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("B", "A")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("B", "B")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
   });
-
   test("rotate bias symetrically for each team", () => {
-    const stateAfter = reducer(state, rotateBiasAction("A", "B"));
-    const expectedBiases = {};
-    expectedBiases[biasKey("A", "A")] = BiasKind.NEXT_TO_SAME_TEAM;
-    expectedBiases[biasKey("A", "B")] = BiasKind.NEXT_TO;
-    expectedBiases[biasKey("B", "A")] = BiasKind.NEXT_TO;
-    expectedBiases[biasKey("B", "B")] = BiasKind.NEXT_TO_SAME_TEAM;
+    store.rotateBias("A", "B");
 
-    expect(stateAfter.teams.biases).toEqual(expectedBiases);
+    const biases = store.teams.biases;
+
+    expect(biases.getBias("A", "A")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+    expect(biases.getBias("A", "B")).toEqual(BiasKind.NEXT_TO);
+    expect(biases.getBias("B", "A")).toEqual(BiasKind.NEXT_TO);
+    expect(biases.getBias("B", "B")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
   });
 });

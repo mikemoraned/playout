@@ -1,12 +1,16 @@
 {
   "name": "playout",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bulma": "^0.8.2",
+    "mobx": "^5.15.4",
+    "mobx-devtools-mst": "^0.9.22",
+    "mobx-react": "^6.2.2",
+    "mobx-state-tree": "^3.16.0",
     "node-sass": "^4.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

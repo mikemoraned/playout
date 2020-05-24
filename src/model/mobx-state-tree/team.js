@@ -34,6 +34,9 @@ export const Teams = types
     },
   }))
   .views((self) => ({
+    get canAdd() {
+      return self.teams.length < self.template.names.length;
+    },
     get next() {
       return self.selected.name;
     },

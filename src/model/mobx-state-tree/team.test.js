@@ -36,11 +36,11 @@ describe("team editing", () => {
     expect(store.teams.list.slice(0, 2)).toEqual(before.teams.list);
   });
 
-  // test("indicates cannot add team when at limit", () => {
-  //   expect(state.teams.canAdd).toEqual(true);
-  //   const stateAfter = reducer(state, addTeamAction());
-  //   expect(stateAfter.teams.canAdd).toEqual(false);
-  // });
+  test("indicates cannot add team when at limit", () => {
+    expect(store.teams.canAdd).toEqual(true);
+    store.addTeam();
+    expect(store.teams.canAdd).toEqual(false);
+  });
 
   // test("cannot add team when at limit", () => {
   //   const stateWhenAtLimit = reducer(state, addTeamAction());

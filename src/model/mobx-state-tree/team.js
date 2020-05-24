@@ -9,6 +9,9 @@ export const Team = types
   })
   .actions((self) => ({
     addTeamMember() {
+      if (!self.canAdd) {
+        throw new Error("cannot add team member");
+      }
       self.size += 1;
     },
   }))

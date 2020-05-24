@@ -51,6 +51,12 @@ function mobXActionMapper(dispatch, store) {
       case "select_team":
         store.selectTeam(action.name);
         break;
+      case "add_team":
+        store.addTeam();
+        break;
+      case "add_team_member":
+        store.addTeam();
+        break;
       default:
       // ignore
     }

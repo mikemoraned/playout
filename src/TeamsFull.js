@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext } from "./model/store.js";
+import { StoreContext, MobXStoreContext } from "./model/store.js";
 import {
   selectTeamAction,
   addTeamAction,
@@ -38,8 +38,9 @@ function AddRemoveMembers({ team }) {
 }
 
 export function TeamsFull() {
-  const { state, dispatch } = useContext(StoreContext);
-  const { teams } = state;
+  const { dispatch } = useContext(StoreContext);
+  const { store } = useContext(MobXStoreContext);
+  const { teams } = store;
   return (
     <div>
       <div className="field">

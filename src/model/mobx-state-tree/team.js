@@ -1,15 +1,22 @@
 import { types } from "mobx-state-tree";
 
-export const Team = types.model({
+export const Team = types.model("Team", {
   id: types.identifier,
   name: types.string,
   size: types.number,
 });
 
+export const Template = types.model("Template", {
+  names: types.array(types.string),
+  defaultSize: types.number,
+  maximumSize: types.number,
+});
+
 export const Teams = types
-  .model({
+  .model("Teams", {
     teams: types.array(Team),
     selected: types.reference(Team),
+    template: Template,
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -18,6 +25,12 @@ export const Teams = types
         throw new Error(`unknown team: ${name}`);
       }
       self.selected = team;
+    },
+    addTeam() {
+      const remaining = self.template.names.filter((n) => {
+        return self.teams.findIndex((t) => t.name === n) === -1;
+      });
+      self.teams.push(teamFor(remaining[0], self.template.defaultSize));
     },
   }))
   .views((self) => ({
@@ -33,38 +46,14 @@ export function teamFor(name, size) {
   return Team.create({ id: name, name, size });
 }
 
-export function teamsFor(teams) {
-  return Teams.create({ teams, selected: teams[0].name });
+export function teamsFor(teams, template) {
+  return Teams.create({ teams, selected: teams[0].name, template });
 }
 
-// export function teamFor(name, size) {
-//     const placed = new Array(size);
-//     for (let index = 0; index < placed.length; index++) {
-//       placed[index] = false;
-//     }
-//     return {
-//       name,
-//       next: 0,
-//       placed,
-//       remaining: size,
-//       canAdd: true,
-//     };
-//   }
-
-//   export function templateFor(names, defaultSize, maximumSize) {
-//     return {
-//       names,
-//       defaultSize,
-//       maximumSize,
-//     };
-//   }
-
-//   export function teamsFor(teams, template) {
-//     return {
-//       list: teams,
-//       next: teams[0].name,
-//       template,
-//       canAdd: true,
-//       biases: biasesFor(teams),
-//     };
-//   }
+export function templateFor(names, defaultSize, maximumSize) {
+  return Template.create({
+    names,
+    defaultSize,
+    maximumSize,
+  });
+}

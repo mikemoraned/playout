@@ -77,4 +77,17 @@ describe("team member editing", () => {
     const expected = teamFor("B", 4, 4);
     expect(store.teams.list[1]).toEqual(expected);
   });
+
+  test("indicates cannot add team member when at limit", () => {
+    expect(store.teams.list[1].canAdd).toEqual(true);
+    store.addTeamMember("B");
+    expect(store.teams.list[1].canAdd).toEqual(false);
+  });
+
+  //   test("cannot add team member when at limit", () => {
+  //     const stateWhenAtLimit = reducer(state, addTeamMemberAction("B"));
+  //     expect(() => {
+  //       reducer(stateWhenAtLimit, addTeamMemberAction("B"));
+  //     }).toThrowError(/^cannot add team member$/);
+  //   });
 });

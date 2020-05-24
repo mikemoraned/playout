@@ -42,12 +42,12 @@ describe("team editing", () => {
     expect(store.teams.canAdd).toEqual(false);
   });
 
-  // test("cannot add team when at limit", () => {
-  //   const stateWhenAtLimit = reducer(state, addTeamAction());
-  //   expect(() => {
-  //     reducer(stateWhenAtLimit, addTeamAction());
-  //   }).toThrowError(/^cannot add team$/);
-  // });
+  test("cannot add team when at limit", () => {
+    store.addTeam();
+    expect(() => {
+      store.addTeam();
+    }).toThrowError(/^cannot add team$/);
+  });
 
   // test("can expand biases", () => {
   //   const stateAfter = reducer(state, addTeamAction());

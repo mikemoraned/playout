@@ -27,6 +27,9 @@ export const Teams = types
       self.selected = team;
     },
     addTeam() {
+      if (!self.canAdd) {
+        throw new Error(`cannot add team`);
+      }
       const remaining = self.template.names.filter((n) => {
         return self.teams.findIndex((t) => t.name === n) === -1;
       });

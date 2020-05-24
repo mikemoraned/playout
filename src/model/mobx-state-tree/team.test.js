@@ -32,7 +32,7 @@ describe("team editing", () => {
     store.addTeam();
     expect(store.teams.next).toBe("A");
     expect(store.teams.list.length).toEqual(3);
-    expect(store.teams.list[2]).toEqual(teamFor("C", 3));
+    expect(store.teams.list[2]).toEqual(teamFor("C", 3, 4));
     expect(store.teams.list.slice(0, 2)).toEqual(before.teams.list);
   });
 
@@ -66,4 +66,15 @@ describe("team editing", () => {
 
   //   expect(stateAfter.teams.biases).toEqual(expectedBiases);
   // });
+});
+
+describe("team member editing", () => {
+  test("can add team member", () => {
+    const before = Store.create(getSnapshot(store));
+    store.addTeamMember("B");
+    expect(store.teams.list.length).toEqual(before.teams.list.length);
+    expect(store.teams.list[0]).toEqual(before.teams.list[0]);
+    const expected = teamFor("B", 4, 4);
+    expect(store.teams.list[1]).toEqual(expected);
+  });
 });

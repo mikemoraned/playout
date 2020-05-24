@@ -1,10 +1,22 @@
 import { types } from "mobx-state-tree";
 
-export const Team = types.model("Team", {
-  id: types.identifier,
-  name: types.string,
-  size: types.number,
-});
+export const Team = types
+  .model("Team", {
+    id: types.identifier,
+    name: types.string,
+    size: types.number,
+    maximumSize: types.number,
+  })
+  .actions((self) => ({
+    addTeamMember() {
+      self.size += 1;
+    },
+  }))
+  .views((self) => ({
+    get canAdd() {
+      return self.size < self.maximumSize;
+    },
+  }));
 
 export const Template = types.model("Template", {
   names: types.array(types.string),
@@ -33,7 +45,28 @@ export const Teams = types
       const remaining = self.template.names.filter((n) => {
         return self.teams.findIndex((t) => t.name === n) === -1;
       });
-      self.teams.push(teamFor(remaining[0], self.template.defaultSize));
+      self.teams.push(
+        teamFor(
+          remaining[0],
+          self.template.defaultSize,
+          self.template.maximumSize
+        )
+      );
+    },
+    addTeamMember(name) {
+      //         const team = teams.list.find((t) => t.name === name);
+      //   if (team.placed.length === teams.template.maximumSize) {
+      //     throw new Error("cannot add team member");
+      //   }
+      //   const placed = team.placed.concat([false]);
+      //   return {
+      //     ...team,
+      //     placed,
+      //     remaining: team.remaining + 1,
+      //     canAdd: placed.length < teams.template.maximumSize,
+      //   };
+      const team = self.teams.find((t) => t.name === name);
+      team.addTeamMember();
     },
   }))
   .views((self) => ({
@@ -48,8 +81,8 @@ export const Teams = types
     },
   }));
 
-export function teamFor(name, size) {
-  return Team.create({ id: name, name, size });
+export function teamFor(name, size, maximumSize) {
+  return Team.create({ id: name, name, size, maximumSize });
 }
 
 export function teamsFor(teams, template) {

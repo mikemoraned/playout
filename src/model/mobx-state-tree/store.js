@@ -14,6 +14,9 @@ export const Store = types
     addTeam() {
       self.teams.addTeam();
     },
+    addTeamMember(name) {
+      self.teams.addTeamMember(name);
+    },
   }));
 
 export function storeFor(teams) {
@@ -26,7 +29,11 @@ export function createStore() {
   const maximumSize = 10;
   const store = storeFor(
     teamsFor(
-      [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
+      [
+        teamFor("A", 3, maximumSize),
+        teamFor("B", 2, maximumSize),
+        teamFor("C", 4, maximumSize),
+      ],
       templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
     )
   );

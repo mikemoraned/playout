@@ -19,6 +19,9 @@ export const Team = types
     get canAdd() {
       return self.size < self.maximumSize;
     },
+    get remaining() {
+      return self.maximumSize - self.size;
+    },
   }));
 
 export const Template = types.model("Template", {

@@ -1,11 +1,14 @@
 import { types } from "mobx-state-tree";
 import makeInspectable from "mobx-devtools-mst";
-import { Teams } from "./team";
+import { Teams, memberFor } from "./team";
+import { Grid, gridFor, positionFor, occupancyFor } from "./grid";
 import { teamFor, teamsFor, templateFor } from "./team";
+import {} from "./grid";
 
 export const Store = types
   .model({
     teams: Teams,
+    grid: Grid,
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -17,10 +20,40 @@ export const Store = types
     addTeamMember(name) {
       self.teams.addTeamMember(name);
     },
+    toggleMemberPlacement(position) {
+      const hasSeat = self.grid.hasSeat(position);
+
+      const currentOccupancy = self.grid.findOccupancy(position);
+
+      if (currentOccupancy) {
+        // occupied = occupied.filter(
+        //   (o) => o.member.id !== currentOccupancy.member.id
+        // );
+        // const team = teams.list.find(
+        //   (t) => t.name === currentOccupancy.member.team
+        // );
+        // return evaluate({
+        //   ...state,
+        //   teams: {
+        //     ...teams,
+        //     list: teamListWithReplacedTeam(
+        //       teams.list,
+        //       teamWithMemberReturned(team, currentOccupancy.member)
+        //     ),
+        //   },
+        // }
+      } else {
+        const selectedTeam = self.teams.selected;
+        if (selectedTeam.remaining > 0 && hasSeat) {
+          const member = selectedTeam.placeMember(position);
+          self.grid.addOccupancy(occupancyFor(position, member));
+        }
+      }
+    },
   }));
 
-export function storeFor(teams) {
-  return Store.create({ teams });
+export function storeFor(teams, grid) {
+  return Store.create({ teams, grid });
 }
 
 export function createStore() {
@@ -35,7 +68,8 @@ export function createStore() {
         teamFor("C", 4, maximumSize),
       ],
       templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
-    )
+    ),
+    gridFor(10, 10)
   );
 
   makeInspectable(store);

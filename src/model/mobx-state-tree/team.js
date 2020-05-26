@@ -4,7 +4,8 @@ export const Team = types
   .model("Team", {
     id: types.identifier,
     name: types.string,
-    size: types.number,
+    nextIndex: types.number,
+    placed: types.array(types.boolean),
     maximumSize: types.number,
   })
   .actions((self) => ({
@@ -12,23 +13,52 @@ export const Team = types
       if (!self.canAdd) {
         throw new Error("cannot add team member");
       }
-      self.size += 1;
+      self.placed.push(false);
+    },
+    placeMember(position) {
+      const member = memberFor(self.name, self.nextIndex);
+      self.placed[self.nextIndex] = true;
+      self.nextIndex = self.placed.findIndex((taken) => !taken);
+      return member;
     },
   }))
   .views((self) => ({
     get canAdd() {
       return self.size < self.maximumSize;
     },
+    get size() {
+      return self.placed.length;
+    },
     get remaining() {
-      return self.maximumSize - self.size;
+      const totalOccupied = self.placed.reduce(
+        (accum, occupied) => (occupied ? accum + 1 : accum),
+        0
+      );
+      return self.placed.length - totalOccupied;
+    },
+    get next() {
+      return self.nextIndex;
     },
   }));
+
+export function teamFor(name, size, maximumSize) {
+  const placed = Array(size).fill(false);
+  return Team.create({ id: name, name, nextIndex: 0, placed, maximumSize });
+}
 
 export const Template = types.model("Template", {
   names: types.array(types.string),
   defaultSize: types.number,
   maximumSize: types.number,
 });
+
+export function templateFor(names, defaultSize, maximumSize) {
+  return Template.create({
+    names,
+    defaultSize,
+    maximumSize,
+  });
+}
 
 export const Teams = types
   .model("Teams", {
@@ -60,17 +90,6 @@ export const Teams = types
       );
     },
     addTeamMember(name) {
-      //         const team = teams.list.find((t) => t.name === name);
-      //   if (team.placed.length === teams.template.maximumSize) {
-      //     throw new Error("cannot add team member");
-      //   }
-      //   const placed = team.placed.concat([false]);
-      //   return {
-      //     ...team,
-      //     placed,
-      //     remaining: team.remaining + 1,
-      //     canAdd: placed.length < teams.template.maximumSize,
-      //   };
       const team = self.teams.find((t) => t.name === name);
       team.addTeamMember();
     },
@@ -87,18 +106,20 @@ export const Teams = types
     },
   }));
 
-export function teamFor(name, size, maximumSize) {
-  return Team.create({ id: name, name, size, maximumSize });
-}
-
 export function teamsFor(teams, template) {
   return Teams.create({ teams, selected: teams[0].name, template });
 }
 
-export function templateFor(names, defaultSize, maximumSize) {
-  return Template.create({
-    names,
-    defaultSize,
-    maximumSize,
+export const Member = types.model("Member", {
+  id: types.identifier,
+  team: types.string,
+  index: types.number,
+});
+
+export function memberFor(teamName, index) {
+  return Member.create({
+    id: `${teamName}_${index}`,
+    team: teamName,
+    index,
   });
 }

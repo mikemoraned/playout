@@ -51,13 +51,10 @@ describe("team member placement", () => {
     expect(store.grid).toEqual(before.grid);
   });
 
-  // test("toggle place member on position with no seat", () => {
-  //   expect(state.grid.occupied).toEqual([]);
-  //   const stateAfterToggle = reducer(
-  //     state,
-  //     togglePlaceMemberAction(positionFor(0, 1))
-  //   );
-  //   expect(stateAfterToggle.teams).toEqual(state.teams);
-  //   expect(stateAfterToggle.grid).toEqual(state.grid);
-  // });
+  test("toggle place member on position with no seat", () => {
+    const before = Store.create(getSnapshot(store));
+    store.toggleMemberPlacement(positionFor(0, 1));
+    expect(store.teams).toEqual(before.teams);
+    expect(store.grid).toEqual(before.grid);
+  });
 });

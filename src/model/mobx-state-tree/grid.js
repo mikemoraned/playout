@@ -21,6 +21,11 @@ export const Grid = types
     addOccupancy(occupancy) {
       self.occupied.push(occupancy);
     },
+    removeOccupancy(occupancy) {
+      self.occupied = self.occupied.filter(
+        (o) => o.member.id !== occupancy.member.id
+      );
+    },
     addSeat(position) {
       self.seats.push(position);
     },

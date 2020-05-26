@@ -21,30 +21,17 @@ export const Store = types
       self.teams.addTeamMember(name);
     },
     toggleMemberPlacement(position) {
-      const hasSeat = self.grid.hasSeat(position);
-
       const currentOccupancy = self.grid.findOccupancy(position);
 
       if (currentOccupancy) {
-        // occupied = occupied.filter(
-        //   (o) => o.member.id !== currentOccupancy.member.id
-        // );
-        // const team = teams.list.find(
-        //   (t) => t.name === currentOccupancy.member.team
-        // );
-        // return evaluate({
-        //   ...state,
-        //   teams: {
-        //     ...teams,
-        //     list: teamListWithReplacedTeam(
-        //       teams.list,
-        //       teamWithMemberReturned(team, currentOccupancy.member)
-        //     ),
-        //   },
-        // }
+        const team = self.teams.list.find(
+          (t) => t.name === currentOccupancy.member.team
+        );
+        team.returnMember(currentOccupancy.member);
+        self.grid.removeOccupancy(currentOccupancy);
       } else {
         const selectedTeam = self.teams.selected;
-        if (selectedTeam.remaining > 0 && hasSeat) {
+        if (selectedTeam.remaining > 0 && self.grid.hasSeat(position)) {
           const member = selectedTeam.placeMember(position);
           self.grid.addOccupancy(occupancyFor(position, member));
         }

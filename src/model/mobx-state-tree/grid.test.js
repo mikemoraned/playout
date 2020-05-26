@@ -39,19 +39,17 @@ describe("team member placement", () => {
     ]);
   });
 
-  // test("toggle place member on occupied seat", () => {
-  //   expect(state.grid.occupied).toEqual([]);
-  //   const stateAfterFirstToggle = reducer(
-  //     state,
-  //     togglePlaceMemberAction(positionFor(0, 0))
-  //   );
-  //   const stateAfterSecondToggle = reducer(
-  //     stateAfterFirstToggle,
-  //     togglePlaceMemberAction(positionFor(0, 0))
-  //   );
-  //   expect(stateAfterSecondToggle.teams).toEqual(state.teams);
-  //   expect(stateAfterSecondToggle.grid).toEqual(state.grid);
-  // });
+  test("toggle place member on occupied seat", () => {
+    const before = Store.create(getSnapshot(store));
+
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams).not.toEqual(before.teams);
+    expect(store.grid).not.toEqual(before.grid);
+
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams).toEqual(before.teams);
+    expect(store.grid).toEqual(before.grid);
+  });
 
   // test("toggle place member on position with no seat", () => {
   //   expect(state.grid.occupied).toEqual([]);

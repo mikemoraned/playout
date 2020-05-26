@@ -15,11 +15,15 @@ export const Team = types
       }
       self.placed.push(false);
     },
-    placeMember(position) {
+    placeMember() {
       const member = memberFor(self.name, self.nextIndex);
       self.placed[self.nextIndex] = true;
       self.nextIndex = self.placed.findIndex((taken) => !taken);
       return member;
+    },
+    returnMember(member) {
+      self.placed[member.index] = false;
+      self.nextIndex = self.placed.findIndex((taken) => !taken);
     },
   }))
   .views((self) => ({

@@ -1,6 +1,6 @@
 import React from "react";
 import { useReducer } from "react";
-import { gridFor, addRandomSeats } from "./grid";
+import { gridFor, positionFor } from "./grid";
 import { teamFor, teamsFor, templateFor } from "./team";
 import { evaluate } from "./evaluation";
 import { reducer } from "./reducer";
@@ -18,22 +18,24 @@ export function storeFor(teams, grid) {
 export const StoreContext = React.createContext(null);
 export const MobXStoreContext = React.createContext(null);
 
+const defaultSize = 5;
+const maximumSize = 10;
+const initialState = storeFor(
+  teamsFor(
+    [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
+    templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
+  ),
+  gridFor(10, 10)
+);
+
+const initialStore = createStore();
+
+addRandomSeats(initialState.grid, initialStore.grid);
+
 export const StoreProvider = ({ children }) => {
-  const defaultSize = 5;
-  const maximumSize = 10;
-  const initialState = storeFor(
-    teamsFor(
-      [teamFor("A", 3), teamFor("B", 2), teamFor("C", 4)],
-      templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
-    ),
-    gridFor(10, 10)
-  );
-
-  addRandomSeats(initialState.grid);
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const mobXStore = useLocalStore(createStore);
+  const mobXStore = useLocalStore(() => initialStore);
   const mappedDispatch = mobXActionMapper(dispatch, mobXStore);
 
   return (
@@ -57,9 +59,25 @@ function mobXActionMapper(dispatch, store) {
       case "add_team_member":
         store.addTeam();
         break;
+      case "toggle_place_member":
+        store.toggleMemberPlacement(action.position);
+        break;
       default:
       // ignore
     }
     dispatch(action);
   };
+}
+
+function addRandomSeats(grid, mobXGrid) {
+  console.log("Adding random seats");
+  for (let x = 0; x < grid.width; x++) {
+    for (let y = 0; y < grid.height; y++) {
+      if (Math.random() < 0.5) {
+        const position = positionFor(x, y);
+        grid.seats.push(position);
+        mobXGrid.addSeat(position);
+      }
+    }
+  }
 }

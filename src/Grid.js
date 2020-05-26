@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
-import { StoreContext } from "./model/store.js";
+import { StoreContext, MobXStoreContext } from "./model/store.js";
 import { togglePlaceMemberAction } from "./model/action";
 import { positionFor } from "./model/grid";
 
@@ -19,8 +19,9 @@ function Desktop({ visibility }) {
 }
 
 export function Grid() {
-  const { state, dispatch } = useContext(StoreContext);
-  const { width, height, seats, occupied } = state.grid;
+  const { dispatch } = useContext(StoreContext);
+  const { store } = useContext(MobXStoreContext);
+  const { width, height, seats, occupied } = store.grid;
   return (
     <div className="table-container">
       <table width={"100%"} className="table" style={{ tableLayout: "fixed" }}>

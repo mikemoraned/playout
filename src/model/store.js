@@ -57,7 +57,7 @@ function mobXActionMapper(dispatch, store) {
         store.addTeam();
         break;
       case "add_team_member":
-        store.addTeam();
+        store.addTeamMember(action.name);
         break;
       case "toggle_place_member":
         store.toggleMemberPlacement(action.position);

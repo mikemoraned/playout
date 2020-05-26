@@ -3,7 +3,6 @@ import makeInspectable from "mobx-devtools-mst";
 import { Teams } from "./team";
 import { Grid, gridFor, occupancyFor } from "./grid";
 import { teamFor, teamsFor, templateFor } from "./team";
-import {} from "./grid";
 
 export const Store = types
   .model({

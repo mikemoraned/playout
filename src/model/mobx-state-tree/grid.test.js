@@ -1,5 +1,5 @@
 import { testStore } from "./testStore";
-import { gridFor, positionFor } from "./grid";
+import { positionFor } from "./grid";
 import { memberFor } from "./team";
 import { getSnapshot } from "mobx-state-tree";
 import { Store } from "./store";

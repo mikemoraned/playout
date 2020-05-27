@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { Biases, biasesFor } from "./bias";
 
 export const Team = types
   .model("Team", {
@@ -69,6 +70,7 @@ export const Teams = types
     teams: types.array(Team),
     selected: types.reference(Team),
     template: Template,
+    biases: Biases,
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -111,7 +113,12 @@ export const Teams = types
   }));
 
 export function teamsFor(teams, template) {
-  return Teams.create({ teams, selected: teams[0].name, template });
+  return Teams.create({
+    teams,
+    selected: teams[0].name,
+    template,
+    biases: biasesFor(teams),
+  });
 }
 
 export const Member = types.model("Member", {

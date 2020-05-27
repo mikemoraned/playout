@@ -1,5 +1,6 @@
 import { testStore } from "./testStore";
 import { teamFor } from "./team";
+import { BiasKind, Biases } from "./bias";
 import { getSnapshot } from "mobx-state-tree";
 import { Store } from "./store";
 
@@ -49,23 +50,23 @@ describe("team editing", () => {
     }).toThrowError(/^cannot add team$/);
   });
 
-  // test("can expand biases", () => {
-  //   const stateAfter = reducer(state, addTeamAction());
-  //   const expectedBiases = {};
-  //   expectedBiases[biasKey("A", "A")] = BiasKind.NEXT_TO_SAME_TEAM;
-  //   expectedBiases[biasKey("A", "B")] = BiasKind.NO_BIAS;
-  //   expectedBiases[biasKey("A", "C")] = BiasKind.NO_BIAS;
+  test("can expand biases", () => {
+    store.addTeam();
 
-  //   expectedBiases[biasKey("B", "A")] = BiasKind.NO_BIAS;
-  //   expectedBiases[biasKey("B", "B")] = BiasKind.NEXT_TO_SAME_TEAM;
-  //   expectedBiases[biasKey("B", "C")] = BiasKind.NO_BIAS;
+    const biases = store.teams.biases;
 
-  //   expectedBiases[biasKey("C", "A")] = BiasKind.NO_BIAS;
-  //   expectedBiases[biasKey("C", "B")] = BiasKind.NO_BIAS;
-  //   expectedBiases[biasKey("C", "C")] = BiasKind.NEXT_TO_SAME_TEAM;
+    expect(biases.getBias("A", "A")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+    expect(biases.getBias("A", "B")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("A", "C")).toEqual(BiasKind.NO_BIAS);
 
-  //   expect(stateAfter.teams.biases).toEqual(expectedBiases);
-  // });
+    expect(biases.getBias("B", "A")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("B", "B")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+    expect(biases.getBias("B", "C")).toEqual(BiasKind.NO_BIAS);
+
+    expect(biases.getBias("C", "A")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("C", "B")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("C", "C")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+  });
 });
 
 describe("team member editing", () => {

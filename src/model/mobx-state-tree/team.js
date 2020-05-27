@@ -94,6 +94,7 @@ export const Teams = types
           self.template.maximumSize
         )
       );
+      self.biases.expandBiases(self.list);
     },
     addTeamMember(name) {
       const team = self.teams.find((t) => t.name === name);

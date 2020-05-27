@@ -12,22 +12,23 @@ beforeEach(() => {
 
 describe("team member biases", () => {
   test("no bias by default", () => {
-    const expectedBiases = Biases.create();
-    expectedBiases.setBias("A", "A", BiasKind.NEXT_TO_SAME_TEAM);
-    expectedBiases.setBias("A", "B", BiasKind.NO_BIAS);
-    expectedBiases.setBias("B", "A", BiasKind.NO_BIAS);
-    expectedBiases.setBias("B", "B", BiasKind.NEXT_TO_SAME_TEAM);
-    expect(store.teams.biases).toEqual(expectedBiases);
+    const biases = store.teams.biases;
+
+    expect(store.teams.biases.getBias("A", "A")).toEqual(
+      BiasKind.NEXT_TO_SAME_TEAM
+    );
+    expect(biases.getBias("A", "B")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("B", "A")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("B", "B")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
   });
   test("rotate bias symetrically for each team", () => {
-    const expectedBiases = Biases.create();
-    expectedBiases.setBias("A", "A", BiasKind.NEXT_TO_SAME_TEAM);
-    expectedBiases.setBias("A", "B", BiasKind.NEXT_TO);
-    expectedBiases.setBias("B", "A", BiasKind.NEXT_TO);
-    expectedBiases.setBias("B", "B", BiasKind.NEXT_TO_SAME_TEAM);
-
     store.rotateBias("A", "B");
 
-    expect(store.teams.biases).toEqual(expectedBiases);
+    const biases = store.teams.biases;
+
+    expect(biases.getBias("A", "A")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+    expect(biases.getBias("A", "B")).toEqual(BiasKind.NEXT_TO);
+    expect(biases.getBias("B", "A")).toEqual(BiasKind.NEXT_TO);
+    expect(biases.getBias("B", "B")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
   });
 });

@@ -18,7 +18,7 @@ export function biasKey(fromTeamName, toTeamName) {
 
 export const Biases = types
   .model("Biases", {
-    biases: types.map(types.string, types.string),
+    biases: types.map(types.string),
   })
   .actions((self) => ({
     setBias(fromTeamName, toTeamName, biasKind) {
@@ -31,6 +31,21 @@ export const Biases = types
       const current = self.getBias(fromTeamName, toTeamName);
       const next = nextBias[current];
       self.setBias(fromTeamName, toTeamName, next);
+    },
+    expandBiases(teamList) {
+      for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
+        for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
+          const fromTeamName = teamList[fromIndex].name;
+          const toTeamName = teamList[toIndex].name;
+          if (fromIndex === toIndex) {
+            self.setBias(fromTeamName, toTeamName, BiasKind.NEXT_TO_SAME_TEAM);
+          } else {
+            if (!self.getBias(fromTeamName, toTeamName)) {
+              self.setBias(fromTeamName, toTeamName, BiasKind.NO_BIAS);
+            }
+          }
+        }
+      }
     },
   }))
   .views((self) => ({

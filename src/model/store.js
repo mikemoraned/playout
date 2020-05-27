@@ -62,6 +62,9 @@ function mobXActionMapper(dispatch, store) {
       case "toggle_place_member":
         store.toggleMemberPlacement(action.position);
         break;
+      case "rotate_bias":
+        store.rotateBias(action.fromTeamName, action.toTeamName);
+        break;
       default:
       // ignore
     }

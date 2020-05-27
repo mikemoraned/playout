@@ -1,8 +1,8 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext } from "./model/store.js";
+import { StoreContext, MobXStoreContext } from "./model/store.js";
 import { rotateBiasAction } from "./model/action";
-import { biasKey, BiasKind, canRotate } from "./model/bias";
+import { BiasKind, canRotate } from "./model/mobx-state-tree/bias";
 import { ScoreFaceIcon } from "./Evaluation";
 
 const iconForBiasKind = {};
@@ -31,9 +31,11 @@ function Bias({ biasKind, fromTeamName, toTeamName }) {
 }
 
 export function Biases() {
-  const { state } = useContext(StoreContext);
-  const { teams } = state;
+  const { store } = useContext(MobXStoreContext);
+  const { teams } = store;
   const { biases } = teams;
+
+  const { state } = useContext(StoreContext);
   const { evaluation } = state;
 
   return (
@@ -60,10 +62,9 @@ export function Biases() {
             <tr key={toTeam.name}>
               <td>to {toTeam.name}:</td>
               {teams.list.map((fromTeam) => {
-                const key = biasKey(fromTeam.name, toTeam.name);
-                const bias = biases[key];
+                const bias = biases.getBias(fromTeam.name, toTeam.name);
                 return (
-                  <td key={key}>
+                  <td key={fromTeam.name}>
                     <Bias
                       biasKind={bias}
                       fromTeamName={fromTeam.name}

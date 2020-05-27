@@ -12,8 +12,8 @@ export const nextBias = {};
 nextBias[BiasKind.NO_BIAS] = BiasKind.NEXT_TO;
 nextBias[BiasKind.NEXT_TO] = BiasKind.NO_BIAS;
 
-export function biasKey(fromTeamName, toTeamName) {
-  return `${fromTeamName}.${toTeamName}`;
+export function canRotate(biasKind) {
+  return biasKind === BiasKind.NEXT_TO || biasKind === BiasKind.NO_BIAS;
 }
 
 export const Biases = types
@@ -54,6 +54,10 @@ export const Biases = types
       return self.biases[forwardKey];
     },
   }));
+
+function biasKey(fromTeamName, toTeamName) {
+  return `${fromTeamName}.${toTeamName}`;
+}
 
 export function biasesFor(teamList) {
   const biases = Biases.create();

@@ -22,8 +22,21 @@ export const Biases = types
   })
   .actions((self) => ({
     setBias(fromTeamName, toTeamName, biasKind) {
-      const key = biasKey(fromTeamName, toTeamName);
-      self.biases[key] = biasKind;
+      const forwardKey = biasKey(fromTeamName, toTeamName);
+      const backwardKey = biasKey(toTeamName, fromTeamName);
+      self.biases[forwardKey] = biasKind;
+      self.biases[backwardKey] = biasKind;
+    },
+    rotateBias(fromTeamName, toTeamName) {
+      const current = self.getBias(fromTeamName, toTeamName);
+      const next = nextBias[current];
+      self.setBias(fromTeamName, toTeamName, next);
+    },
+  }))
+  .views((self) => ({
+    getBias(fromTeamName, toTeamName) {
+      const forwardKey = biasKey(fromTeamName, toTeamName);
+      return self.biases[forwardKey];
     },
   }));
 

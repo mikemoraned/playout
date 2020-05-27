@@ -19,13 +19,15 @@ describe("team member biases", () => {
     expectedBiases.setBias("B", "B", BiasKind.NEXT_TO_SAME_TEAM);
     expect(store.teams.biases).toEqual(expectedBiases);
   });
-  // test("rotate bias symetrically for each team", () => {
-  //   const stateAfter = reducer(state, rotateBiasAction("A", "B"));
-  //   const expectedBiases = {};
-  //   expectedBiases[biasKey("A", "A")] = BiasKind.NEXT_TO_SAME_TEAM;
-  //   expectedBiases[biasKey("A", "B")] = BiasKind.NEXT_TO;
-  //   expectedBiases[biasKey("B", "A")] = BiasKind.NEXT_TO;
-  //   expectedBiases[biasKey("B", "B")] = BiasKind.NEXT_TO_SAME_TEAM;
-  //   expect(stateAfter.teams.biases).toEqual(expectedBiases);
-  // });
+  test("rotate bias symetrically for each team", () => {
+    const expectedBiases = Biases.create();
+    expectedBiases.setBias("A", "A", BiasKind.NEXT_TO_SAME_TEAM);
+    expectedBiases.setBias("A", "B", BiasKind.NEXT_TO);
+    expectedBiases.setBias("B", "A", BiasKind.NEXT_TO);
+    expectedBiases.setBias("B", "B", BiasKind.NEXT_TO_SAME_TEAM);
+
+    store.rotateBias("A", "B");
+
+    expect(store.teams.biases).toEqual(expectedBiases);
+  });
 });

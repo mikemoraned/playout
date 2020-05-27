@@ -36,6 +36,9 @@ export const Store = types
         }
       }
     },
+    rotateBias(fromTeamName, toTeamName) {
+      self.teams.rotateBias(fromTeamName, toTeamName);
+    },
   }));
 
 export function storeFor(teams, grid) {

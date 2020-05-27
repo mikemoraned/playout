@@ -99,6 +99,9 @@ export const Teams = types
       const team = self.teams.find((t) => t.name === name);
       team.addTeamMember();
     },
+    rotateBias(fromTeamName, toTeamName) {
+      self.biases.rotateBias(fromTeamName, toTeamName);
+    },
   }))
   .views((self) => ({
     get canAdd() {

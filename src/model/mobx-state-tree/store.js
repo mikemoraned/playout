@@ -3,11 +3,13 @@ import makeInspectable from "mobx-devtools-mst";
 import { Teams } from "./team";
 import { Grid, gridFor, occupancyFor } from "./grid";
 import { teamFor, teamsFor, templateFor } from "./team";
+import { UndoToggleMemberPlacement } from "./undo";
 
 export const Store = types
   .model({
     teams: Teams,
     grid: Grid,
+    undos: types.array(UndoToggleMemberPlacement),
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -19,9 +21,8 @@ export const Store = types
     addTeamMember(name) {
       self.teams.addTeamMember(name);
     },
-    toggleMemberPlacement(position) {
+    toggleMemberPlacementWithoutUndo(position) {
       const currentOccupancy = self.grid.findOccupancy(position);
-
       if (currentOccupancy) {
         const team = self.teams.list.find(
           (t) => t.name === currentOccupancy.member.team
@@ -36,8 +37,17 @@ export const Store = types
         }
       }
     },
+    toggleMemberPlacement(position) {
+      self.toggleMemberPlacementWithoutUndo(position);
+      self.undos.push(UndoToggleMemberPlacement.create({ position }));
+    },
     rotateBias(fromTeamName, toTeamName) {
       self.teams.rotateBias(fromTeamName, toTeamName);
+    },
+    undo() {
+      const undoCommand = self.undos[self.undos.length - 1];
+      undoCommand.apply(self);
+      self.undos.pop();
     },
   }));
 

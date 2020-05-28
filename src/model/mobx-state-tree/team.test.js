@@ -1,6 +1,6 @@
 import { testStore } from "./testStore";
 import { teamFor } from "./team";
-import { BiasKind, Biases } from "./bias";
+import { BiasKind } from "./bias";
 import { getSnapshot } from "mobx-state-tree";
 import { Store } from "./store";
 

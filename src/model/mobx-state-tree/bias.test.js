@@ -1,8 +1,5 @@
 import { testStore } from "./testStore";
-import { BiasKind, biasKey, Biases } from "./bias";
-import { memberFor } from "./team";
-import { getSnapshot } from "mobx-state-tree";
-import { Store } from "./store";
+import { BiasKind } from "./bias";
 
 let store = null;
 

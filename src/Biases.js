@@ -32,11 +32,11 @@ function Bias({ biasKind, fromTeamName, toTeamName }) {
 
 export function Biases() {
   const { store } = useContext(MobXStoreContext);
+
   const { teams } = store;
   const { biases } = teams;
 
-  const { state } = useContext(StoreContext);
-  const { evaluation } = state;
+  const { evaluation } = store;
 
   return (
     <table className="table is-narrow" style={{ tableLayout: "fixed" }}>

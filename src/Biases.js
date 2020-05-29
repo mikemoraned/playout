@@ -1,7 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext, MobXStoreContext } from "./model/store.js";
-import { rotateBiasAction } from "./model/action";
+import { MobXStoreContext } from "./model/store.js";
 import { BiasKind, canRotate } from "./model/mobx-state-tree/bias";
 import { ScoreFaceIcon } from "./Evaluation";
 
@@ -13,13 +12,13 @@ iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO_SAME_TEAM] = iconForBiasKind[BiasKind.NEXT_TO];
 
 function Bias({ biasKind, fromTeamName, toTeamName }) {
-  const { dispatch } = useContext(StoreContext);
+  const { store } = useContext(MobXStoreContext);
   const disabled = !canRotate(biasKind);
 
   return (
     <button
       className="button is-small"
-      onClick={() => dispatch(rotateBiasAction(fromTeamName, toTeamName))}
+      onClick={() => store.rotateBias(fromTeamName, toTeamName)}
       title={biasKind}
       disabled={disabled}
     >

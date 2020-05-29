@@ -1,8 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
-import { StoreContext, MobXStoreContext } from "./model/store.js";
-import { togglePlaceMemberAction } from "./model/action";
+import { MobXStoreContext } from "./model/store.js";
 import { positionFor } from "./model/grid";
 
 function Desktop({ visibility }) {
@@ -19,7 +18,6 @@ function Desktop({ visibility }) {
 }
 
 export function Grid() {
-  const { dispatch } = useContext(StoreContext);
   const { store } = useContext(MobXStoreContext);
   const { width, height, seats, occupied } = store.grid;
   return (
@@ -39,9 +37,7 @@ export function Grid() {
                   return (
                     <td
                       className={`${has_seat ? "has-background-info" : ""}`}
-                      onClick={() =>
-                        dispatch(togglePlaceMemberAction(position))
-                      }
+                      onClick={() => store.toggleMemberPlacement(position)}
                       key={key}
                       style={{
                         textAlign: "center",

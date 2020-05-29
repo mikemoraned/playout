@@ -33,21 +33,16 @@ const Bias = observer(({ biasKind, fromTeamName, toTeamName }) => {
 export const Biases = observer(() => {
   const { store } = useContext(MobXStoreContext);
 
-  const { teams } = store;
-  const { biases } = teams;
-
-  const { evaluation } = store;
-
   return (
     <table className="table is-narrow" style={{ tableLayout: "fixed" }}>
       <thead>
         <tr>
-          <th colSpan={teams.list.length + 1}>Proximity:</th>
+          <th colSpan={store.teams.list.length + 1}>Proximity:</th>
         </tr>
         <tr>
           <th>from:</th>
-          {teams.list.map((fromTeam) => {
-            const score = evaluation.score.teams[fromTeam.name];
+          {store.teams.list.map((fromTeam) => {
+            const score = store.evaluation.score.teams[fromTeam.name];
             return (
               <th key={fromTeam.name}>
                 {fromTeam.name} <ScoreFaceIcon {...score} size="small" />{" "}
@@ -57,12 +52,15 @@ export const Biases = observer(() => {
         </tr>
       </thead>
       <tbody>
-        {teams.list.map((toTeam) => {
+        {store.teams.list.map((toTeam) => {
           return (
             <tr key={toTeam.name}>
               <td>to {toTeam.name}:</td>
-              {teams.list.map((fromTeam) => {
-                const bias = biases.getBias(fromTeam.name, toTeam.name);
+              {store.teams.list.map((fromTeam) => {
+                const bias = store.teams.biases.getBias(
+                  fromTeam.name,
+                  toTeam.name
+                );
                 return (
                   <td key={fromTeam.name}>
                     <Bias

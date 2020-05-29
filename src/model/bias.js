@@ -24,8 +24,8 @@ export const Biases = types
     setBias(fromTeamName, toTeamName, biasKind) {
       const forwardKey = biasKey(fromTeamName, toTeamName);
       const backwardKey = biasKey(toTeamName, fromTeamName);
-      self.biases[forwardKey] = biasKind;
-      self.biases[backwardKey] = biasKind;
+      self.biases.set(forwardKey, biasKind);
+      self.biases.set(backwardKey, biasKind);
     },
     rotateBias(fromTeamName, toTeamName) {
       const current = self.getBias(fromTeamName, toTeamName);
@@ -51,7 +51,7 @@ export const Biases = types
   .views((self) => ({
     getBias(fromTeamName, toTeamName) {
       const forwardKey = biasKey(fromTeamName, toTeamName);
-      return self.biases[forwardKey];
+      return self.biases.get(forwardKey);
     },
   }));
 

@@ -1,11 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext, MobXStoreContext } from "./model/store.js";
-import {
-  selectTeamAction,
-  addTeamAction,
-  addTeamMemberAction,
-} from "./model/action";
+import { MobXStoreContext } from "./model/store.js";
 import { TeamMember } from "./TeamMember";
 
 function AddRemoveMembersHeader() {
@@ -19,14 +14,14 @@ function AddRemoveMembersHeader() {
 }
 
 function AddRemoveMembers({ team }) {
-  const { dispatch } = useContext(StoreContext);
+  const { store } = useContext(MobXStoreContext);
   return (
     <div className="field is-grouped">
       <div className="buttons are-small has-addons">
         <button
           className="button"
           disabled={!team.canAdd}
-          onClick={() => dispatch(addTeamMemberAction(team.name))}
+          onClick={() => store.addTeamMember(team.name)}
         >
           <span className="icon">
             <i className="fas fa-user-plus"></i>
@@ -38,7 +33,6 @@ function AddRemoveMembers({ team }) {
 }
 
 export function TeamsFull() {
-  const { dispatch } = useContext(StoreContext);
   const { store } = useContext(MobXStoreContext);
   const { teams } = store;
   return (
@@ -62,13 +56,11 @@ export function TeamsFull() {
                     key={t.name}
                     className={t.name === teams.next ? "is-selected" : ""}
                   >
-                    <td onClick={() => dispatch(selectTeamAction(t.name))}>
-                      {t.name}
-                    </td>
+                    <td onClick={() => store.selectTeam(t.name)}>{t.name}</td>
                     <td>
                       <AddRemoveMembers team={t} />
                     </td>
-                    <td onClick={() => dispatch(selectTeamAction(t.name))}>
+                    <td onClick={() => store.selectTeam(t.name)}>
                       {t.placed.map((taken, index) => {
                         const isLast = index + 1 === t.placed.length;
                         return (
@@ -94,7 +86,7 @@ export function TeamsFull() {
           <button
             className="button is-primary"
             disabled={!teams.canAdd}
-            onClick={() => dispatch(addTeamAction())}
+            onClick={() => store.addTeam()}
           >
             <span className="icon">
               <i className="fas fa-users"></i>

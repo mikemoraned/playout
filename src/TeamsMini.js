@@ -1,11 +1,9 @@
 import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
-import { StoreContext, MobXStoreContext } from "./model/store.js";
-import { selectTeamAction, undoAction } from "./model/action";
+import { MobXStoreContext } from "./model/store.js";
 
 export const TeamsMini = observer(() => {
-  const { dispatch } = useContext(StoreContext);
   const { store } = useContext(MobXStoreContext);
   return (
     <div className="field is-horizontal">
@@ -28,7 +26,7 @@ export const TeamsMini = observer(() => {
                   <button
                     key={t.name}
                     className={`button ${isNext ? "is-primary" : ""}`}
-                    onClick={() => dispatch(selectTeamAction(t.name))}
+                    onClick={() => store.selectTeam(t.name)}
                   >
                     <span>
                       {t.name} ({t.remaining})
@@ -42,7 +40,7 @@ export const TeamsMini = observer(() => {
             <button
               className="button is-small"
               disabled={!store.canUndo()}
-              onClick={() => dispatch(undoAction())}
+              onClick={() => store.undo()}
             >
               <span className="icon">
                 <i className="fas fa-undo"></i>

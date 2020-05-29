@@ -29,17 +29,23 @@ export const Store = types
         );
         team.returnMember(currentOccupancy.member);
         self.grid.removeOccupancy(currentOccupancy);
+        return true;
       } else {
         const selectedTeam = self.teams.selected;
         if (selectedTeam.remaining > 0 && self.grid.hasSeat(position)) {
           const member = selectedTeam.placeMember(position);
           self.grid.addOccupancy(occupancyFor(position, member));
+          return true;
+        } else {
+          return false;
         }
       }
     },
     toggleMemberPlacement(position) {
-      self.toggleMemberPlacementWithoutUndo(position);
-      self.undos.push(UndoToggleMemberPlacement.create({ position }));
+      const updated = self.toggleMemberPlacementWithoutUndo(position);
+      if (updated) {
+        self.undos.push(UndoToggleMemberPlacement.create({ position }));
+      }
     },
     rotateBias(fromTeamName, toTeamName) {
       self.teams.rotateBias(fromTeamName, toTeamName);

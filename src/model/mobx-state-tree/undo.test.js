@@ -33,4 +33,11 @@ describe("undo", () => {
       store.undo();
     }).toThrowError(/^nothing to undo$/);
   });
+
+  test("undo is not added for action which had no effect", () => {
+    const positionWithNoSeat = positionFor(0, 1);
+    store.toggleMemberPlacement(positionWithNoSeat);
+
+    expect(store.undos).toEqual([]);
+  });
 });

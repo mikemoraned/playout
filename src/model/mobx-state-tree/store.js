@@ -4,6 +4,7 @@ import { Teams } from "./team";
 import { Grid, gridFor, occupancyFor } from "./grid";
 import { teamFor, teamsFor, templateFor } from "./team";
 import { UndoToggleMemberPlacement } from "./undo";
+import { evaluate } from "./evaluation";
 
 export const Store = types
   .model({
@@ -62,6 +63,9 @@ export const Store = types
   .views((self) => ({
     canUndo() {
       return self.undos.length > 0;
+    },
+    get evaluation() {
+      return evaluate(self);
     },
   }));
 

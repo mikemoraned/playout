@@ -1,93 +1,94 @@
-import { reducer } from "./reducer";
-import { selectTeamAction, addTeamAction, addTeamMemberAction } from "./action";
-import { teamFor } from "./team";
-import { biasKey, BiasKind } from "./bias";
 import { testStore } from "./testStore";
+import { teamFor } from "./team";
+import { BiasKind } from "./bias";
+import { getSnapshot } from "mobx-state-tree";
+import { Store } from "./store";
 
-let state = {};
+let store = null;
 
 beforeEach(() => {
-  state = testStore();
+  store = testStore();
 });
 
 describe("team selection", () => {
   test("default selected team is first team", () => {
-    expect(state.teams.next).toBe("A");
+    expect(store.teams.next).toBe("A");
   });
 
   test("can select team by name", () => {
-    const stateAfter = reducer(state, selectTeamAction("B"));
-    expect(stateAfter.teams.next).toBe("B");
+    store.selectTeam("B");
+    expect(store.teams.next).toBe("B");
   });
 
   test("select unknown team throws Error", () => {
     expect(() => {
-      reducer(state, selectTeamAction("C"));
+      store.selectTeam("C");
     }).toThrowError(/^unknown team: C$/);
   });
 });
 
 describe("team editing", () => {
   test("can add new team when below limit", () => {
-    const stateAfter = reducer(state, addTeamAction());
-    expect(stateAfter.teams.next).toBe("A");
-    expect(stateAfter.teams.list.length).toEqual(3);
-    expect(stateAfter.teams.list[2]).toEqual(teamFor("C", 3));
-    expect(stateAfter.teams.list.slice(0, 2)).toEqual(state.teams.list);
+    const before = Store.create(getSnapshot(store));
+    store.addTeam();
+    expect(store.teams.next).toBe("A");
+    expect(store.teams.list.length).toEqual(3);
+    expect(store.teams.list[2]).toEqual(teamFor("C", 3, 4));
+    expect(store.teams.list.slice(0, 2)).toEqual(before.teams.list);
   });
 
   test("indicates cannot add team when at limit", () => {
-    expect(state.teams.canAdd).toEqual(true);
-    const stateAfter = reducer(state, addTeamAction());
-    expect(stateAfter.teams.canAdd).toEqual(false);
+    expect(store.teams.canAdd).toEqual(true);
+    store.addTeam();
+    expect(store.teams.canAdd).toEqual(false);
   });
 
   test("cannot add team when at limit", () => {
-    const stateWhenAtLimit = reducer(state, addTeamAction());
+    store.addTeam();
     expect(() => {
-      reducer(stateWhenAtLimit, addTeamAction());
+      store.addTeam();
     }).toThrowError(/^cannot add team$/);
   });
 
   test("can expand biases", () => {
-    const stateAfter = reducer(state, addTeamAction());
-    const expectedBiases = {};
-    expectedBiases[biasKey("A", "A")] = BiasKind.NEXT_TO_SAME_TEAM;
-    expectedBiases[biasKey("A", "B")] = BiasKind.NO_BIAS;
-    expectedBiases[biasKey("A", "C")] = BiasKind.NO_BIAS;
+    store.addTeam();
 
-    expectedBiases[biasKey("B", "A")] = BiasKind.NO_BIAS;
-    expectedBiases[biasKey("B", "B")] = BiasKind.NEXT_TO_SAME_TEAM;
-    expectedBiases[biasKey("B", "C")] = BiasKind.NO_BIAS;
+    const biases = store.teams.biases;
 
-    expectedBiases[biasKey("C", "A")] = BiasKind.NO_BIAS;
-    expectedBiases[biasKey("C", "B")] = BiasKind.NO_BIAS;
-    expectedBiases[biasKey("C", "C")] = BiasKind.NEXT_TO_SAME_TEAM;
+    expect(biases.getBias("A", "A")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+    expect(biases.getBias("A", "B")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("A", "C")).toEqual(BiasKind.NO_BIAS);
 
-    expect(stateAfter.teams.biases).toEqual(expectedBiases);
+    expect(biases.getBias("B", "A")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("B", "B")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
+    expect(biases.getBias("B", "C")).toEqual(BiasKind.NO_BIAS);
+
+    expect(biases.getBias("C", "A")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("C", "B")).toEqual(BiasKind.NO_BIAS);
+    expect(biases.getBias("C", "C")).toEqual(BiasKind.NEXT_TO_SAME_TEAM);
   });
 });
 
 describe("team member editing", () => {
   test("can add team member", () => {
-    const stateAfter = reducer(state, addTeamMemberAction("B"));
-    expect(stateAfter.teams.list.length).toEqual(state.teams.list.length);
-    expect(stateAfter.teams.list[0]).toEqual(state.teams.list[0]);
-    const expected = teamFor("B", 4);
-    expected.canAdd = false;
-    expect(stateAfter.teams.list[1]).toEqual(expected);
+    const before = Store.create(getSnapshot(store));
+    store.addTeamMember("B");
+    expect(store.teams.list.length).toEqual(before.teams.list.length);
+    expect(store.teams.list[0]).toEqual(before.teams.list[0]);
+    const expected = teamFor("B", 4, 4);
+    expect(store.teams.list[1]).toEqual(expected);
   });
 
   test("indicates cannot add team member when at limit", () => {
-    expect(state.teams.list[1].canAdd).toEqual(true);
-    const stateAfter = reducer(state, addTeamMemberAction("B"));
-    expect(stateAfter.teams.list[1].canAdd).toEqual(false);
+    expect(store.teams.list[1].canAdd).toEqual(true);
+    store.addTeamMember("B");
+    expect(store.teams.list[1].canAdd).toEqual(false);
   });
 
   test("cannot add team member when at limit", () => {
-    const stateWhenAtLimit = reducer(state, addTeamMemberAction("B"));
+    store.addTeamMember("B");
     expect(() => {
-      reducer(stateWhenAtLimit, addTeamMemberAction("B"));
+      store.addTeamMember("B");
     }).toThrowError(/^cannot add team member$/);
   });
 });

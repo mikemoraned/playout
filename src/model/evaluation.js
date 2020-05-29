@@ -1,26 +1,23 @@
-import { biasKey, BiasKind } from "./bias";
+import { BiasKind } from "./bias";
 import { expandToNextToArea } from "./grid";
 
-export function evaluate(state) {
+export function evaluate(store) {
   return {
-    ...state,
-    evaluation: {
-      progress: evaluateProgress(state),
-      score: evaluateScore(state),
-    },
+    progress: evaluateProgress(store),
+    score: evaluateScore(store),
   };
 }
 
-function evaluateProgress(state) {
+function evaluateProgress(store) {
   const progressLimits = {
     min: 0,
     max: 100,
   };
-  const total = state.teams.list.reduce(
+  const total = store.teams.list.reduce(
     (sum, team) => team.placed.length + sum,
     0
   );
-  const remaining = state.teams.list.reduce(
+  const remaining = store.teams.list.reduce(
     (sum, team) => team.remaining + sum,
     0
   );
@@ -35,19 +32,19 @@ function evaluateProgress(state) {
   };
 }
 
-function evaluateScore(state) {
+function evaluateScore(store) {
   const scoreLimits = {
     min: 0,
     max: 100,
   };
   const perTeamScores = {};
   let scoreSum = 0;
-  state.teams.list.forEach((t) => {
-    const score = evaluateTeamScore(state, t.name, scoreLimits);
+  store.teams.list.forEach((t) => {
+    const score = evaluateTeamScore(store, t.name, scoreLimits);
     perTeamScores[t.name] = score;
     scoreSum += score.value;
   });
-  const overallScore = Math.floor(scoreSum / state.teams.list.length);
+  const overallScore = Math.floor(scoreSum / store.teams.list.length);
   return {
     ...scoreLimits,
     value: overallScore,
@@ -55,27 +52,24 @@ function evaluateScore(state) {
   };
 }
 
-function evaluateTeamScore(state, thisTeamName, scoreLimits) {
-  const { teams } = state;
+function evaluateTeamScore(store, thisTeamName, scoreLimits) {
+  const { teams } = store;
   const { biases } = teams;
   let satisfiedBiases = 0;
   let biasesEvaluated = 0;
   for (let toIndex = 0; toIndex < teams.list.length; toIndex++) {
     const otherTeamName = teams.list[toIndex].name;
-    const key = biasKey(thisTeamName, otherTeamName);
-    const bias = biases[key];
-    if (bias) {
-      biasesEvaluated++;
-      if (bias === BiasKind.NO_BIAS) {
+    const bias = biases.getBias(thisTeamName, otherTeamName);
+    biasesEvaluated++;
+    if (bias === BiasKind.NO_BIAS) {
+      satisfiedBiases++;
+    } else if (bias === BiasKind.NEXT_TO) {
+      if (nextToMemberOfOtherTeam(store, thisTeamName, otherTeamName)) {
         satisfiedBiases++;
-      } else if (bias === BiasKind.NEXT_TO) {
-        if (nextToMemberOfOtherTeam(state, thisTeamName, otherTeamName)) {
-          satisfiedBiases++;
-        }
-      } else if (bias === BiasKind.NEXT_TO_SAME_TEAM) {
-        if (nextToMemberOfSameTeam(state, thisTeamName, otherTeamName)) {
-          satisfiedBiases++;
-        }
+      }
+    } else if (bias === BiasKind.NEXT_TO_SAME_TEAM) {
+      if (nextToMemberOfSameTeam(store, thisTeamName, otherTeamName)) {
+        satisfiedBiases++;
       }
     }
   }
@@ -91,20 +85,20 @@ function evaluateTeamScore(state, thisTeamName, scoreLimits) {
   };
 }
 
-function nextToMemberOfOtherTeam(state, thisTeamName, otherTeamName) {
-  const otherTeamPositions = state.grid.occupied
+function nextToMemberOfOtherTeam(store, thisTeamName, otherTeamName) {
+  const otherTeamPositions = store.grid.occupied
     .filter((o) => o.member.team === otherTeamName)
     .map((o) => o.position);
   const positionsNextToOtherTeam = otherTeamPositions.reduce(
     (positionsNextToOtherTeamSoFar, position) =>
-      expandToNextToArea(position, state.grid).reduce(
+      expandToNextToArea(position, store.grid).reduce(
         (positions, position) => positions.add(position),
         positionsNextToOtherTeamSoFar
       ),
     new Set()
   );
 
-  const thisTeamPositions = state.grid.occupied
+  const thisTeamPositions = store.grid.occupied
     .filter((o) => o.member.team === thisTeamName)
     .map((o) => o.position);
 
@@ -113,8 +107,8 @@ function nextToMemberOfOtherTeam(state, thisTeamName, otherTeamName) {
   );
 }
 
-function nextToMemberOfSameTeam(state, thisTeamName) {
-  const thisTeamOccupancies = state.grid.occupied.filter(
+function nextToMemberOfSameTeam(store, thisTeamName) {
+  const thisTeamOccupancies = store.grid.occupied.filter(
     (o) => o.member.team === thisTeamName
   );
 
@@ -130,7 +124,7 @@ function nextToMemberOfSameTeam(state, thisTeamName) {
       );
       const positionsNextToOtherTeamMembers = otherTeamMemberPositions.reduce(
         (positionsNextToOtherTeamMembersSoFar, position) =>
-          expandToNextToArea(position, state.grid).reduce(
+          expandToNextToArea(position, store.grid).reduce(
             (positions, position) => positions.add(position),
             positionsNextToOtherTeamMembersSoFar
           ),

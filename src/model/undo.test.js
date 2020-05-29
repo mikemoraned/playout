@@ -1,30 +1,43 @@
-import { reducer } from "./reducer";
-import { togglePlaceMemberAction, undoAction } from "./action";
 import { positionFor } from "./grid";
 import { testStore } from "./testStore";
+import { Store } from "./store";
+import { UndoToggleMemberPlacement } from "./undo";
+import { getSnapshot } from "mobx-state-tree";
 
-let state = {};
+let store = {};
 
 beforeEach(() => {
-  state = testStore();
+  store = testStore();
 });
 
 describe("undo", () => {
   test("undo toggle", () => {
-    expect(state.grid.occupied).toEqual([]);
-    expect(state.undos).toEqual([]);
+    const before = Store.create(getSnapshot(store));
+    expect(before.grid.occupied).toEqual([]);
+    expect(before.undos).toEqual([]);
 
-    const stateAfterToggle = reducer(
-      state,
-      togglePlaceMemberAction(positionFor(0, 0))
-    );
-    expect(stateAfterToggle.undos).toEqual([
-      { position: "0_0", type: "toggle_place_member", undoable: false },
+    store.toggleMemberPlacement(positionFor(0, 0));
+
+    expect(store.undos).toEqual([
+      UndoToggleMemberPlacement.create({ position: positionFor(0, 0) }),
     ]);
 
-    const stateAfterUndo = reducer(stateAfterToggle, undoAction());
-    expect(stateAfterUndo.teams).toEqual(state.teams);
-    expect(stateAfterUndo.grid).toEqual(state.grid);
-    expect(stateAfterUndo.undos).toEqual([]);
+    store.undo();
+    expect(store.teams).toEqual(before.teams);
+    expect(store.grid).toEqual(before.grid);
+    expect(store.undos).toEqual([]);
+  });
+
+  test("undo attempt with no pending undos throws Error", () => {
+    expect(() => {
+      store.undo();
+    }).toThrowError(/^nothing to undo$/);
+  });
+
+  test("undo is not added for action which had no effect", () => {
+    const positionWithNoSeat = positionFor(0, 1);
+    store.toggleMemberPlacement(positionWithNoSeat);
+
+    expect(store.undos).toEqual([]);
   });
 });

@@ -1,12 +1,8 @@
 import React from "react";
 import { useContext } from "react";
 import { StoreContext } from "./model/store.js";
-import {
-  selectTeamAction,
-  addTeamAction,
-  addTeamMemberAction,
-} from "./model/action";
 import { TeamMember } from "./TeamMember";
+import { observer } from "mobx-react";
 
 function AddRemoveMembersHeader() {
   return (
@@ -19,14 +15,14 @@ function AddRemoveMembersHeader() {
 }
 
 function AddRemoveMembers({ team }) {
-  const { dispatch } = useContext(StoreContext);
+  const { store } = useContext(StoreContext);
   return (
     <div className="field is-grouped">
       <div className="buttons are-small has-addons">
         <button
           className="button"
           disabled={!team.canAdd}
-          onClick={() => dispatch(addTeamMemberAction(team.name))}
+          onClick={() => store.addTeamMember(team.name)}
         >
           <span className="icon">
             <i className="fas fa-user-plus"></i>
@@ -37,9 +33,9 @@ function AddRemoveMembers({ team }) {
   );
 }
 
-export function TeamsFull() {
-  const { state, dispatch } = useContext(StoreContext);
-  const { teams } = state;
+export const TeamsFull = observer(() => {
+  const { store } = useContext(StoreContext);
+  const { teams } = store;
   return (
     <div>
       <div className="field">
@@ -61,13 +57,11 @@ export function TeamsFull() {
                     key={t.name}
                     className={t.name === teams.next ? "is-selected" : ""}
                   >
-                    <td onClick={() => dispatch(selectTeamAction(t.name))}>
-                      {t.name}
-                    </td>
+                    <td onClick={() => store.selectTeam(t.name)}>{t.name}</td>
                     <td>
                       <AddRemoveMembers team={t} />
                     </td>
-                    <td onClick={() => dispatch(selectTeamAction(t.name))}>
+                    <td onClick={() => store.selectTeam(t.name)}>
                       {t.placed.map((taken, index) => {
                         const isLast = index + 1 === t.placed.length;
                         return (
@@ -93,7 +87,7 @@ export function TeamsFull() {
           <button
             className="button is-primary"
             disabled={!teams.canAdd}
-            onClick={() => dispatch(addTeamAction())}
+            onClick={() => store.addTeam()}
           >
             <span className="icon">
               <i className="fas fa-users"></i>
@@ -104,4 +98,4 @@ export function TeamsFull() {
       </div>
     </div>
   );
-}
+});

@@ -1,8 +1,8 @@
 import React from "react";
 import { useContext } from "react";
+import { observer } from "mobx-react";
 import { StoreContext } from "./model/store.js";
-import { rotateBiasAction } from "./model/action";
-import { biasKey, BiasKind, canRotate } from "./model/bias";
+import { BiasKind, canRotate } from "./model/bias";
 import { ScoreFaceIcon } from "./Evaluation";
 
 const iconForBiasKind = {};
@@ -12,14 +12,14 @@ iconForBiasKind[BiasKind.NEARBY] = "fas fa-user-friends fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO_SAME_TEAM] = iconForBiasKind[BiasKind.NEXT_TO];
 
-function Bias({ biasKind, fromTeamName, toTeamName }) {
-  const { dispatch } = useContext(StoreContext);
+const Bias = observer(({ biasKind, fromTeamName, toTeamName }) => {
+  const { store } = useContext(StoreContext);
   const disabled = !canRotate(biasKind);
 
   return (
     <button
       className="button is-small"
-      onClick={() => dispatch(rotateBiasAction(fromTeamName, toTeamName))}
+      onClick={() => store.rotateBias(fromTeamName, toTeamName)}
       title={biasKind}
       disabled={disabled}
     >
@@ -28,24 +28,21 @@ function Bias({ biasKind, fromTeamName, toTeamName }) {
       </span>
     </button>
   );
-}
+});
 
-export function Biases() {
-  const { state } = useContext(StoreContext);
-  const { teams } = state;
-  const { biases } = teams;
-  const { evaluation } = state;
+export const Biases = observer(() => {
+  const { store } = useContext(StoreContext);
 
   return (
     <table className="table is-narrow" style={{ tableLayout: "fixed" }}>
       <thead>
         <tr>
-          <th colSpan={teams.list.length + 1}>Proximity:</th>
+          <th colSpan={store.teams.list.length + 1}>Proximity:</th>
         </tr>
         <tr>
           <th>from:</th>
-          {teams.list.map((fromTeam) => {
-            const score = evaluation.score.teams[fromTeam.name];
+          {store.teams.list.map((fromTeam) => {
+            const score = store.evaluation.score.teams[fromTeam.name];
             return (
               <th key={fromTeam.name}>
                 {fromTeam.name} <ScoreFaceIcon {...score} size="small" />{" "}
@@ -55,15 +52,17 @@ export function Biases() {
         </tr>
       </thead>
       <tbody>
-        {teams.list.map((toTeam) => {
+        {store.teams.list.map((toTeam) => {
           return (
             <tr key={toTeam.name}>
               <td>to {toTeam.name}:</td>
-              {teams.list.map((fromTeam) => {
-                const key = biasKey(fromTeam.name, toTeam.name);
-                const bias = biases[key];
+              {store.teams.list.map((fromTeam) => {
+                const bias = store.teams.biases.getBias(
+                  fromTeam.name,
+                  toTeam.name
+                );
                 return (
-                  <td key={key}>
+                  <td key={fromTeam.name}>
                     <Bias
                       biasKind={bias}
                       fromTeamName={fromTeam.name}
@@ -78,4 +77,4 @@ export function Biases() {
       </tbody>
     </table>
   );
-}
+});

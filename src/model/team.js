@@ -1,106 +1,140 @@
-import { biasesFor, expandBiases } from "./bias";
+import { types } from "mobx-state-tree";
+import { Biases, biasesFor } from "./bias";
 
-export function memberFor(teamName, index) {
-  return {
-    id: `${teamName}_${index}`,
-    team: teamName,
-    index,
-  };
+export const Team = types
+  .model("Team", {
+    id: types.identifier,
+    name: types.string,
+    nextIndex: types.number,
+    placed: types.array(types.boolean),
+    maximumSize: types.number,
+  })
+  .actions((self) => ({
+    addTeamMember() {
+      if (!self.canAdd) {
+        throw new Error("cannot add team member");
+      }
+      self.placed.push(false);
+    },
+    placeMember() {
+      const member = memberFor(self.name, self.nextIndex);
+      self.placed[self.nextIndex] = true;
+      self.nextIndex = self.placed.findIndex((taken) => !taken);
+      return member;
+    },
+    returnMember(member) {
+      self.placed[member.index] = false;
+      self.nextIndex = self.placed.findIndex((taken) => !taken);
+    },
+  }))
+  .views((self) => ({
+    get canAdd() {
+      return self.size < self.maximumSize;
+    },
+    get size() {
+      return self.placed.length;
+    },
+    get remaining() {
+      const totalOccupied = self.placed.reduce(
+        (accum, occupied) => (occupied ? accum + 1 : accum),
+        0
+      );
+      return self.placed.length - totalOccupied;
+    },
+    get next() {
+      return self.nextIndex;
+    },
+  }));
+
+export function teamFor(name, size, maximumSize) {
+  const placed = Array(size).fill(false);
+  return Team.create({ id: name, name, nextIndex: 0, placed, maximumSize });
 }
 
-export function teamFor(name, size) {
-  const placed = new Array(size);
-  for (let index = 0; index < placed.length; index++) {
-    placed[index] = false;
-  }
-  return {
-    name,
-    next: 0,
-    placed,
-    remaining: size,
-    canAdd: true,
-  };
-}
+export const Template = types.model("Template", {
+  names: types.array(types.string),
+  defaultSize: types.number,
+  maximumSize: types.number,
+});
 
 export function templateFor(names, defaultSize, maximumSize) {
-  return {
+  return Template.create({
     names,
     defaultSize,
     maximumSize,
-  };
+  });
 }
+
+export const Teams = types
+  .model("Teams", {
+    teams: types.array(Team),
+    selected: types.reference(Team),
+    template: Template,
+    biases: Biases,
+  })
+  .actions((self) => ({
+    selectTeam(name) {
+      const team = self.teams.find((t) => t.name === name);
+      if (team === undefined) {
+        throw new Error(`unknown team: ${name}`);
+      }
+      self.selected = team;
+    },
+    addTeam() {
+      if (!self.canAdd) {
+        throw new Error(`cannot add team`);
+      }
+      const remaining = self.template.names.filter((n) => {
+        return self.teams.findIndex((t) => t.name === n) === -1;
+      });
+      self.teams.push(
+        teamFor(
+          remaining[0],
+          self.template.defaultSize,
+          self.template.maximumSize
+        )
+      );
+      self.biases.expandBiases(self.list);
+    },
+    addTeamMember(name) {
+      const team = self.teams.find((t) => t.name === name);
+      team.addTeamMember();
+    },
+    rotateBias(fromTeamName, toTeamName) {
+      self.biases.rotateBias(fromTeamName, toTeamName);
+    },
+  }))
+  .views((self) => ({
+    get canAdd() {
+      return self.teams.length < self.template.names.length;
+    },
+    get next() {
+      return self.selected.name;
+    },
+    get list() {
+      return self.teams;
+    },
+  }));
 
 export function teamsFor(teams, template) {
-  return {
-    list: teams,
-    next: teams[0].name,
+  return Teams.create({
+    teams,
+    selected: teams[0].name,
     template,
-    canAdd: true,
     biases: biasesFor(teams),
-  };
-}
-
-export function teamWithMemberPlaced(team, member) {
-  const placed = [...team.placed];
-  placed[member.index] = true;
-  const next = placed.findIndex((taken) => !taken);
-
-  return {
-    ...team,
-    placed,
-    next,
-    remaining: team.remaining - 1,
-  };
-}
-
-export function teamWithMemberReturned(team, member) {
-  const placed = [...team.placed];
-  placed[member.index] = false;
-  const next = placed.findIndex((taken) => !taken);
-
-  return {
-    ...team,
-    placed,
-    next,
-    remaining: team.remaining + 1,
-  };
-}
-
-export function addNewTeamFromTemplate(teams) {
-  const remaining = teams.template.names.filter((n) => {
-    return teams.list.findIndex((t) => t.name === n) === -1;
   });
-  const newList = teams.list.concat([
-    teamFor(remaining[0], teams.template.defaultSize),
-  ]);
-  return {
-    ...teams,
-    list: newList,
-    canAdd: remaining.length > 1,
-    biases: expandBiases(teams.biases, newList),
-  };
 }
 
-export function addTeamMember(teams, name) {
-  const team = teams.list.find((t) => t.name === name);
-  if (team.placed.length === teams.template.maximumSize) {
-    throw new Error("cannot add team member");
-  }
-  const placed = team.placed.concat([false]);
-  return {
-    ...team,
-    placed,
-    remaining: team.remaining + 1,
-    canAdd: placed.length < teams.template.maximumSize,
-  };
-}
+export const Member = types.model("Member", {
+  id: types.identifier,
+  team: types.string,
+  index: types.number,
+});
 
-export function teamListWithReplacedTeam(list, team) {
-  return list.map((t) => {
-    if (t.name === team.name) {
-      return team;
-    } else {
-      return t;
-    }
+export function memberFor(teamName, index) {
+  return Member.create({
+    id: `${teamName}_${index}`,
+    team: teamName,
+    index,
   });
 }

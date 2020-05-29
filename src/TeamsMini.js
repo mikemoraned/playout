@@ -5,10 +5,8 @@ import { StoreContext, MobXStoreContext } from "./model/store.js";
 import { selectTeamAction, undoAction } from "./model/action";
 
 export const TeamsMini = observer(() => {
-  const { state, dispatch } = useContext(StoreContext);
+  const { dispatch } = useContext(StoreContext);
   const { store } = useContext(MobXStoreContext);
-  const teams = store.teams;
-  const { undos } = state;
   return (
     <div className="field is-horizontal">
       <div className="field-label is-normal">
@@ -24,8 +22,8 @@ export const TeamsMini = observer(() => {
         <div className="field is-grouped">
           <div className="control">
             <div className="buttons are-small has-addons">
-              {teams.list.map((t) => {
-                const isNext = teams.next === t.name;
+              {store.teams.list.map((t) => {
+                const isNext = store.teams.next === t.name;
                 return (
                   <button
                     key={t.name}
@@ -43,7 +41,7 @@ export const TeamsMini = observer(() => {
           <div className="control">
             <button
               className="button is-small"
-              disabled={undos.length === 0}
+              disabled={!store.canUndo()}
               onClick={() => dispatch(undoAction())}
             >
               <span className="icon">

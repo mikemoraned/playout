@@ -1,5 +1,5 @@
 import { testStore } from "./testStore";
-import { positionFor } from "./grid";
+import { positionFor, expandToNextToArea } from "./grid";
 import { memberFor } from "./team";
 import { getSnapshot } from "mobx-state-tree";
 import { Store } from "./store";
@@ -56,5 +56,32 @@ describe("team member placement", () => {
     store.toggleMemberPlacement(positionFor(0, 1));
     expect(store.teams).toEqual(before.teams);
     expect(store.grid).toEqual(before.grid);
+  });
+});
+
+describe("positions and areas", () => {
+  test("can expand to next_to area", () => {
+    const position = positionFor(1, 1);
+    const expanded = expandToNextToArea(position, { width: 3, height: 3 });
+    expect(expanded).toEqual([
+      positionFor(0, 0),
+      positionFor(0, 1),
+      positionFor(0, 2),
+      positionFor(1, 0),
+      positionFor(1, 2),
+      positionFor(2, 0),
+      positionFor(2, 1),
+      positionFor(2, 2),
+    ]);
+  });
+
+  test("can expand to next_to area, excluding outside area", () => {
+    const position = positionFor(0, 2);
+    const expanded = expandToNextToArea(position, { width: 3, height: 3 });
+    expect(expanded).toEqual([
+      positionFor(0, 1),
+      positionFor(1, 1),
+      positionFor(1, 2),
+    ]);
   });
 });

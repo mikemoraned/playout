@@ -1,8 +1,9 @@
 import React from "react";
 import { useContext } from "react";
+import { observer } from "mobx-react";
 import { MobXStoreContext } from "./model/store.js";
 
-function Progress() {
+const Progress = observer(() => {
   const { store } = useContext(MobXStoreContext);
   const { progress } = store.evaluation;
   const fractionDone = progress.value / (progress.max - progress.min);
@@ -17,7 +18,7 @@ function Progress() {
       {100 * fractionDone}%
     </progress>
   );
-}
+});
 
 export function ScoreFaceIcon({ min, max, value, size, success }) {
   const faces = [
@@ -37,16 +38,16 @@ export function ScoreFaceIcon({ min, max, value, size, success }) {
   );
 }
 
-function ScoreFace() {
+const ScoreFace = observer(() => {
   const { store } = useContext(MobXStoreContext);
   const { score } = store.evaluation;
   const { progress } = store.evaluation;
   const completed = progress.value === progress.max;
 
   return <ScoreFaceIcon {...score} size="medium" success={completed} />;
-}
+});
 
-export function Evaluation() {
+export const Evaluation = observer(() => {
   const { store } = useContext(MobXStoreContext);
   const { progress } = store.evaluation;
   const percentDone = (
@@ -75,4 +76,4 @@ export function Evaluation() {
       </div>
     </div>
   );
-}
+});

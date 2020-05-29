@@ -2,6 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { MobXStoreContext } from "./model/store.js";
 import { TeamMember } from "./TeamMember";
+import { observer } from "mobx-react";
 
 function AddRemoveMembersHeader() {
   return (
@@ -32,7 +33,7 @@ function AddRemoveMembers({ team }) {
   );
 }
 
-export function TeamsFull() {
+export const TeamsFull = observer(() => {
   const { store } = useContext(MobXStoreContext);
   const { teams } = store;
   return (
@@ -97,4 +98,4 @@ export function TeamsFull() {
       </div>
     </div>
   );
-}
+});

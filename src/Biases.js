@@ -1,5 +1,6 @@
 import React from "react";
 import { useContext } from "react";
+import { observer } from "mobx-react";
 import { MobXStoreContext } from "./model/store.js";
 import { BiasKind, canRotate } from "./model/mobx-state-tree/bias";
 import { ScoreFaceIcon } from "./Evaluation";
@@ -11,7 +12,7 @@ iconForBiasKind[BiasKind.NEARBY] = "fas fa-user-friends fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
 iconForBiasKind[BiasKind.NEXT_TO_SAME_TEAM] = iconForBiasKind[BiasKind.NEXT_TO];
 
-function Bias({ biasKind, fromTeamName, toTeamName }) {
+const Bias = observer(({ biasKind, fromTeamName, toTeamName }) => {
   const { store } = useContext(MobXStoreContext);
   const disabled = !canRotate(biasKind);
 
@@ -27,9 +28,9 @@ function Bias({ biasKind, fromTeamName, toTeamName }) {
       </span>
     </button>
   );
-}
+});
 
-export function Biases() {
+export const Biases = observer(() => {
   const { store } = useContext(MobXStoreContext);
 
   const { teams } = store;
@@ -78,4 +79,4 @@ export function Biases() {
       </tbody>
     </table>
   );
-}
+});

@@ -1,5 +1,6 @@
 import React from "react";
 import { useContext } from "react";
+import { observer } from "mobx-react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { MobXStoreContext } from "./model/store.js";
 import { positionFor } from "./model/grid";
@@ -17,9 +18,9 @@ function Desktop({ visibility }) {
   );
 }
 
-export function Grid() {
+export const Grid = observer(() => {
   const { store } = useContext(MobXStoreContext);
-  const { width, height, seats, occupied } = store.grid;
+  const { width, height } = store.grid;
   return (
     <div className="table-container">
       <table width={"100%"} className="table" style={{ tableLayout: "fixed" }}>
@@ -28,17 +29,14 @@ export function Grid() {
             return (
               <tr key={y}>
                 {[...Array(width).keys()].map((x) => {
-                  const key = `${x}_${y}`;
                   const position = positionFor(x, y);
-                  const has_seat = seats.indexOf(position) !== -1;
-                  const occupancy = occupied.find(
-                    (o) => o.position === position
-                  );
+                  const has_seat = store.grid.hasSeat(position);
+                  const occupancy = store.grid.findOccupancy(position);
                   return (
                     <td
                       className={`${has_seat ? "has-background-info" : ""}`}
                       onClick={() => store.toggleMemberPlacement(position)}
-                      key={key}
+                      key={x}
                       style={{
                         textAlign: "center",
                         border: "1px solid black",
@@ -75,4 +73,4 @@ export function Grid() {
       </table>
     </div>
   );
-}
+});

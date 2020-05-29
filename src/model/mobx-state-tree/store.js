@@ -45,9 +45,17 @@ export const Store = types
       self.teams.rotateBias(fromTeamName, toTeamName);
     },
     undo() {
+      if (!self.canUndo()) {
+        throw new Error("nothing to undo");
+      }
       const undoCommand = self.undos[self.undos.length - 1];
       undoCommand.apply(self);
       self.undos.pop();
+    },
+  }))
+  .views((self) => ({
+    canUndo() {
+      return self.undos.length > 0;
     },
   }));
 

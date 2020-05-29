@@ -27,4 +27,10 @@ describe("undo", () => {
     expect(store.grid).toEqual(before.grid);
     expect(store.undos).toEqual([]);
   });
+
+  test("undo attempt with no pending undos throws Error", () => {
+    expect(() => {
+      store.undo();
+    }).toThrowError(/^nothing to undo$/);
+  });
 });

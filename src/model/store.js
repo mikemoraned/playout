@@ -65,6 +65,9 @@ function mobXActionMapper(dispatch, store) {
       case "rotate_bias":
         store.rotateBias(action.fromTeamName, action.toTeamName);
         break;
+      case "undo":
+        store.undo();
+        break;
       default:
       // ignore
     }

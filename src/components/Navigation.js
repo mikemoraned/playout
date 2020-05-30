@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Logo } from "./Logo";
 
 export function Navigation({ version }) {
@@ -40,11 +40,15 @@ export function Navigation({ version }) {
         }`}
       >
         <div className="navbar-start">
-          <Link to="/about" className="navbar-item">
+          <NavLink
+            to="/about"
+            className="navbar-item"
+            activeClassName="is-active"
+          >
             <span className="icon is-medium">
               <i className="fas fa-info-circle fa-2x"></i>
             </span>
-          </Link>
+          </NavLink>
         </div>
       </div>
     </nav>

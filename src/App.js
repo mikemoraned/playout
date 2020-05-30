@@ -1,60 +1,27 @@
 import React from "react";
 import "./App.scss";
-import { Navigation } from "./Navigation";
-import { Grid } from "./Grid";
-import { TeamsMini } from "./TeamsMini";
-import { TeamsFull } from "./TeamsFull";
-import { Evaluation } from "./Evaluation";
-import { StoreProvider } from "./model/store.js";
+import { Navigation } from "./components/Navigation";
+import { Footer } from "./components/Footer";
 import { version } from "../package.json";
-import { Biases } from "./Biases";
+import { Build } from "./pages/Build";
+import { About } from "./pages/About";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <Navigation version={version} />
-      <StoreProvider>
-        <div className="container">
-          <div className="columns">
-            <div className="column is-two-thirds">
-              <section className="section">
-                <h1 className="title is-4">Layout</h1>
-                <p className="subtitle is-6">
-                  <span className="icon">
-                    <i className="fas fa-border-all"></i>
-                  </span>{" "}
-                  Place Team Members in Seats
-                </p>
-                <Evaluation />
-                <TeamsMini />
-                <Grid />
-              </section>
-            </div>
-            <div className="column">
-              <section className="section">
-                <h1 className="title is-4">Teams</h1>
-                <p className="subtitle is-6">
-                  <span className="icon">
-                    <i className="fas fa-user-edit"></i>
-                  </span>{" "}
-                  Edit Teams
-                </p>
-                <TeamsFull />
-              </section>
-              <section className="section">
-                <h1 className="title is-4">Biases</h1>
-                <p className="subtitle is-6">
-                  <span className="icon">
-                    <i className="fas fa-star"></i>
-                  </span>{" "}
-                  Who wants what?
-                </p>
-                <Biases />
-              </section>
-            </div>
-          </div>
-        </div>
-      </StoreProvider>
+      <Router>
+        <Navigation version={version} />
+        <Switch>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/">
+            <Build />
+          </Route>
+        </Switch>
+        <Footer />
+      </Router>
     </div>
   );
 }

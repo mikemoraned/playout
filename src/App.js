@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.scss";
-import { Navigation } from "./Navigation";
+import { Navigation } from "./components/Navigation";
 import { version } from "../package.json";
 import { Build } from "./pages/Build";
 

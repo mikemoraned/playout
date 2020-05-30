@@ -1,10 +1,10 @@
 import React from "react";
-import { Grid } from "../Grid";
-import { TeamsMini } from "../TeamsMini";
-import { TeamsFull } from "../TeamsFull";
-import { Evaluation } from "../Evaluation";
+import { Grid } from "../components/Grid";
+import { TeamsMini } from "../components/TeamsMini";
+import { TeamsFull } from "../components/TeamsFull";
+import { Evaluation } from "../components/Evaluation";
 import { StoreProvider } from "../model/store.js";
-import { Biases } from "../Biases";
+import { Biases } from "../components/Biases";
 
 export function Build() {
   return (

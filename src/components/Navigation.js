@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { About } from "./pages/About";
+import { About } from "../pages/About";
 
 function Logo({ fontSize }) {
   return (

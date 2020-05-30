@@ -1,27 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-function Logo({ fontSize }) {
-  return (
-    <span
-      style={{
-        marginLeft: "0.5em",
-        font: `small-caps bold ${fontSize} monospace`,
-      }}
-    >
-      P L{" "}
-      <span className="icon is-small">
-        <i className="far fa-user fa-xs"></i>
-      </span>{" "}
-      Y{" "}
-      <span className="icon is-small">
-        <i className={`far fa-smile fa-xs`}></i>
-      </span>{" "}
-      U T
-    </span>
-  );
-}
+import { Logo } from "./Logo";
 
 export function Navigation({ version }) {
   const [activeMobile, setActiveMobile] = useState(false);

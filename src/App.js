@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.scss";
 import { Navigation } from "./components/Navigation";
+import { Footer } from "./components/Footer";
 import { version } from "../package.json";
 import { Build } from "./pages/Build";
 import { About } from "./pages/About";
@@ -19,6 +20,7 @@ function App() {
             <Build />
           </Route>
         </Switch>
+        <Footer />
       </Router>
     </div>
   );

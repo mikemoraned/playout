@@ -1,5 +1,6 @@
 import React from "react";
 import { Logo } from "./Logo";
+import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
@@ -9,9 +10,12 @@ export function Footer() {
           <div className="column is-two-thirds">
             <div className="content has-text-centered">
               <p>
-                <Logo fontSize="20px" /> is{" "}
+                <Link to="/about">
+                  <Logo fontSize="20px" />
+                </Link>{" "}
+                is{" "}
                 <span className="icon is-small">
-                  <i class="far fa-copyright"></i>
+                  <i className="far fa-copyright"></i>
                 </span>{" "}
                 2020 by <a href="https://houseofmoran.com/">Mike Moran</a>. The
                 source code is licensed under{" "}

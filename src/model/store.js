@@ -1,12 +1,9 @@
 import React from "react";
 import { types } from "mobx-state-tree";
-import makeInspectable from "mobx-devtools-mst";
 import { Teams } from "./team";
-import { Grid, gridFor, occupancyFor } from "./grid";
-import { teamFor, teamsFor, templateFor } from "./team";
+import { Grid, occupancyFor } from "./grid";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
-import { positionFor } from "./grid";
 import { useLocalStore } from "mobx-react";
 
 export const Store = types
@@ -76,33 +73,9 @@ export function storeFor(teams, grid) {
   return Store.create({ teams, grid });
 }
 
-export function createStore() {
-  console.log("creating mst initial state");
-  const defaultSize = 5;
-  const maximumSize = 10;
-  const store = storeFor(
-    teamsFor(
-      [
-        teamFor("A", 3, maximumSize),
-        teamFor("B", 2, maximumSize),
-        teamFor("C", 4, maximumSize),
-      ],
-      templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
-    ),
-    gridFor(10, 10)
-  );
-
-  makeInspectable(store);
-  return store;
-}
-
 export const StoreContext = React.createContext(null);
 
-const initialStore = createStore();
-
-addRandomSeats(initialStore.grid);
-
-export const StoreProvider = ({ children }) => {
+export const StoreProvider = ({ initialStore, children }) => {
   const mobXStore = useLocalStore(() => initialStore);
 
   return (
@@ -111,15 +84,3 @@ export const StoreProvider = ({ children }) => {
     </StoreContext.Provider>
   );
 };
-
-function addRandomSeats(grid) {
-  console.log("Adding random seats");
-  for (let x = 0; x < grid.width; x++) {
-    for (let y = 0; y < grid.height; y++) {
-      if (Math.random() < 0.5) {
-        const position = positionFor(x, y);
-        grid.addSeat(position);
-      }
-    }
-  }
-}

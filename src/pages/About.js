@@ -3,11 +3,11 @@ import React from "react";
 export function About() {
   return (
     <>
-      <section class="section">
+      <section className="section">
         <div className="container">
           <div className="columns">
             <div className="column is-two-thirds">
-              <h1 class="title">About</h1>
+              <h1 className="title">About</h1>
               <div className="content">
                 <p>
                   Playout is a game born during the times of Covid, when the
@@ -23,11 +23,11 @@ export function About() {
           </div>
         </div>
       </section>
-      <section class="section">
+      <section className="section">
         <div className="container">
           <div className="columns">
             <div className="column is-two-thirds">
-              <h1 class="title">The Rules for Happiness</h1>
+              <h1 className="title">The Rules for Happiness</h1>
               <div className="content">
                 <dl>
                   <dt>Place all of the Teams</dt>

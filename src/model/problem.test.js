@@ -10,72 +10,105 @@ describe("problem parsing", () => {
     expect(problem.grid.seats).toEqual(["1_0", "1_1"]);
   });
 
-  test("undefined causes error", () => {
-    expect(() => {
-      parseProblemFrom(undefined);
-    }).toThrowError(/^missing spec$/);
+  describe("format errors", () => {
+    test("undefined causes error", () => {
+      expect(() => {
+        parseProblemFrom(undefined);
+      }).toThrowError(/^missing spec$/);
+    });
+
+    test("null causes error", () => {
+      expect(() => {
+        parseProblemFrom(null);
+      }).toThrowError(/^missing spec$/);
+    });
+
+    test("missing version causes error", () => {
+      const invalidExample = "2x2.~.~..~~";
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: incorrect format$/);
+    });
+
+    test("missing size causes error", () => {
+      const invalidExample = ".~.~..~~_v1";
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: incorrect format$/);
+    });
+
+    test("missing space indicator causes error", () => {
+      const invalidExample = "2x2_v1";
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: incorrect format$/);
+    });
+
+    test("non-integer size causes error", () => {
+      const invalidExample = "2x1.2.~.~..~~_v1";
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: incorrect format$/);
+    });
+
+    test("invalid space char causes error", () => {
+      const invalidExample = "2x2_~.~..~~_v1";
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: incorrect format$/);
+    });
   });
 
-  test("null causes error", () => {
-    expect(() => {
-      parseProblemFrom(null);
-    }).toThrowError(/^missing spec$/);
+  describe("semantic errors", () => {
+    test("zero as a width causes error", () => {
+      const invalidExample = `0x2.~.~..~~_v1`;
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: dimensions cannot be zero$/);
+    });
+
+    test("zero as a height causes error", () => {
+      const invalidExample = `2x0.~.~..~~_v1`;
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: dimensions cannot be zero$/);
+    });
+
+    test("mis-matched size causes error", () => {
+      const invalidExample = "2x2.~....~~_v1";
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(/^invalid spec: expected 4 seat indicators$/);
+    });
   });
 
-  test("missing version causes error", () => {
-    const invalidExample = "2x2.~.~..~~";
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: incorrect format$/);
-  });
+  describe("limits", () => {
+    test("example at limit is accepted error", () => {
+      let seatString = "";
+      let remaining = 100 * 100;
+      while (remaining-- !== 0) {
+        seatString += "~";
+      }
+      const validExample = `100x100${seatString}_v1`;
+      const problem = getSnapshot(parseProblemFrom(validExample));
+      expect(problem.grid.width).toEqual(100);
+      expect(problem.grid.height).toEqual(100);
+      expect(problem.grid.seats.length).toEqual(100 * 100);
+    });
 
-  test("missing size causes error", () => {
-    const invalidExample = ".~.~..~~_v1";
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: incorrect format$/);
-  });
-
-  test("missing space indicator causes error", () => {
-    const invalidExample = "2x2_v1";
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: incorrect format$/);
-  });
-
-  test("non-integer size causes error", () => {
-    const invalidExample = "2x1.2.~.~..~~_v1";
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: incorrect format$/);
-  });
-
-  test("zero as a width causes error", () => {
-    const invalidExample = `0x2.~.~..~~_v1`;
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: dimensions cannot be zero$/);
-  });
-
-  test("zero as a height causes error", () => {
-    const invalidExample = `2x0.~.~..~~_v1`;
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: dimensions cannot be zero$/);
-  });
-
-  test("mis-matched size causes error", () => {
-    const invalidExample = "2x2.~....~~_v1";
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: expected 4 seat indicators$/);
-  });
-
-  test("invalid space char causes error", () => {
-    const invalidExample = "2x2_~.~..~~_v1";
-    expect(() => {
-      parseProblemFrom(invalidExample);
-    }).toThrowError(/^invalid spec: incorrect format$/);
+    test("too large area causes error", () => {
+      let seatString = "";
+      let remaining = 100 * 101;
+      while (remaining-- !== 0) {
+        seatString += "~";
+      }
+      const invalidExample = `100x101${seatString}_v1`;
+      expect(() => {
+        parseProblemFrom(invalidExample);
+      }).toThrowError(
+        /^invalid spec: width \* height too large, must be <= 10000$/
+      );
+    });
   });
 });
 

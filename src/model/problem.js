@@ -79,6 +79,12 @@ function parseGridSpec(gridSpec) {
   if (width === 0 || height === 0) {
     throw new InvalidProblemSpec("invalid spec: dimensions cannot be zero");
   }
+  const maxArea = 10000;
+  if (width * height > maxArea) {
+    throw new InvalidProblemSpec(
+      `invalid spec: width * height too large, must be <= ${maxArea}`
+    );
+  }
   const seatString = match[3];
   const expectedSpaceCharacters = width * height;
   if (seatString.length !== expectedSpaceCharacters) {

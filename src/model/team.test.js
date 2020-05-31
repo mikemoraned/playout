@@ -27,6 +27,14 @@ describe("team selection", () => {
   });
 });
 
+describe("team information", () => {
+  test("total team sizes", () => {
+    expect(store.teams.totalMembers).toBe(5);
+    store.addTeam();
+    expect(store.teams.totalMembers).toBe(8);
+  });
+});
+
 describe("team editing", () => {
   test("can add new team when below limit", () => {
     const before = Store.create(getSnapshot(store));

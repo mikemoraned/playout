@@ -52,7 +52,6 @@ export const Problem = types
       self.grid.seats.forEach((position) => {
         store.grid.addSeat(position);
       });
-      // addRandomSeats(store.grid);
 
       makeInspectable(store);
       return store;
@@ -63,7 +62,7 @@ export class InvalidProblemSpec extends Error {}
 
 export function parseProblemFrom(gridSpec) {
   if (gridSpec === null || gridSpec === undefined) {
-    throw new InvalidProblemSpec("invalid spec");
+    throw new InvalidProblemSpec("missing spec");
   } else {
     return Problem.create({ grid: parseGridSpec(gridSpec) });
   }
@@ -73,22 +72,25 @@ function parseGridSpec(gridSpec) {
   const regex = /(\d+)x(\d+)([.~]+)_v1/;
   const match = gridSpec.match(regex);
   if (match === null) {
-    throw new InvalidProblemSpec("invalid spec");
+    throw new InvalidProblemSpec("invalid spec: incorrect format");
   }
   const width = parseInt(match[1]);
   const height = parseInt(match[2]);
   if (width === 0 || height === 0) {
-    throw new InvalidProblemSpec("invalid spec");
+    throw new InvalidProblemSpec("invalid spec: dimensions cannot be zero");
   }
-  const spaceString = match[3];
-  if (spaceString.length !== width * height) {
-    throw new InvalidProblemSpec("invalid spec");
+  const seatString = match[3];
+  const expectedSpaceCharacters = width * height;
+  if (seatString.length !== expectedSpaceCharacters) {
+    throw new InvalidProblemSpec(
+      `invalid spec: expected ${expectedSpaceCharacters} seat indicators`
+    );
   }
   const seats = [];
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const index = y * width + x;
-      if (spaceString.charAt(index) === "~") {
+      if (seatString.charAt(index) === "~") {
         seats.push(positionFor(x, y));
       }
     }

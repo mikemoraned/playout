@@ -35,17 +35,8 @@ export const Problem = types
   .views((self) => ({
     toStore() {
       console.log("creating mst initial state");
-      const defaultSize = 5;
-      const maximumSize = 10;
       const store = storeFor(
-        teamsFor(
-          [
-            teamFor("A", 3, maximumSize),
-            teamFor("B", 2, maximumSize),
-            teamFor("C", 4, maximumSize),
-          ],
-          templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
-        ),
+        defaultTeams(),
         gridFor(self.grid.width, self.grid.height)
       );
 
@@ -108,13 +99,37 @@ function parseGridSpec(gridSpec) {
   });
 }
 
-export function randomGridSpec(width, height) {
+function defaultTeams() {
+  const defaultSize = 5;
+  const maximumSize = 10;
+  return teamsFor(
+    [
+      teamFor("A", 3, maximumSize),
+      teamFor("B", 2, maximumSize),
+      teamFor("C", 4, maximumSize),
+    ],
+    templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
+  );
+}
+
+export function randomEasyGridSpec() {
+  return randomGridSpec(10, 10);
+}
+
+export function randomHardGridSpec() {
+  return randomGridSpec(5, 5);
+}
+
+function randomGridSpec(width, height) {
+  const minimumSeats = defaultTeams().totalMembers;
   const seats = [];
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-      if (Math.random() < 0.5) {
-        const position = positionFor(x, y);
-        seats.push(position);
+  while (seats.length < minimumSeats) {
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        if (Math.random() < 0.5) {
+          const position = positionFor(x, y);
+          seats.push(position);
+        }
       }
     }
   }

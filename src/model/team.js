@@ -114,6 +114,10 @@ export const Teams = types
     get list() {
       return self.teams;
     },
+    get totalMembers() {
+      const total = self.teams.reduce((sum, team) => team.size + sum, 0);
+      return total;
+    },
   }));
 
 export function teamsFor(teams, template) {

@@ -1,12 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { randomGridSpec } from "../model/problem";
+import { randomEasyGridSpec, randomHardGridSpec } from "../model/problem";
 
 export function Start() {
   const history = useHistory();
 
-  function visitRandomGameLink() {
-    const gridSpec = randomGridSpec(10, 10);
+  function visitRandomGameLink(gridSpec) {
     const path = `/play/${gridSpec.toVersion1Format()}`;
     history.push(path);
   }
@@ -16,11 +15,27 @@ export function Start() {
         <div className="hero-body">
           <div className="container">
             <h1 className="title">Start</h1>
-            <p>
-              <button className="button" onClick={() => visitRandomGameLink()}>
-                Play Random
+            <div className="buttons">
+              <button
+                className="button is-link is-light"
+                onClick={() => visitRandomGameLink(randomEasyGridSpec())}
+              >
+                <span className="icon">
+                  <i className="fas fa-chess-board"></i>
+                </span>
+                <span>Random Easy Game</span>
               </button>
-            </p>
+
+              <button
+                className="button is-link is-light"
+                onClick={() => visitRandomGameLink(randomHardGridSpec())}
+              >
+                <span className="icon">
+                  <i className="fas fa-chess-board"></i>
+                </span>
+                <span>Random Hard Game</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>

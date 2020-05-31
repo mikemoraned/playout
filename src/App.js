@@ -5,7 +5,13 @@ import { Footer } from "./components/Footer";
 import { version } from "../package.json";
 import { Build } from "./pages/Build";
 import { About } from "./pages/About";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Start } from "./pages/Start";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
 function App() {
   return (
@@ -16,8 +22,14 @@ function App() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/">
+          <Route path="/play/:gridSpec">
             <Build />
+          </Route>
+          <Route path="/play">
+            <Redirect to="/" />;
+          </Route>
+          <Route path="/">
+            <Start />
           </Route>
         </Switch>
         <Footer />

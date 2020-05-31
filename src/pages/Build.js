@@ -5,10 +5,13 @@ import { TeamsFull } from "../components/TeamsFull";
 import { Evaluation } from "../components/Evaluation";
 import { StoreProvider } from "../model/store.js";
 import { Biases } from "../components/Biases";
+import { useParams, Redirect } from "react-router-dom";
+import { parseProblemFrom } from "../model/problem";
 
-export function Build() {
+function gameInstance(problem) {
+  const store = problem.toStore();
   return (
-    <StoreProvider>
+    <StoreProvider initialStore={store}>
       <div className="container">
         <div className="columns">
           <div className="column is-two-thirds">
@@ -51,4 +54,15 @@ export function Build() {
       </div>
     </StoreProvider>
   );
+}
+
+export function Build() {
+  const { gridSpec } = useParams();
+
+  try {
+    return gameInstance(parseProblemFrom(gridSpec));
+  } catch (e) {
+    console.log(e);
+    return <Redirect to="/" />;
+  }
 }

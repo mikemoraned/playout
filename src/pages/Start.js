@@ -6,7 +6,7 @@ export function Start() {
   const history = useHistory();
 
   function visitRandomGameLink(gridSpec) {
-    const path = `/play/${gridSpec.toVersion1Format()}`;
+    const path = `/play/${gridSpec.toVersion2Format()}`;
     history.push(path);
   }
   return (

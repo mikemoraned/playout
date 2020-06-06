@@ -1,4 +1,5 @@
-import { parseProblemFrom, Problem, GridSpec, randomGridSpec } from "./problem";
+import { parseProblemFrom, Problem, randomGridSpec } from "./problem";
+import { GridSpec } from "./grid/grid_spec";
 import { getSnapshot } from "mobx-state-tree";
 
 describe("v1 problem parsing", () => {

@@ -1,6 +1,6 @@
-import { BiasKind } from "./bias";
+import { BiasKind } from "./teams/bias";
 import { testStore } from "./testStore";
-import { positionFor } from "./grid";
+import { positionFor } from "./grid/grid";
 
 let store = {};
 

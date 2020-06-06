@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { observer } from "mobx-react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/store.js";
-import { positionFor } from "../model/grid";
+import { positionFor } from "../model/grid/grid";
 
 function Desktop({ visibility }) {
   return (

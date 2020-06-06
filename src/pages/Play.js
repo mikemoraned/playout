@@ -1,9 +1,12 @@
 import React from "react";
 import { Grid } from "../components/Grid";
+import { TeamsMini } from "../components/TeamsMini";
 import { TeamsFull } from "../components/TeamsFull";
+import { Evaluation } from "../components/Evaluation";
 import { StoreProvider } from "../model/store.js";
 import { Biases } from "../components/Biases";
-import { Problem, randomEasyGridSpec } from "../model/problem";
+import { useParams, Redirect } from "react-router-dom";
+import { parseProblemFrom } from "../model/problem";
 
 function gameInstance(problem) {
   const store = problem.toStore();
@@ -18,8 +21,10 @@ function gameInstance(problem) {
                 <span className="icon">
                   <i className="fas fa-border-all"></i>
                 </span>{" "}
-                Edit layout
+                Place Team Members in Seats
               </p>
+              <Evaluation />
+              <TeamsMini />
               <Grid />
             </section>
           </div>
@@ -40,7 +45,7 @@ function gameInstance(problem) {
                 <span className="icon">
                   <i className="fas fa-star"></i>
                 </span>{" "}
-                Edit Biases
+                Who wants what?
               </p>
               <Biases />
             </section>
@@ -51,8 +56,13 @@ function gameInstance(problem) {
   );
 }
 
-export function Build() {
-  const problem = Problem.create({ grid: randomEasyGridSpec() });
+export function Play() {
+  const { gridSpec } = useParams();
 
-  return gameInstance(problem);
+  try {
+    return gameInstance(parseProblemFrom(gridSpec));
+  } catch (e) {
+    console.log(e);
+    return <Redirect to="/" />;
+  }
 }

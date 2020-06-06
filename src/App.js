@@ -4,6 +4,7 @@ import { Navigation } from "./components/Navigation";
 import { Footer } from "./components/Footer";
 import { version } from "../package.json";
 import { Build } from "./pages/Build";
+import { Play } from "./pages/Play";
 import { About } from "./pages/About";
 import { Start } from "./pages/Start";
 import {
@@ -23,10 +24,13 @@ function App() {
             <About />
           </Route>
           <Route path="/play/:gridSpec">
-            <Build />
+            <Play />
           </Route>
           <Route path="/play">
             <Redirect to="/" />;
+          </Route>
+          <Route path="/build">
+            <Build />
           </Route>
           <Route path="/">
             <Start />

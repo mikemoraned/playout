@@ -24,23 +24,27 @@ export const Store = types
     },
     toggleMemberPlacementWithoutUndo(position) {
       const currentOccupancy = self.grid.findOccupancy(position);
+      let changeMade = false;
       if (currentOccupancy) {
         const team = self.teams.list.find(
           (t) => t.name === currentOccupancy.member.team
         );
         team.returnMember(currentOccupancy.member);
+        self.teams.selectTeam(currentOccupancy.member.team);
         self.grid.removeOccupancy(currentOccupancy);
-        return true;
+        changeMade = true;
       } else {
         const selectedTeam = self.teams.selected;
         if (selectedTeam.remaining > 0 && self.grid.hasSeat(position)) {
           const member = selectedTeam.placeMember(position);
           self.grid.addOccupancy(occupancyFor(position, member));
-          return true;
+          self.teams.selectNextTeamWithRemainingUnplaced(selectedTeam.name);
+          changeMade = true;
         } else {
-          return false;
+          changeMade = false;
         }
       }
+      return changeMade;
     },
     toggleMemberPlacement(position) {
       const updated = self.toggleMemberPlacementWithoutUndo(position);

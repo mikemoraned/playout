@@ -1,24 +1,9 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
-
-const Progress = observer(() => {
-  const { store } = useContext(StoreContext);
-  const { progress } = store.evaluation;
-  const fractionDone = progress.value / (progress.max - progress.min);
-  const completed = progress.value === progress.max;
-
-  return (
-    <progress
-      className={`progress is-small ${completed ? "is-success" : ""}`}
-      value={progress.value}
-      max={progress.max}
-    >
-      {100 * fractionDone}%
-    </progress>
-  );
-});
+import { Progress } from "./Progress";
+import { Rules } from "./Rules";
 
 export function ScoreFaceIcon({ min, max, value, size, success }) {
   const faces = [
@@ -47,6 +32,36 @@ const ScoreFace = observer(() => {
   return <ScoreFaceIcon {...score} size="medium" success={completed} />;
 });
 
+const Score = observer(() => {
+  const [showRules, setShowRules] = useState(false);
+  return (
+    <>
+      <button className="button" onClick={() => setShowRules(true)}>
+        <ScoreFace />
+      </button>
+      {showRules && (
+        <div className="modal is-active has-text-justified">
+          <div className="modal-background"></div>
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">Scoring</p>
+              <button
+                className="delete"
+                aria-label="close"
+                onClick={() => setShowRules(false)}
+              ></button>
+            </header>
+            <section className="modal-card-body">
+              <Rules />
+            </section>
+            <footer className="modal-card-foot"></footer>
+          </div>
+        </div>
+      )}
+    </>
+  );
+});
+
 export const Evaluation = observer(() => {
   const { store } = useContext(StoreContext);
   const { progress } = store.evaluation;
@@ -71,7 +86,7 @@ export const Evaluation = observer(() => {
           <Progress />
         </div>
         <div className="column is-2 has-text-centered">
-          <ScoreFace />
+          <Score />
         </div>
       </div>
     </div>

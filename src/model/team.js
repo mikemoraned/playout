@@ -80,6 +80,26 @@ export const Teams = types
       }
       self.selected = team;
     },
+    selectNextTeamWithRemainingUnplaced(startingTeamName) {
+      const teamIndex = self.teams.findIndex(
+        (t) => t.name === startingTeamName
+      );
+      if (teamIndex === -1) {
+        throw new Error(`unknown team: ${startingTeamName}`);
+      }
+      for (
+        let indexOffset = 0;
+        indexOffset < self.teams.length;
+        indexOffset++
+      ) {
+        const index = (teamIndex + indexOffset) % self.teams.length;
+        const team = self.teams[index];
+        if (team.remaining > 0) {
+          self.selectTeam(team.name);
+          break;
+        }
+      }
+    },
     addTeam() {
       if (!self.canAdd) {
         throw new Error(`cannot add team`);

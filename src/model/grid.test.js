@@ -57,6 +57,26 @@ describe("team member placement", () => {
     expect(store.teams).toEqual(before.teams);
     expect(store.grid).toEqual(before.grid);
   });
+
+  test("select next non-empty team after placing last member of current team", () => {
+    expect(store.teams.selected.name).toEqual("A");
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams.selected.name).toEqual("A");
+    store.toggleMemberPlacement(positionFor(1, 1));
+    expect(store.teams.selected.name).toEqual("B");
+  });
+
+  test("select team when removing placement", () => {
+    expect(store.teams.selected.name).toEqual("A");
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams.selected.name).toEqual("A");
+
+    store.selectTeam("B");
+    expect(store.teams.selected.name).toEqual("B");
+
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams.selected.name).toEqual("A");
+  });
 });
 
 describe("positions and areas", () => {

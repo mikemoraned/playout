@@ -4,7 +4,7 @@ import { expandToNextToArea } from "./grid";
 export function evaluate(store) {
   return {
     progress: evaluateProgress(store),
-    score: evaluateScore(store),
+    scoring: evaluateScore(store),
   };
 }
 
@@ -34,20 +34,19 @@ function evaluateProgress(store) {
 
 function evaluateScore(store) {
   const scoreLimits = {
-    min: 0,
-    max: 100,
+    max: 1000,
   };
   const perTeamScores = {};
   let scoreSum = 0;
   store.teams.list.forEach((t) => {
     const score = evaluateTeamScore(store, t.name, scoreLimits);
     perTeamScores[t.name] = score;
-    scoreSum += score.value;
+    scoreSum += score.score;
   });
   const overallScore = Math.floor(scoreSum / store.teams.list.length);
   return {
     ...scoreLimits,
-    value: overallScore,
+    score: overallScore,
     teams: perTeamScores,
   };
 }
@@ -75,13 +74,11 @@ function evaluateTeamScore(store, thisTeamName, scoreLimits) {
   }
 
   const fractionComplete = satisfiedBiases / biasesEvaluated;
-  const scoreValue =
-    Math.floor((scoreLimits.max - scoreLimits.min) * fractionComplete) +
-    scoreLimits.min;
+  const scoreValue = Math.floor(scoreLimits.max * fractionComplete);
 
   return {
     ...scoreLimits,
-    value: scoreValue,
+    score: scoreValue,
   };
 }
 

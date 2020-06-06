@@ -42,10 +42,10 @@ export const Biases = observer(() => {
         <tr>
           <th>from:</th>
           {store.teams.list.map((fromTeam) => {
-            const score = store.evaluation.score.teams[fromTeam.name];
+            const scoring = store.evaluation.scoring.teams[fromTeam.name];
             return (
               <th key={fromTeam.name}>
-                {fromTeam.name} <ScoreFaceIcon {...score} size="small" />{" "}
+                {fromTeam.name} <ScoreFaceIcon {...scoring} size="small" />{" "}
               </th>
             );
           })}

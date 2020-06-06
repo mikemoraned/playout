@@ -5,7 +5,7 @@ import { StoreContext } from "../model/store.js";
 import { Progress } from "./Progress";
 import { Rules } from "./Rules";
 
-export function ScoreFaceIcon({ min, max, value, size, success }) {
+export function ScoreFaceIcon({ max, score, size }) {
   const faces = [
     // "sad-cry",
     // "frown",
@@ -14,10 +14,10 @@ export function ScoreFaceIcon({ min, max, value, size, success }) {
     "smile-beam",
     "grin-stars",
   ];
-  const fractionDone = value / (max - min);
+  const fractionDone = score / max;
   const face = faces[Math.floor(fractionDone * (faces.length - 1))];
   return (
-    <span className={`icon is-${size} ${success ? "has-text-success" : ""}`}>
+    <span className={`icon is-${size}`}>
       <i className={`far fa-${face} ${size === "medium" ? "fa-2x" : ""}`}></i>
     </span>
   );
@@ -25,19 +25,28 @@ export function ScoreFaceIcon({ min, max, value, size, success }) {
 
 const ScoreFace = observer(() => {
   const { store } = useContext(StoreContext);
-  const { score } = store.evaluation;
-  const { progress } = store.evaluation;
-  const completed = progress.value === progress.max;
+  const { scoring } = store.evaluation;
 
-  return <ScoreFaceIcon {...score} size="medium" success={completed} />;
+  return <ScoreFaceIcon {...scoring} size="medium" />;
 });
 
 const Score = observer(() => {
+  const { store } = useContext(StoreContext);
+  const { scoring } = store.evaluation;
   const [showRules, setShowRules] = useState(false);
+  const nonBreakingSpace = "\xa0";
   return (
     <>
-      <button className="button" onClick={() => setShowRules(true)}>
+      <button className="button is-info" onClick={() => setShowRules(true)}>
         <ScoreFace />
+        {nonBreakingSpace}
+        <span
+          style={{
+            fontFamily: "monospace",
+          }}
+        >
+          {scoring.score.toFixed(0).padStart(4, nonBreakingSpace)}
+        </span>
       </button>
       {showRules && (
         <div className="modal is-active has-text-justified">
@@ -82,10 +91,10 @@ export const Evaluation = observer(() => {
             {percentDone.padStart(3, nonBreakingSpace)}%
           </span>
         </div>
-        <div className="column is-8">
+        <div className="column is-6">
           <Progress />
         </div>
-        <div className="column is-2 has-text-centered">
+        <div className="column is-4 has-text-centered">
           <Score />
         </div>
       </div>

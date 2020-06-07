@@ -1,4 +1,4 @@
-import { testStore } from "./testStore";
+import { testStore } from "../testStore";
 import { BiasKind } from "./bias";
 
 let store = null;

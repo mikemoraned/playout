@@ -1,6 +1,6 @@
-import { BiasKind } from "./bias";
+import { BiasKind } from "./teams/bias";
 import { testStore } from "./testStore";
-import { positionFor } from "./grid";
+import { positionFor } from "./grid/grid";
 
 let store = {};
 
@@ -10,10 +10,12 @@ beforeEach(() => {
 
 describe("bias evaluation", () => {
   test("with all default NEXT_TO biases, but no-one placed, score is maximum", () => {
-    expect(store.evaluation.score.value).toEqual(store.evaluation.score.max);
+    expect(store.evaluation.scoring.score).toEqual(
+      store.evaluation.scoring.max
+    );
     store.teams.list.forEach((t) => {
-      const teamScore = store.evaluation.score.teams[t.name];
-      expect(teamScore.value).toEqual(teamScore.max);
+      const teamScore = store.evaluation.scoring.teams[t.name];
+      expect(teamScore.score).toEqual(teamScore.max);
     });
   });
   test("NEXT_TO bias is met if all placed team members are next to the other team", () => {
@@ -26,8 +28,8 @@ describe("bias evaluation", () => {
     store.toggleMemberPlacement(positionFor(1, 1));
 
     ["A", "B"].forEach((name) => {
-      const teamScore = store.evaluation.score.teams[name];
-      expect(teamScore.value).toEqual(teamScore.max);
+      const teamScore = store.evaluation.scoring.teams[name];
+      expect(teamScore.score).toEqual(teamScore.max);
     });
   });
 
@@ -38,7 +40,7 @@ describe("bias evaluation", () => {
     store.selectTeam("A");
     store.toggleMemberPlacement(positionFor(0, 0));
 
-    expect(store.evaluation.score.teams["A"].value).toEqual(50);
-    expect(store.evaluation.score.teams["B"].value).toEqual(100);
+    expect(store.evaluation.scoring.teams["A"].score).toEqual(500);
+    expect(store.evaluation.scoring.teams["B"].score).toEqual(1000);
   });
 });

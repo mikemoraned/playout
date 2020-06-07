@@ -1,13 +1,16 @@
 import React from "react";
 import { Grid } from "../components/Grid";
+import { TeamsMini } from "../components/TeamsMini";
 import { TeamsFull } from "../components/TeamsFull";
+import { Evaluation } from "../components/Evaluation";
 import { StoreProvider } from "../model/store.js";
 import { Biases } from "../components/Biases";
-import { randomEasyProblem } from "../model/problem";
+import { useParams, Redirect } from "react-router-dom";
+import { parseProblemFrom } from "../model/problem";
 
 function gameInstance(problem) {
   const store = problem.toStore();
-  store.mode.setBuildMode();
+  store.mode.setPlayMode();
   return (
     <StoreProvider initialStore={store}>
       <div className="container">
@@ -19,8 +22,10 @@ function gameInstance(problem) {
                 <span className="icon">
                   <i className="fas fa-border-all"></i>
                 </span>{" "}
-                Edit layout
+                Place Team Members in Seats
               </p>
+              <Evaluation />
+              <TeamsMini />
               <Grid />
             </section>
           </div>
@@ -29,9 +34,8 @@ function gameInstance(problem) {
               <h1 className="title is-4">Teams</h1>
               <p className="subtitle is-6">
                 <span className="icon">
-                  <i className="fas fa-user-edit"></i>
-                </span>{" "}
-                Edit Teams
+                  <i className="fas fa-user"></i>
+                </span>
               </p>
               <TeamsFull />
             </section>
@@ -41,7 +45,7 @@ function gameInstance(problem) {
                 <span className="icon">
                   <i className="fas fa-star"></i>
                 </span>{" "}
-                Edit Biases
+                Who wants what?
               </p>
               <Biases />
             </section>
@@ -52,8 +56,13 @@ function gameInstance(problem) {
   );
 }
 
-export function Build() {
-  const problem = randomEasyProblem();
+export function Play() {
+  const { gridSpec, teamsSpec } = useParams();
 
-  return gameInstance(problem);
+  try {
+    return gameInstance(parseProblemFrom(gridSpec, teamsSpec));
+  } catch (e) {
+    console.log(e);
+    return <Redirect to="/" />;
+  }
 }

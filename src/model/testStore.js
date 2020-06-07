@@ -1,6 +1,8 @@
 import { storeFor } from "./store";
-import { teamFor, teamsFor, templateFor } from "./team";
-import { gridFor, positionFor } from "./grid";
+import { teamsFor } from "./teams/teams";
+import { teamFor } from "./teams/team";
+import { templateFor } from "./teams/template";
+import { gridFor, positionFor } from "./grid/grid";
 
 export function testStore() {
   const defaultSize = 3;

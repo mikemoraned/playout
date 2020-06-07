@@ -1,8 +1,8 @@
-import { testStore } from "./testStore";
+import { testStore } from "../testStore";
 import { positionFor, expandToNextToArea } from "./grid";
-import { memberFor } from "./team";
+import { memberFor } from "./member";
 import { getSnapshot } from "mobx-state-tree";
-import { Store } from "./store";
+import { Store } from "../store";
 
 let store = null;
 
@@ -56,6 +56,26 @@ describe("team member placement", () => {
     store.toggleMemberPlacement(positionFor(0, 1));
     expect(store.teams).toEqual(before.teams);
     expect(store.grid).toEqual(before.grid);
+  });
+
+  test("select next non-empty team after placing last member of current team", () => {
+    expect(store.teams.selected.name).toEqual("A");
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams.selected.name).toEqual("A");
+    store.toggleMemberPlacement(positionFor(1, 1));
+    expect(store.teams.selected.name).toEqual("B");
+  });
+
+  test("select team when removing placement", () => {
+    expect(store.teams.selected.name).toEqual("A");
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams.selected.name).toEqual("A");
+
+    store.selectTeam("B");
+    expect(store.teams.selected.name).toEqual("B");
+
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.teams.selected.name).toEqual("A");
   });
 });
 

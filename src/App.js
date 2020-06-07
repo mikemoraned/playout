@@ -4,6 +4,7 @@ import { Navigation } from "./components/Navigation";
 import { Footer } from "./components/Footer";
 import { version } from "../package.json";
 import { Build } from "./pages/Build";
+import { Play } from "./pages/Play";
 import { About } from "./pages/About";
 import { Start } from "./pages/Start";
 import {
@@ -11,7 +12,9 @@ import {
   Switch,
   Route,
   Redirect,
+  useParams,
 } from "react-router-dom";
+import { defaultTeamsSpec } from "./model/problem";
 
 function App() {
   return (
@@ -22,11 +25,17 @@ function App() {
           <Route path="/about">
             <About />
           </Route>
+          <Route path="/play/:gridSpec/:teamsSpec">
+            <Play />
+          </Route>
           <Route path="/play/:gridSpec">
-            <Build />
+            <FallbackWhenTeamSpecMissing />
           </Route>
           <Route path="/play">
             <Redirect to="/" />;
+          </Route>
+          <Route path="/build">
+            <Build />
           </Route>
           <Route path="/">
             <Start />
@@ -36,6 +45,12 @@ function App() {
       </Router>
     </div>
   );
+}
+
+function FallbackWhenTeamSpecMissing() {
+  const { gridSpec } = useParams();
+  const fallbackTeamsSpec = defaultTeamsSpec().toVersion1Format();
+  return <Redirect to={`/play/${gridSpec}/${fallbackTeamsSpec}`} />;
 }
 
 export default App;

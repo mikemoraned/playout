@@ -1,16 +1,39 @@
 import React from "react";
 import { types } from "mobx-state-tree";
-import { Teams } from "./team";
-import { Grid, occupancyFor } from "./grid";
+import { Teams } from "./teams/teams";
+import { Grid } from "./grid/grid";
+import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { useLocalStore } from "mobx-react";
+
+export const Mode = types
+  .model("Mode", {
+    editable: types.boolean,
+  })
+  .actions((self) => ({
+    setPlayMode() {
+      self.editable = false;
+    },
+    setBuildMode() {
+      self.editable = true;
+    },
+  }))
+  .views((self) => ({
+    canEditTeams() {
+      return self.editable;
+    },
+    canEditBiases() {
+      return self.editable;
+    },
+  }));
 
 export const Store = types
   .model({
     teams: Teams,
     grid: Grid,
     undos: types.array(UndoToggleMemberPlacement),
+    mode: Mode,
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -24,23 +47,27 @@ export const Store = types
     },
     toggleMemberPlacementWithoutUndo(position) {
       const currentOccupancy = self.grid.findOccupancy(position);
+      let changeMade = false;
       if (currentOccupancy) {
         const team = self.teams.list.find(
           (t) => t.name === currentOccupancy.member.team
         );
         team.returnMember(currentOccupancy.member);
+        self.teams.selectTeam(currentOccupancy.member.team);
         self.grid.removeOccupancy(currentOccupancy);
-        return true;
+        changeMade = true;
       } else {
         const selectedTeam = self.teams.selected;
         if (selectedTeam.remaining > 0 && self.grid.hasSeat(position)) {
           const member = selectedTeam.placeMember(position);
           self.grid.addOccupancy(occupancyFor(position, member));
-          return true;
+          self.teams.selectNextTeamWithRemainingUnplaced(selectedTeam.name);
+          changeMade = true;
         } else {
-          return false;
+          changeMade = false;
         }
       }
+      return changeMade;
     },
     toggleMemberPlacement(position) {
       const updated = self.toggleMemberPlacementWithoutUndo(position);
@@ -70,7 +97,8 @@ export const Store = types
   }));
 
 export function storeFor(teams, grid) {
-  return Store.create({ teams, grid });
+  const defaultMode = Mode.create({ editable: true });
+  return Store.create({ teams, grid, mode: defaultMode });
 }
 
 export const StoreContext = React.createContext(null);

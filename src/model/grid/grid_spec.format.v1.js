@@ -1,5 +1,5 @@
 import { positionFor } from "./grid";
-import { InvalidProblemSpec } from "../problem";
+import { InvalidProblemSpec } from "../invalid_problem_spec";
 import { GridSpec } from "./grid_spec";
 import { parseGridDimensions, toSeatString } from "./grid_spec.format";
 

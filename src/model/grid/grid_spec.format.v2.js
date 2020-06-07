@@ -1,4 +1,4 @@
-import { InvalidProblemSpec } from "../problem";
+import { InvalidProblemSpec } from "../invalid_problem_spec";
 import { GridSpec } from "./grid_spec";
 import { parseGridDimensions, toSeatString } from "./grid_spec.format";
 import { parseV1SeatsSpec } from "./grid_spec.format.v1";

@@ -1,9 +1,12 @@
 import { positionFor } from "./grid";
-import { InvalidProblemSpec } from "../problem";
+import { InvalidProblemSpec } from "../invalid_problem_spec";
 import { parseV1GridSpec, V1_REGEX } from "./grid_spec.format.v1";
 import { parseV2GridSpec, V2_REGEX } from "./grid_spec.format.v2";
 
 export function parseGridSpec(gridSpec) {
+  if (gridSpec === null || gridSpec === undefined) {
+    throw new InvalidProblemSpec("missing spec");
+  }
   const v1Match = gridSpec.match(V1_REGEX);
   const v2Match = gridSpec.match(V2_REGEX);
   if (v1Match === null && v2Match === null) {

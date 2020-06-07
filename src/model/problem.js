@@ -8,6 +8,7 @@ import { teamFor } from "./teams/team";
 import { positionFor } from "./grid/grid";
 import { parseGridSpec } from "./grid/grid_spec.format";
 import { GridSpec } from "./grid/grid_spec";
+import { InvalidProblemSpec } from "./invalid_problem_spec";
 
 export const Problem = types
   .model("Problem", {
@@ -29,8 +30,6 @@ export const Problem = types
       return store;
     },
   }));
-
-export class InvalidProblemSpec extends Error {}
 
 export function parseProblemFrom(gridSpec) {
   if (gridSpec === null || gridSpec === undefined) {

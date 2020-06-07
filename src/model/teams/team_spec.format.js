@@ -2,6 +2,20 @@ import { InvalidProblemSpec } from "../invalid_problem_spec";
 import { TeamsSpec, TeamSpec, BiasAssignmentSpec } from "./teams_spec";
 import { BiasKind } from "./bias";
 
+export function toV1Format(teamsSpec) {
+  const teamsFormat = teamsSpec.teams.map((t) => `${t.name}${t.size}`).join("");
+  const biasesFormat = teamsSpec.biases
+    .map((b) => {
+      if (b.bias_kind === BiasKind.NEXT_TO) {
+        return `${b.from_name}${b.to_name}nt`;
+      } else {
+        return `${b.from_name}${b.to_name}nb`;
+      }
+    })
+    .join("");
+  return `${teamsFormat}_${biasesFormat}_v1`;
+}
+
 const V1_REGEX = new RegExp("(.+)_(.*)_v1");
 
 export function parseTeamsSpec(s, template) {

@@ -2,23 +2,23 @@ import { types } from "mobx-state-tree";
 import { storeFor } from "./store";
 import makeInspectable from "mobx-devtools-mst";
 import { gridFor } from "./grid/grid";
-import { teamsFor } from "./teams/teams";
-import { templateFor } from "./teams/template";
-import { teamFor } from "./teams/team";
 import { positionFor } from "./grid/grid";
 import { parseGridSpec } from "./grid/grid_spec.format";
+import { parseTeamsSpec } from "./teams/team_spec.format";
 import { GridSpec } from "./grid/grid_spec";
-import { InvalidProblemSpec } from "./invalid_problem_spec";
+import { TeamsSpec, TeamSpec } from "./teams/teams_spec";
+import { defaultTemplate } from "./teams/template";
 
 export const Problem = types
   .model("Problem", {
     grid: GridSpec,
+    teams: TeamsSpec,
   })
   .views((self) => ({
     toStore() {
       console.log("creating mst initial state");
       const store = storeFor(
-        defaultTeams(),
+        self.teams.toTeams(),
         gridFor(self.grid.width, self.grid.height)
       );
 
@@ -31,37 +31,40 @@ export const Problem = types
     },
   }));
 
-export function parseProblemFrom(gridSpec) {
-  if (gridSpec === null || gridSpec === undefined) {
-    throw new InvalidProblemSpec("missing spec");
-  } else {
-    return Problem.create({ grid: parseGridSpec(gridSpec) });
-  }
+export function parseProblemFrom(gridSpec, teamsSpec) {
+  return Problem.create({
+    grid: parseGridSpec(gridSpec),
+    teams: parseTeamsSpec(teamsSpec, defaultTemplate()),
+  });
 }
 
-function defaultTeams() {
-  const defaultSize = 5;
-  const maximumSize = 10;
-  return teamsFor(
-    [
-      teamFor("A", 3, maximumSize),
-      teamFor("B", 2, maximumSize),
-      teamFor("C", 4, maximumSize),
+export function defaultTeamsSpec() {
+  return TeamsSpec.create({
+    teams: [
+      TeamSpec.create({ name: "A", size: 3 }),
+      TeamSpec.create({ name: "B", size: 2 }),
+      TeamSpec.create({ name: "C", size: 4 }),
     ],
-    templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize)
-  );
+    biases: [],
+  });
 }
 
-export function randomEasyGridSpec() {
-  return randomGridSpec(10, 10);
+export function randomEasyProblem() {
+  return Problem.create({
+    grid: randomGridSpec(10, 10),
+    teams: defaultTeamsSpec(),
+  });
 }
 
-export function randomHardGridSpec() {
-  return randomGridSpec(5, 5);
+export function randomHardProblem() {
+  return Problem.create({
+    grid: randomGridSpec(5, 5),
+    teams: defaultTeamsSpec(),
+  });
 }
 
 export function randomGridSpec(width, height) {
-  const minimumSeats = defaultTeams().totalMembers;
+  const minimumSeats = defaultTeamsSpec().toTeams().totalMembers;
   const seats = [];
   while (seats.length < minimumSeats) {
     for (let x = 0; x < width; x++) {

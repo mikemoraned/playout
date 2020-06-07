@@ -1,14 +1,5 @@
 import { types } from "mobx-state-tree";
-import { Member } from "./team";
-
-export const Occupancy = types.model("Occupancy", {
-  position: types.string,
-  member: Member,
-});
-
-export function occupancyFor(position, member) {
-  return Occupancy.create({ position, member });
-}
+import { Occupancy } from "./occupancy";
 
 export const Grid = types
   .model("Grid", {

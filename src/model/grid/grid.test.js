@@ -1,8 +1,8 @@
-import { testStore } from "./testStore";
+import { testStore } from "../testStore";
 import { positionFor, expandToNextToArea } from "./grid";
-import { memberFor } from "./team";
+import { memberFor } from "./member";
 import { getSnapshot } from "mobx-state-tree";
-import { Store } from "./store";
+import { Store } from "../store";
 
 let store = null;
 

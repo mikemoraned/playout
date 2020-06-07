@@ -1,4 +1,4 @@
-import { positionFor } from "./grid";
+import { positionFor } from "./grid/grid";
 import { testStore } from "./testStore";
 import { Store } from "./store";
 import { UndoToggleMemberPlacement } from "./undo";

@@ -3,7 +3,7 @@ import { Grid } from "../components/Grid";
 import { TeamsFull } from "../components/TeamsFull";
 import { StoreProvider } from "../model/store.js";
 import { Biases } from "../components/Biases";
-import { Problem, randomEasyGridSpec } from "../model/problem";
+import { randomEasyProblem } from "../model/problem";
 
 function gameInstance(problem) {
   const store = problem.toStore();
@@ -52,7 +52,7 @@ function gameInstance(problem) {
 }
 
 export function Build() {
-  const problem = Problem.create({ grid: randomEasyGridSpec() });
+  const problem = randomEasyProblem();
 
   return gameInstance(problem);
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
-import { BiasKind, canRotate } from "../model/bias";
+import { BiasKind, canRotate } from "../model/teams/bias";
 import { ScoreFaceIcon } from "./Evaluation";
 
 const iconForBiasKind = {};

@@ -1,7 +1,8 @@
 import React from "react";
 import { types } from "mobx-state-tree";
-import { Teams } from "./team";
-import { Grid, occupancyFor } from "./grid";
+import { Teams } from "./teams/teams";
+import { Grid } from "./grid/grid";
+import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { useLocalStore } from "mobx-react";

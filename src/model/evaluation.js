@@ -1,5 +1,5 @@
-import { BiasKind } from "./bias";
-import { expandToNextToArea } from "./grid";
+import { BiasKind } from "./teams/bias";
+import { expandToNextToArea } from "./grid/grid";
 
 export function evaluate(store) {
   return {

@@ -57,10 +57,10 @@ function gameInstance(problem) {
 }
 
 export function Play() {
-  const { gridSpec } = useParams();
+  const { gridSpec, teamsSpec } = useParams();
 
   try {
-    return gameInstance(parseProblemFrom(gridSpec));
+    return gameInstance(parseProblemFrom(gridSpec, teamsSpec));
   } catch (e) {
     console.log(e);
     return <Redirect to="/" />;

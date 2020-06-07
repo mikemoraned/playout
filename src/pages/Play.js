@@ -10,6 +10,7 @@ import { parseProblemFrom } from "../model/problem";
 
 function gameInstance(problem) {
   const store = problem.toStore();
+  store.mode.setPlayMode();
   return (
     <StoreProvider initialStore={store}>
       <div className="container">

@@ -7,11 +7,30 @@ import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { useLocalStore } from "mobx-react";
 
+export const Mode = types
+  .model("Mode", {
+    editable: types.boolean,
+  })
+  .actions((self) => ({
+    setPlayMode() {
+      self.editable = false;
+    },
+    setBuildMode() {
+      self.editable = true;
+    },
+  }))
+  .views((self) => ({
+    canEditTeams() {
+      return self.editable;
+    },
+  }));
+
 export const Store = types
   .model({
     teams: Teams,
     grid: Grid,
     undos: types.array(UndoToggleMemberPlacement),
+    mode: Mode,
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -75,7 +94,8 @@ export const Store = types
   }));
 
 export function storeFor(teams, grid) {
-  return Store.create({ teams, grid });
+  const defaultMode = Mode.create({ editable: true });
+  return Store.create({ teams, grid, mode: defaultMode });
 }
 
 export const StoreContext = React.createContext(null);

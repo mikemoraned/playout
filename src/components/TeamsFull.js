@@ -35,6 +35,7 @@ function AddRemoveMembers({ team }) {
 
 export const TeamsFull = observer(() => {
   const { store } = useContext(StoreContext);
+  const editable = store.mode.canEditTeams();
   const { teams } = store;
   return (
     <div>
@@ -44,9 +45,11 @@ export const TeamsFull = observer(() => {
             <thead>
               <tr>
                 <th>Team</th>
-                <th>
-                  <AddRemoveMembersHeader />
-                </th>
+                {editable && (
+                  <th>
+                    <AddRemoveMembersHeader />
+                  </th>
+                )}
                 <th>Members</th>
               </tr>
             </thead>
@@ -58,9 +61,11 @@ export const TeamsFull = observer(() => {
                     className={t.name === teams.next ? "is-selected" : ""}
                   >
                     <td onClick={() => store.selectTeam(t.name)}>{t.name}</td>
-                    <td>
-                      <AddRemoveMembers team={t} />
-                    </td>
+                    {editable && (
+                      <td>
+                        <AddRemoveMembers team={t} />
+                      </td>
+                    )}
                     <td onClick={() => store.selectTeam(t.name)}>
                       {t.placed.map((taken, index) => {
                         const isLast = index + 1 === t.placed.length;
@@ -82,20 +87,22 @@ export const TeamsFull = observer(() => {
           </table>
         </div>
       </div>
-      <div className="field">
-        <div className="control">
-          <button
-            className="button is-primary"
-            disabled={!teams.canAdd}
-            onClick={() => store.addTeam()}
-          >
-            <span className="icon">
-              <i className="fas fa-users"></i>
-            </span>
-            <span>Add Team</span>
-          </button>
+      {editable && (
+        <div className="field">
+          <div className="control">
+            <button
+              className="button is-primary"
+              disabled={!teams.canAdd}
+              onClick={() => store.addTeam()}
+            >
+              <span className="icon">
+                <i className="fas fa-users"></i>
+              </span>
+              <span>Add Team</span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 });

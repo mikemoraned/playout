@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
 import { BiasKind, canRotate } from "../model/teams/bias";
-import { ScoreFaceIcon } from "./Evaluation";
+import { ScoreFaceIcon, ScoringBreakdown } from "./Scoring";
 
 const iconForBiasKind = {};
 iconForBiasKind[BiasKind.DISTANT] = "fas fa-user-slash";
@@ -101,13 +101,14 @@ const BiasesExplanation = observer(() => {
         }, []);
         return (
           nextToBiases.length > 0 && (
-            <div>
+            <div key={fromTeam.name}>
               Team {fromTeam.name} members want to be next to{" "}
               {nextToBiases.join(", ")} members.
             </div>
           )
         );
       })}
+      <ScoringBreakdown />
     </>
   );
 });

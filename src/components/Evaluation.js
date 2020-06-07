@@ -1,75 +1,9 @@
 import React from "react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
 import { Progress } from "./Progress";
-import { Rules } from "./Rules";
-
-export function ScoreFaceIcon({ max, score, size }) {
-  const faces = [
-    // "sad-cry",
-    // "frown",
-    "meh",
-    "smile",
-    "smile-beam",
-    "grin-stars",
-  ];
-  const fractionDone = score / max;
-  const face = faces[Math.floor(fractionDone * (faces.length - 1))];
-  return (
-    <span className={`icon is-${size}`}>
-      <i className={`far fa-${face} ${size === "medium" ? "fa-2x" : ""}`}></i>
-    </span>
-  );
-}
-
-const ScoreFace = observer(() => {
-  const { store } = useContext(StoreContext);
-  const { scoring } = store.evaluation;
-
-  return <ScoreFaceIcon {...scoring} size="medium" />;
-});
-
-const Score = observer(() => {
-  const { store } = useContext(StoreContext);
-  const { scoring } = store.evaluation;
-  const [showRules, setShowRules] = useState(false);
-  const nonBreakingSpace = "\xa0";
-  return (
-    <>
-      <button className="button is-info" onClick={() => setShowRules(true)}>
-        <ScoreFace />
-        {nonBreakingSpace}
-        <span
-          style={{
-            fontFamily: "monospace",
-          }}
-        >
-          {scoring.score.toFixed(0).padStart(4, nonBreakingSpace)}
-        </span>
-      </button>
-      {showRules && (
-        <div className="modal is-active has-text-justified">
-          <div className="modal-background"></div>
-          <div className="modal-card">
-            <header className="modal-card-head">
-              <p className="modal-card-title">Scoring</p>
-              <button
-                className="delete"
-                aria-label="close"
-                onClick={() => setShowRules(false)}
-              ></button>
-            </header>
-            <section className="modal-card-body">
-              <Rules />
-            </section>
-            <footer className="modal-card-foot"></footer>
-          </div>
-        </div>
-      )}
-    </>
-  );
-});
+import { Scoring } from "./Scoring";
 
 export const Evaluation = observer(() => {
   const { store } = useContext(StoreContext);
@@ -95,7 +29,7 @@ export const Evaluation = observer(() => {
           <Progress />
         </div>
         <div className="column is-4 has-text-centered">
-          <Score />
+          <Scoring />
         </div>
       </div>
     </div>

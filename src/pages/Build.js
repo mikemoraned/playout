@@ -7,6 +7,7 @@ import { randomEasyProblem } from "../model/problem";
 
 function gameInstance(problem) {
   const store = problem.toStore();
+  store.mode.setBuildMode();
   return (
     <StoreProvider initialStore={store}>
       <div className="container">

@@ -23,6 +23,9 @@ export const Mode = types
     canEditTeams() {
       return self.editable;
     },
+    canEditBiases() {
+      return self.editable;
+    },
   }));
 
 export const Store = types

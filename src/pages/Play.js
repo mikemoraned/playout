@@ -34,9 +34,8 @@ function gameInstance(problem) {
               <h1 className="title is-4">Teams</h1>
               <p className="subtitle is-6">
                 <span className="icon">
-                  <i className="fas fa-user-edit"></i>
-                </span>{" "}
-                Edit Teams
+                  <i className="fas fa-user"></i>
+                </span>
               </p>
               <TeamsFull />
             </section>

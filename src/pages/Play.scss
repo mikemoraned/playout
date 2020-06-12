@@ -1,0 +1,7 @@
+@import "../variables.scss";
+
+.sticky-evaluation {
+  position: sticky;
+  top: 0;
+  z-index: $sticky-z;
+}

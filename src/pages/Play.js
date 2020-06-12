@@ -7,6 +7,7 @@ import { StoreProvider } from "../model/store.js";
 import { Biases } from "../components/Biases";
 import { useParams, Redirect } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
+import "./Play.scss";
 
 function gameInstance(problem) {
   const store = problem.toStore();
@@ -14,6 +15,9 @@ function gameInstance(problem) {
   return (
     <StoreProvider initialStore={store}>
       <div className="container">
+        <section className="section sticky-evaluation">
+          <Evaluation />
+        </section>
         <div className="columns">
           <div className="column is-two-thirds">
             <section className="section">
@@ -24,7 +28,6 @@ function gameInstance(problem) {
                 </span>{" "}
                 Place Team Members in Seats
               </p>
-              <Evaluation />
               <TeamsMini />
               <Grid />
             </section>

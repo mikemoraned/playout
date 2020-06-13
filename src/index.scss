@@ -1,5 +1,6 @@
 $section-padding: 2rem 1rem;
 @import "bulma/sass/utilities/_all.sass";
+@import "bulma/sass/helpers/_all.sass";
 @import "bulma/sass/base/_all.sass";
 @import "bulma/sass/layout/section.sass";
 @import "bulma/sass/layout/footer.sass";
@@ -10,6 +11,14 @@ $section-padding: 2rem 1rem;
 @import "bulma/sass/elements/_all.sass";
 @import "bulma/sass/components/navbar.sass";
 @import "bulma/sass/components/modal.sass";
+@import "bulma/sass/components/tabs.sass";
+
+// allows Link component from React Router to be unclickable
+// when disabled
+// see https://github.com/ReactTraining/react-router/issues/1082#issuecomment-160348163
+a[disabled] {
+  pointer-events: none;
+}
 
 body {
   margin: 0;

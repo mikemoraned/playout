@@ -6,6 +6,7 @@ import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { useLocalStore } from "mobx-react";
+import { Problem } from "./problem";
 
 export const Mode = types
   .model("Mode", {
@@ -20,6 +21,13 @@ export const Mode = types
     },
   }))
   .views((self) => ({
+    get name() {
+      if (self.editable) {
+        return "Build";
+      } else {
+        return "Play";
+      }
+    },
     canEditTeams() {
       return self.editable;
     },
@@ -49,12 +57,7 @@ export const Store = types
       const currentOccupancy = self.grid.findOccupancy(position);
       let changeMade = false;
       if (currentOccupancy) {
-        const team = self.teams.list.find(
-          (t) => t.name === currentOccupancy.member.team
-        );
-        team.returnMember(currentOccupancy.member);
-        self.teams.selectTeam(currentOccupancy.member.team);
-        self.grid.removeOccupancy(currentOccupancy);
+        self.removeOccupancy(currentOccupancy);
         changeMade = true;
       } else {
         const selectedTeam = self.teams.selected;
@@ -69,10 +72,32 @@ export const Store = types
       }
       return changeMade;
     },
+    removeOccupancy(currentOccupancy) {
+      const team = self.teams.list.find(
+        (t) => t.name === currentOccupancy.member.team
+      );
+      team.returnMember(currentOccupancy.member);
+      self.teams.selectTeam(currentOccupancy.member.team);
+      self.grid.removeOccupancy(currentOccupancy);
+    },
     toggleMemberPlacement(position) {
       const updated = self.toggleMemberPlacementWithoutUndo(position);
       if (updated) {
         self.undos.push(UndoToggleMemberPlacement.create({ position }));
+      }
+    },
+    toggleSeat(position) {
+      const currentOccupancy = self.grid.findOccupancy(position);
+      if (currentOccupancy) {
+        self.removeOccupancy(currentOccupancy);
+      }
+      self.grid.toggleSeat(position);
+    },
+    togglePosition(position) {
+      if (self.mode.name === "Build") {
+        self.toggleSeat(position);
+      } else {
+        self.toggleMemberPlacement(position);
       }
     },
     rotateBias(fromTeamName, toTeamName) {
@@ -93,6 +118,18 @@ export const Store = types
     },
     get evaluation() {
       return evaluate(self);
+    },
+    get solvable() {
+      return self.teams.totalMembers <= self.grid.totalSeats;
+    },
+    toProblem() {
+      const gridSpec = self.grid.toGridSpec();
+      const teamsSpec = self.teams.toTeamsSpec();
+
+      return Problem.create({
+        grid: gridSpec,
+        teams: teamsSpec,
+      });
     },
   }));
 

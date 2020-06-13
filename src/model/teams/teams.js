@@ -2,6 +2,8 @@ import { types } from "mobx-state-tree";
 import { Biases, biasesFor } from "./bias";
 import { Team, teamFor } from "./team";
 import { Template } from "./template";
+import { TeamsSpec } from "./teams_spec";
+import { TeamSpec } from "./team_spec";
 
 export const Teams = types
   .model("Teams", {
@@ -78,6 +80,14 @@ export const Teams = types
     },
     get names() {
       return self.teams.map((t) => t.name);
+    },
+    toTeamsSpec() {
+      return TeamsSpec.create({
+        teams: self.teams.map((t) =>
+          TeamSpec.create({ name: t.name, size: t.size })
+        ),
+        biases: self.biases.toBiasAssignmentSpecs(self.teams),
+      });
     },
   }));
 

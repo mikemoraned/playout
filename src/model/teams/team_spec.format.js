@@ -1,5 +1,7 @@
 import { InvalidProblemSpec } from "../invalid_problem_spec";
-import { TeamsSpec, TeamSpec, BiasAssignmentSpec } from "./teams_spec";
+import { TeamsSpec } from "./teams_spec";
+import { TeamSpec } from "./team_spec";
+import { BiasAssignmentSpec } from "./bias_assignment_spec";
 import { BiasKind } from "./bias";
 
 export function toV1Format(teamsSpec) {

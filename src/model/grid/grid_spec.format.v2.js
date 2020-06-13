@@ -1,6 +1,7 @@
 import { InvalidProblemSpec } from "../invalid_problem_spec";
 import { GridSpec } from "./grid_spec";
-import { parseGridDimensions, toSeatString } from "./grid_spec.format";
+import { toSeatString } from "./grid_spec.format";
+import { parseGridDimensions } from "./area_spec.format";
 import { parseV1SeatsSpec } from "./grid_spec.format.v1";
 
 export function toV2Format(gridSpec) {

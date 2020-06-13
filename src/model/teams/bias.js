@@ -1,4 +1,5 @@
 import { types } from "mobx-state-tree";
+import { BiasAssignmentSpec } from "./bias_assignment_spec";
 
 export const BiasKind = Object.freeze({
   DISTANT: "distant",
@@ -52,6 +53,28 @@ export const Biases = types
     getBias(fromTeamName, toTeamName) {
       const forwardKey = biasKey(fromTeamName, toTeamName);
       return self.biases.get(forwardKey);
+    },
+    toBiasAssignmentSpecs(teamList) {
+      let specs = [];
+      for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {
+        for (let toIndex = 0; toIndex < teamList.length; toIndex++) {
+          const fromTeamName = teamList[fromIndex].name;
+          const toTeamName = teamList[toIndex].name;
+          if (fromIndex < toIndex) {
+            const biasKind = self.getBias(fromTeamName, toTeamName);
+            if (biasKind !== BiasKind.NO_BIAS) {
+              specs.push(
+                BiasAssignmentSpec.create({
+                  from_name: fromTeamName,
+                  to_name: toTeamName,
+                  bias_kind: biasKind,
+                })
+              );
+            }
+          }
+        }
+      }
+      return specs;
     },
   }));
 

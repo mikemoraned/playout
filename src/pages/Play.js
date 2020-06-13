@@ -15,9 +15,9 @@ function gameInstance(problem) {
   return (
     <StoreProvider initialStore={store}>
       <div className="container">
-        <section className="section sticky-evaluation">
+        <div className="mt-3 sticky-evaluation">
           <Evaluation />
-        </section>
+        </div>
         <div className="columns">
           <div className="column is-two-thirds">
             <section className="section">

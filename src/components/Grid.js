@@ -35,7 +35,7 @@ export const Grid = observer(() => {
                   return (
                     <td
                       className={`${has_seat ? "has-background-info" : ""}`}
-                      onClick={() => store.toggleMemberPlacement(position)}
+                      onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{
                         textAlign: "center",

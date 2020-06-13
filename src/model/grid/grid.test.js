@@ -79,6 +79,50 @@ describe("team member placement", () => {
   });
 });
 
+describe("editing seats", () => {
+  test("can add seat via toggle", () => {
+    expect(store.grid.seats).toEqual([positionFor(0, 0), positionFor(1, 1)]);
+    store.toggleSeat(positionFor(0, 1));
+    expect(store.grid.seats).toEqual([
+      positionFor(0, 0),
+      positionFor(1, 1),
+      positionFor(0, 1),
+    ]);
+  });
+
+  test("can remove seat via toggle", () => {
+    expect(store.grid.seats).toEqual([positionFor(0, 0), positionFor(1, 1)]);
+    store.toggleSeat(positionFor(1, 1));
+    expect(store.grid.seats).toEqual([positionFor(0, 0)]);
+  });
+
+  test("occupancies cleared when seat removed", () => {
+    expect(store.grid.seats).toEqual([positionFor(0, 0), positionFor(1, 1)]);
+    expect(store.grid.occupied).toEqual([]);
+    store.toggleMemberPlacement(positionFor(0, 0));
+    store.toggleMemberPlacement(positionFor(1, 1));
+    expect(store.grid.occupied).toEqual([
+      {
+        member: memberFor("A", 0),
+        position: positionFor(0, 0),
+      },
+      {
+        member: memberFor("A", 1),
+        position: positionFor(1, 1),
+      },
+    ]);
+
+    store.toggleSeat(positionFor(1, 1));
+    expect(store.grid.seats).toEqual([positionFor(0, 0)]);
+    expect(store.grid.occupied).toEqual([
+      {
+        member: memberFor("A", 0),
+        position: positionFor(0, 0),
+      },
+    ]);
+  });
+});
+
 describe("positions and areas", () => {
   test("can expand to next_to area", () => {
     const position = positionFor(1, 1);

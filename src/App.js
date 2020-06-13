@@ -34,8 +34,11 @@ function App() {
           <Route path="/play">
             <Redirect to="/" />;
           </Route>
-          <Route path="/build">
+          <Route path="/build/:areaSpec">
             <Build />
+          </Route>
+          <Route path="/build/">
+            <FallbackWhenAreaSpecMissing />
           </Route>
           <Route path="/">
             <Start />
@@ -51,6 +54,10 @@ function FallbackWhenTeamSpecMissing() {
   const { gridSpec } = useParams();
   const fallbackTeamsSpec = defaultTeamsSpec().toVersion1Format();
   return <Redirect to={`/play/${gridSpec}/${fallbackTeamsSpec}`} />;
+}
+
+function FallbackWhenAreaSpecMissing() {
+  return <Redirect to="/build/10x10" />;
 }
 
 export default App;

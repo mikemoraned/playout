@@ -14,26 +14,24 @@ const Instance = observer(() => {
 
   return (
     <div className="container">
-      <section className="section">
-        <div className="columns">
-          <div className="column">
-            <div className="tabs is-medium is-boxed is-toggle">
-              <ul>
-                <li className={store.mode.name === "Build" ? "is-active" : ""}>
-                  <a href="#build" onClick={() => store.mode.setBuildMode()}>
-                    Edit
-                  </a>
-                </li>
-                <li className={store.mode.name === "Play" ? "is-active" : ""}>
-                  <a href="#play" onClick={() => store.mode.setPlayMode()}>
-                    Play Test
-                  </a>
-                </li>
-              </ul>
-            </div>
+      <div className="columns">
+        <div className="column">
+          <div className="mt-3 ml-3 tabs is-medium is-boxed is-toggle">
+            <ul>
+              <li className={store.mode.name === "Build" ? "is-active" : ""}>
+                <a href="#build" onClick={() => store.mode.setBuildMode()}>
+                  Edit
+                </a>
+              </li>
+              <li className={store.mode.name === "Play" ? "is-active" : ""}>
+                <a href="#play" onClick={() => store.mode.setPlayMode()}>
+                  Play Test
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-      </section>
+      </div>
       <div className="columns">
         <div className="column is-two-thirds">
           <section className="section">

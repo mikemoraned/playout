@@ -56,6 +56,7 @@ export const Grid = observer(() => {
                         {has_seat && !occupancy && (
                           <Desktop visibility={"visible"} />
                         )}
+                        {!has_seat && <Desktop visibility={"hidden"} />}
                         {occupancy && (
                           <TeamMember
                             teamName={occupancy.member.team}

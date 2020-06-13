@@ -20,6 +20,13 @@ export const Mode = types
     },
   }))
   .views((self) => ({
+    get name() {
+      if (self.editable) {
+        return "Build";
+      } else {
+        return "Play";
+      }
+    },
     canEditTeams() {
       return self.editable;
     },

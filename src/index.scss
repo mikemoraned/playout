@@ -13,6 +13,13 @@ $section-padding: 2rem 1rem;
 @import "bulma/sass/components/modal.sass";
 @import "bulma/sass/components/tabs.sass";
 
+// allows Link component from React Router to be unclickable
+// when disabled
+// see https://github.com/ReactTraining/react-router/issues/1082#issuecomment-160348163
+a[disabled] {
+  pointer-events: none;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

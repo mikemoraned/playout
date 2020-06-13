@@ -1,4 +1,6 @@
-import { TeamsSpec, TeamSpec, BiasAssignmentSpec } from "./teams_spec";
+import { TeamsSpec } from "./teams_spec";
+import { TeamSpec } from "./team_spec";
+import { BiasAssignmentSpec } from "./bias_assignment_spec";
 import { parseTeamsSpec } from "./team_spec.format";
 import { BiasKind } from "./bias";
 import { Template } from "./template";

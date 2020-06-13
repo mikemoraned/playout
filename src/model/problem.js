@@ -6,7 +6,8 @@ import { positionFor } from "./grid/grid";
 import { parseGridSpec } from "./grid/grid_spec.format";
 import { parseTeamsSpec } from "./teams/team_spec.format";
 import { GridSpec } from "./grid/grid_spec";
-import { TeamsSpec, TeamSpec } from "./teams/teams_spec";
+import { TeamsSpec } from "./teams/teams_spec";
+import { TeamSpec } from "./teams/team_spec";
 import { defaultTemplate } from "./teams/template";
 
 export const Problem = types

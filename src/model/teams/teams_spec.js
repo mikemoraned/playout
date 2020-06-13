@@ -3,17 +3,8 @@ import { defaultTemplate } from "./template";
 import { teamsFor } from "./teams";
 import { teamFor } from "./team";
 import { toV1Format } from "./team_spec.format";
-
-export const BiasAssignmentSpec = types.model("BiasSpec", {
-  from_name: types.string,
-  to_name: types.string,
-  bias_kind: types.string,
-});
-
-export const TeamSpec = types.model("TeamSpec", {
-  name: types.string,
-  size: types.number,
-});
+import { TeamSpec } from "./team_spec";
+import { BiasAssignmentSpec } from "./bias_assignment_spec";
 
 export const TeamsSpec = types
   .model("TeamsSpec", {

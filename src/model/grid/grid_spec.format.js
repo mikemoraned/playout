@@ -19,21 +19,6 @@ export function parseGridSpec(gridSpec) {
   }
 }
 
-export function parseGridDimensions(match) {
-  const width = parseInt(match[1]);
-  const height = parseInt(match[2]);
-  if (width === 0 || height === 0) {
-    throw new InvalidProblemSpec("invalid spec: dimensions cannot be zero");
-  }
-  const maxArea = 10000;
-  if (width * height > maxArea) {
-    throw new InvalidProblemSpec(
-      `invalid spec: width * height too large, must be <= ${maxArea}`
-    );
-  }
-  return { width, height };
-}
-
 export function toSeatString(seats, width, height, missingChar, presentChar) {
   let seatString = "";
   for (let y = 0; y < height; y++) {

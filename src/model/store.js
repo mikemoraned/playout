@@ -56,12 +56,7 @@ export const Store = types
       const currentOccupancy = self.grid.findOccupancy(position);
       let changeMade = false;
       if (currentOccupancy) {
-        const team = self.teams.list.find(
-          (t) => t.name === currentOccupancy.member.team
-        );
-        team.returnMember(currentOccupancy.member);
-        self.teams.selectTeam(currentOccupancy.member.team);
-        self.grid.removeOccupancy(currentOccupancy);
+        self.removeOccupancy(currentOccupancy);
         changeMade = true;
       } else {
         const selectedTeam = self.teams.selected;
@@ -76,10 +71,32 @@ export const Store = types
       }
       return changeMade;
     },
+    removeOccupancy(currentOccupancy) {
+      const team = self.teams.list.find(
+        (t) => t.name === currentOccupancy.member.team
+      );
+      team.returnMember(currentOccupancy.member);
+      self.teams.selectTeam(currentOccupancy.member.team);
+      self.grid.removeOccupancy(currentOccupancy);
+    },
     toggleMemberPlacement(position) {
       const updated = self.toggleMemberPlacementWithoutUndo(position);
       if (updated) {
         self.undos.push(UndoToggleMemberPlacement.create({ position }));
+      }
+    },
+    toggleSeat(position) {
+      const currentOccupancy = self.grid.findOccupancy(position);
+      if (currentOccupancy) {
+        self.removeOccupancy(currentOccupancy);
+      }
+      self.grid.toggleSeat(position);
+    },
+    togglePosition(position) {
+      if (self.mode.name === "Build") {
+        self.toggleSeat(position);
+      } else {
+        self.toggleMemberPlacement(position);
       }
     },
     rotateBias(fromTeamName, toTeamName) {

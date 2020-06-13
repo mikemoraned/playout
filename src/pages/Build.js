@@ -3,11 +3,13 @@ import { Grid } from "../components/Grid";
 import { TeamsFull } from "../components/TeamsFull";
 import { StoreProvider } from "../model/store.js";
 import { Biases } from "../components/Biases";
-import { randomEasyProblem } from "../model/problem";
 import { useContext } from "react";
 import { StoreContext } from "../model/store.js";
+import { useParams, Redirect } from "react-router-dom";
+import { Problem, defaultTeamsSpec } from "../model/problem";
 
 import { observer } from "mobx-react";
+import { parseAreaSpec } from "../model/grid/area_spec.format";
 
 const Instance = observer(() => {
   const { store } = useContext(StoreContext);
@@ -73,13 +75,24 @@ const Instance = observer(() => {
 });
 
 export function Build() {
-  const problem = randomEasyProblem();
-  const store = problem.toStore();
-  store.mode.setBuildMode();
+  const { areaSpec } = useParams();
+  try {
+    const gridSpec = parseAreaSpec(areaSpec).toGridSpec();
+    const problemSpec = Problem.create({
+      grid: gridSpec,
+      teams: defaultTeamsSpec(),
+    });
 
-  return (
-    <StoreProvider initialStore={store}>
-      <Instance />
-    </StoreProvider>
-  );
+    const store = problemSpec.toStore();
+    store.mode.setBuildMode();
+
+    return (
+      <StoreProvider initialStore={store}>
+        <Instance />
+      </StoreProvider>
+    );
+  } catch (e) {
+    console.log(e);
+    return <Redirect to="/" />;
+  }
 }

@@ -20,6 +20,13 @@ export const Grid = types
     addSeat(position) {
       self.seats.push(position);
     },
+    toggleSeat(position) {
+      if (self.hasSeat(position)) {
+        self.seats = self.seats.filter((s) => s !== position);
+      } else {
+        self.seats.push(position);
+      }
+    },
   }))
   .views((self) => ({
     hasSeat(position) {

@@ -1,7 +1,8 @@
 import { positionFor } from "./grid";
 import { InvalidProblemSpec } from "../invalid_problem_spec";
 import { GridSpec } from "./grid_spec";
-import { parseGridDimensions, toSeatString } from "./grid_spec.format";
+import { toSeatString } from "./grid_spec.format";
+import { parseGridDimensions } from "./area_spec.format";
 
 export function toV1Format(gridSpec) {
   return `${gridSpec.width}x${gridSpec.height}${toSeatString(

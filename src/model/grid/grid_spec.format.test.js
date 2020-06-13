@@ -104,27 +104,27 @@ describe("v1 grid spec parsing", () => {
   describe("limits", () => {
     test("example at limit is accepted", () => {
       let seatString = "";
-      let remaining = 100 * 100;
+      let remaining = 10 * 10;
       while (remaining-- !== 0) {
         seatString += "~";
       }
-      const validExample = `100x100${seatString}_v1`;
+      const validExample = `10x10${seatString}_v1`;
       const gridSpec = getSnapshot(parseGridSpec(validExample));
-      expect(gridSpec.width).toEqual(100);
-      expect(gridSpec.height).toEqual(100);
-      expect(gridSpec.seats.length).toEqual(100 * 100);
+      expect(gridSpec.width).toEqual(10);
+      expect(gridSpec.height).toEqual(10);
+      expect(gridSpec.seats.length).toEqual(10 * 10);
     });
     test("too large area causes error", () => {
       let seatString = "";
-      let remaining = 100 * 101;
+      let remaining = 10 * 11;
       while (remaining-- !== 0) {
         seatString += "~";
       }
-      const invalidExample = `100x101${seatString}_v1`;
+      const invalidExample = `10x11${seatString}_v1`;
       expect(() => {
         parseGridSpec(invalidExample);
       }).toThrowError(
-        /^invalid spec: width \* height too large, must be <= 10000$/
+        /^invalid spec: width \* height too large, must be <= 100$/
       );
     });
   });

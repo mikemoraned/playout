@@ -35,7 +35,7 @@ export const Grid = observer(() => {
                   return (
                     <td
                       className={`${has_seat ? "has-background-info" : ""}`}
-                      onClick={() => store.toggleMemberPlacement(position)}
+                      onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{
                         textAlign: "center",
@@ -56,6 +56,7 @@ export const Grid = observer(() => {
                         {has_seat && !occupancy && (
                           <Desktop visibility={"visible"} />
                         )}
+                        {!has_seat && <Desktop visibility={"hidden"} />}
                         {occupancy && (
                           <TeamMember
                             teamName={occupancy.member.team}

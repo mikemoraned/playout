@@ -6,6 +6,7 @@ import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { useLocalStore } from "mobx-react";
+import { Problem } from "./problem";
 
 export const Mode = types
   .model("Mode", {
@@ -117,6 +118,18 @@ export const Store = types
     },
     get evaluation() {
       return evaluate(self);
+    },
+    get solvable() {
+      return self.teams.totalMembers <= self.grid.totalSeats;
+    },
+    toProblem() {
+      const gridSpec = self.grid.toGridSpec();
+      const teamsSpec = self.teams.toTeamsSpec();
+
+      return Problem.create({
+        grid: gridSpec,
+        teams: teamsSpec,
+      });
     },
   }));
 

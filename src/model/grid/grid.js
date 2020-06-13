@@ -1,5 +1,6 @@
-import { types } from "mobx-state-tree";
+import { types, getSnapshot } from "mobx-state-tree";
 import { Occupancy } from "./occupancy";
+import { GridSpec } from "./grid_spec";
 
 export const Grid = types
   .model("Grid", {
@@ -34,6 +35,16 @@ export const Grid = types
     },
     findOccupancy(position) {
       return self.occupied.find((o) => o.position === position);
+    },
+    get totalSeats() {
+      return self.seats.length;
+    },
+    toGridSpec() {
+      return GridSpec.create({
+        width: self.width,
+        height: self.height,
+        seats: getSnapshot(self.seats),
+      });
     },
   }));
 

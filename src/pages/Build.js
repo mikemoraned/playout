@@ -13,12 +13,15 @@ import { parseAreaSpec } from "../model/grid/area_spec.format";
 
 const Instance = observer(() => {
   const { store } = useContext(StoreContext);
-
+  const problem = store.toProblem();
+  const base = window.location.href;
+  const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
+  const fullURL = new URL(path, base);
   return (
     <div className="container">
-      <div className="columns">
+      <div className="columns mt-3 ml-3">
         <div className="column">
-          <div className="mt-3 ml-3 tabs is-medium is-boxed is-toggle">
+          <div className="tabs is-medium is-boxed is-toggle">
             <ul>
               <li className={store.mode.name === "Build" ? "is-active" : ""}>
                 <a href="#build" onClick={() => store.mode.setBuildMode()}>
@@ -32,6 +35,20 @@ const Instance = observer(() => {
               </li>
             </ul>
           </div>
+        </div>
+        <div className="column">
+          <button
+            className="button is-success"
+            disabled={!store.solvable}
+            onClick={() => {
+              window.open(fullURL, "_blank");
+            }}
+          >
+            <span className="icon">
+              <i className="fas fa-external-link-alt"></i>
+            </span>
+            <span>Open in new tab</span>
+          </button>
         </div>
       </div>
       <div className="columns">

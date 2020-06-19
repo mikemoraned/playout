@@ -1,0 +1,21 @@
+$duration: 1.5s;
+@import "bulma/sass/utilities/_all.sass";
+
+.button.scoring {
+  transition: background-color $duration ease-in-out,
+    color $duration ease-in-out;
+}
+
+.button.scoring.woopwoop {
+  animation: throb 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes throb {
+  from {
+    box-shadow: 0px 0px 0px 0px $success;
+  }
+
+  to {
+    box-shadow: 0px 0px 5px 5px $success;
+  }
+}

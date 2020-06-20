@@ -39,7 +39,12 @@ function evaluateScore(store) {
   const perTeamScores = {};
   let scoreSum = 0;
   store.teams.list.forEach((t) => {
-    const score = evaluateTeamScore(store, t.name, scoreLimits);
+    // const score = evaluateTeamScore(store, t.name, scoreLimits);
+    const score = evaluateTeamScoreBasedOnPlacedMembers(
+      store,
+      t.name,
+      scoreLimits
+    );
     perTeamScores[t.name] = score;
     scoreSum += score.score;
   });
@@ -51,29 +56,39 @@ function evaluateScore(store) {
   };
 }
 
-function evaluateTeamScore(store, thisTeamName, scoreLimits) {
+function evaluateTeamScoreBasedOnPlacedMembers(
+  store,
+  thisTeamName,
+  scoreLimits
+) {
   const { teams } = store;
   const { biases } = teams;
-  let satisfiedBiases = 0;
-  let biasesEvaluated = 0;
+  let totalActual = 0;
+  let totalPossible = 0;
   for (let toIndex = 0; toIndex < teams.list.length; toIndex++) {
     const otherTeamName = teams.list[toIndex].name;
     const bias = biases.getBias(thisTeamName, otherTeamName);
-    biasesEvaluated++;
     if (bias === BiasKind.NO_BIAS) {
-      satisfiedBiases++;
+      // doesn't affect score at all
     } else if (bias === BiasKind.NEXT_TO) {
-      if (nextToMemberOfOtherTeam(store, thisTeamName, otherTeamName)) {
-        satisfiedBiases++;
-      }
+      const { actual, possible } = nextToMemberOfOtherTeam_actualVersusPossible(
+        store,
+        thisTeamName,
+        otherTeamName
+      );
+      totalActual += actual;
+      totalPossible += possible;
     } else if (bias === BiasKind.NEXT_TO_SAME_TEAM) {
-      if (nextToMemberOfSameTeam(store, thisTeamName, otherTeamName)) {
-        satisfiedBiases++;
-      }
+      const { actual, possible } = nextToMemberOfSameTeam_actualVersusPossible(
+        store,
+        thisTeamName
+      );
+      totalActual += actual;
+      totalPossible += possible;
     }
   }
 
-  const fractionComplete = satisfiedBiases / biasesEvaluated;
+  const fractionComplete = totalActual / totalPossible;
   const scoreValue = Math.floor(scoreLimits.max * fractionComplete);
 
   return {
@@ -82,7 +97,11 @@ function evaluateTeamScore(store, thisTeamName, scoreLimits) {
   };
 }
 
-function nextToMemberOfOtherTeam(store, thisTeamName, otherTeamName) {
+function nextToMemberOfOtherTeam_actualVersusPossible(
+  store,
+  thisTeamName,
+  otherTeamName
+) {
   const otherTeamPositions = store.grid.occupied
     .filter((o) => o.member.team === otherTeamName)
     .map((o) => o.position);
@@ -99,20 +118,30 @@ function nextToMemberOfOtherTeam(store, thisTeamName, otherTeamName) {
     .filter((o) => o.member.team === thisTeamName)
     .map((o) => o.position);
 
-  return thisTeamPositions.every((thisTeamPosition) =>
+  const actual = thisTeamPositions.filter((thisTeamPosition) =>
     positionsNextToOtherTeam.has(thisTeamPosition)
-  );
+  ).length;
+  const possible = store.teams.findTeam(thisTeamName).size;
+  return {
+    actual,
+    possible,
+  };
 }
 
-function nextToMemberOfSameTeam(store, thisTeamName) {
+function nextToMemberOfSameTeam_actualVersusPossible(store, thisTeamName) {
+  const possible = store.teams.findTeam(thisTeamName).size;
+
   const thisTeamOccupancies = store.grid.occupied.filter(
     (o) => o.member.team === thisTeamName
   );
 
   if (thisTeamOccupancies.length === 1) {
-    return true;
+    return {
+      actual: 1,
+      possible,
+    };
   } else {
-    return thisTeamOccupancies.every((thisTeamOccupancy) => {
+    const actual = thisTeamOccupancies.filter((thisTeamOccupancy) => {
       const otherTeamMemberOccupancies = thisTeamOccupancies.filter((o) => {
         return o.member.id !== thisTeamOccupancy.member.id;
       });
@@ -128,6 +157,10 @@ function nextToMemberOfSameTeam(store, thisTeamName) {
         new Set()
       );
       return positionsNextToOtherTeamMembers.has(thisTeamOccupancy.position);
-    });
+    }).length;
+    return {
+      actual,
+      possible,
+    };
   }
 }

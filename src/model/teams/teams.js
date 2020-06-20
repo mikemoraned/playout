@@ -14,10 +14,7 @@ export const Teams = types
   })
   .actions((self) => ({
     selectTeam(name) {
-      const team = self.teams.find((t) => t.name === name);
-      if (team === undefined) {
-        throw new Error(`unknown team: ${name}`);
-      }
+      const team = self.findTeam(name);
       self.selected = team;
     },
     selectNextTeamWithRemainingUnplaced(startingTeamName) {
@@ -65,6 +62,13 @@ export const Teams = types
     },
   }))
   .views((self) => ({
+    findTeam(name) {
+      const team = self.teams.find((t) => t.name === name);
+      if (team === undefined) {
+        throw new Error(`unknown team: ${name}`);
+      }
+      return team;
+    },
     get canAdd() {
       return self.teams.length < self.template.names.length;
     },

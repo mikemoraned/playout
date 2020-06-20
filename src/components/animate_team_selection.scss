@@ -1,0 +1,7 @@
+$duration: 0.5s;
+
+.button.is-primary,
+tr.is-selected {
+  transition: background-color $duration ease-in-out,
+    color $duration ease-in-out;
+}

@@ -3,6 +3,12 @@ import { useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
 import { Rules } from "./Rules";
+import "./Scoring.scss";
+
+function mapScoreToCategory(score, max, numCategories) {
+  const fractionDone = score / max;
+  return Math.floor(fractionDone * (numCategories - 1));
+}
 
 export function ScoreFaceIcon({ max, score, size }) {
   const faces = [
@@ -13,8 +19,7 @@ export function ScoreFaceIcon({ max, score, size }) {
     "smile-beam",
     "grin-stars",
   ];
-  const fractionDone = score / max;
-  const face = faces[Math.floor(fractionDone * (faces.length - 1))];
+  const face = faces[mapScoreToCategory(score, max, faces.length)];
   return (
     <span className={`icon is-${size}`}>
       <i className={`far fa-${face} ${size === "medium" ? "fa-2x" : ""}`}></i>
@@ -103,9 +108,22 @@ export const Scoring = observer(() => {
   const { store } = useContext(StoreContext);
   const { scoring } = store.evaluation;
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const buttonKinds = [
+    "is-info",
+    "is-warning",
+    "is-success",
+    "is-success woopwoop",
+  ];
+  const buttonKind =
+    buttonKinds[
+      mapScoreToCategory(scoring.score, scoring.max, buttonKinds.length)
+    ];
   return (
     <>
-      <button className="button is-info" onClick={() => setShowBreakdown(true)}>
+      <button
+        className={`button scoring ${buttonKind}`}
+        onClick={() => setShowBreakdown(true)}
+      >
         <ScoreFaceWithScore scoring={scoring} size="medium" />
       </button>
       {showBreakdown && (

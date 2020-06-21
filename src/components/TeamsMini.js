@@ -2,9 +2,12 @@ import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
+import "./animate_team_selection.scss";
+import { ScoreFaceIcon } from "./Scoring.js";
 
 export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);
+  const { scoring } = store.evaluation;
   return (
     <div className="field is-horizontal">
       <div className="field-label is-normal">
@@ -22,12 +25,14 @@ export const TeamsMini = observer(() => {
             <div className="buttons are-small has-addons">
               {store.teams.list.map((t) => {
                 const isNext = store.teams.next === t.name;
+                const teamScoring = scoring.teams[t.name];
                 return (
                   <button
                     key={t.name}
                     className={`button ${isNext ? "is-primary" : ""}`}
                     onClick={() => store.selectTeam(t.name)}
                   >
+                    <ScoreFaceIcon {...teamScoring} />
                     <span>
                       {t.name} ({t.remaining})
                     </span>

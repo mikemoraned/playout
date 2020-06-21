@@ -15,37 +15,40 @@ import {
   useParams,
 } from "react-router-dom";
 import { defaultTeamsSpec } from "./model/problem";
+import { GraphQLProvider } from "./model/contexts";
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Navigation version={version} />
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/play/:gridSpec/:teamsSpec">
-            <Play />
-          </Route>
-          <Route path="/play/:gridSpec">
-            <FallbackWhenTeamSpecMissing />
-          </Route>
-          <Route path="/play">
-            <Redirect to="/" />;
-          </Route>
-          <Route path="/build/:areaSpec">
-            <Build />
-          </Route>
-          <Route path="/build/">
-            <FallbackWhenAreaSpecMissing />
-          </Route>
-          <Route path="/">
-            <Start />
-          </Route>
-        </Switch>
-        <Footer />
-      </Router>
+      <GraphQLProvider>
+        <Router>
+          <Navigation version={version} />
+          <Switch>
+            <Route path="/about">
+              <About />
+            </Route>
+            <Route path="/play/:gridSpec/:teamsSpec">
+              <Play />
+            </Route>
+            <Route path="/play/:gridSpec">
+              <FallbackWhenTeamSpecMissing />
+            </Route>
+            <Route path="/play">
+              <Redirect to="/" />;
+            </Route>
+            <Route path="/build/:areaSpec">
+              <Build />
+            </Route>
+            <Route path="/build/">
+              <FallbackWhenAreaSpecMissing />
+            </Route>
+            <Route path="/">
+              <Start />
+            </Route>
+          </Switch>
+          <Footer />
+        </Router>
+      </GraphQLProvider>
     </div>
   );
 }

@@ -74,7 +74,7 @@ function Build() {
   );
 }
 
-export function Start() {
+export default function Start() {
   return (
     <section className="hero is-medium is-primary is-bold">
       <div className="hero-body">

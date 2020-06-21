@@ -59,7 +59,7 @@ function gameInstance(problem) {
   );
 }
 
-export function Play() {
+export default function Play() {
   const { gridSpec, teamsSpec } = useParams();
 
   try {

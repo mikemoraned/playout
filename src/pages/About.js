@@ -1,7 +1,7 @@
 import React from "react";
 import { Rules } from "../components/Rules";
 
-export function About() {
+export default function About() {
   return (
     <>
       <section className="section">

@@ -91,7 +91,7 @@ const Instance = observer(() => {
   );
 });
 
-export function Build() {
+export default function Build() {
   const { areaSpec } = useParams();
   try {
     const gridSpec = parseAreaSpec(areaSpec).toGridSpec();

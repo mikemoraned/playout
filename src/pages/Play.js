@@ -3,7 +3,7 @@ import { Grid } from "../components/Grid";
 import { TeamsMini } from "../components/TeamsMini";
 import { TeamsFull } from "../components/TeamsFull";
 import { Evaluation } from "../components/Evaluation";
-import { StoreProvider } from "../model/store.js";
+import { StoreProvider } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
 import { useParams, Redirect } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";

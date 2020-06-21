@@ -1,10 +1,10 @@
 import React from "react";
 import { Grid } from "../components/Grid";
 import { TeamsFull } from "../components/TeamsFull";
-import { StoreProvider } from "../model/store.js";
+import { StoreProvider } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
 import { useContext } from "react";
-import { StoreContext } from "../model/store.js";
+import { StoreContext } from "../model/contexts.js";
 import { useParams, Redirect } from "react-router-dom";
 import { Problem, defaultTeamsSpec } from "../model/problem";
 

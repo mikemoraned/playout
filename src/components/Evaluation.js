@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
-import { StoreContext } from "../model/store.js";
+import { StoreContext } from "../model/contexts.js";
 import { Progress } from "./Progress";
 import { Scoring } from "./Scoring";
 

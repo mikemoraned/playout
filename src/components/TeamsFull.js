@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { StoreContext } from "../model/store.js";
+import { StoreContext } from "../model/contexts.js";
 import { TeamMember } from "./TeamMember";
 import { observer } from "mobx-react";
 import "./animate_team_selection.scss";

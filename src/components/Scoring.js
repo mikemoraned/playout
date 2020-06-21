@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext, useState } from "react";
 import { observer } from "mobx-react";
-import { StoreContext } from "../model/store.js";
+import { StoreContext } from "../model/contexts.js";
 import { Rules } from "./Rules";
 import "./Scoring.scss";
 

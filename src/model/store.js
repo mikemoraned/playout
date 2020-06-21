@@ -1,11 +1,9 @@
-import React from "react";
 import { types } from "mobx-state-tree";
 import { Teams } from "./teams/teams";
 import { Grid } from "./grid/grid";
 import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
-import { useLocalStore } from "mobx-react";
 import { Problem } from "./problem";
 
 export const Mode = types
@@ -137,15 +135,3 @@ export function storeFor(teams, grid) {
   const defaultMode = Mode.create({ editable: true });
   return Store.create({ teams, grid, mode: defaultMode });
 }
-
-export const StoreContext = React.createContext(null);
-
-export const StoreProvider = ({ initialStore, children }) => {
-  const mobXStore = useLocalStore(() => initialStore);
-
-  return (
-    <StoreContext.Provider value={{ store: mobXStore }}>
-      {children}
-    </StoreContext.Provider>
-  );
-};

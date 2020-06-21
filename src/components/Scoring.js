@@ -109,7 +109,7 @@ export const Scoring = observer(() => {
   const { scoring } = store.evaluation;
   const [showBreakdown, setShowBreakdown] = useState(false);
   const buttonKinds = [
-    "is-danger",
+    "is-info",
     "is-warning",
     "is-success",
     "is-success woopwoop",

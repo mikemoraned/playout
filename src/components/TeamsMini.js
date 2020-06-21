@@ -2,6 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/store.js";
+import "./animate_team_selection.scss";
 
 export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);

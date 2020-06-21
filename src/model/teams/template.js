@@ -23,5 +23,5 @@ export function templateFor(names, defaultSize, maximumSize) {
 export function defaultTemplate() {
   const defaultSize = 5;
   const maximumSize = 10;
-  return templateFor(["A", "B", "C", "D", "E"], defaultSize, maximumSize);
+  return templateFor(["A", "B", "C", "D"], defaultSize, maximumSize);
 }

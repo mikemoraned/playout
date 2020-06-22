@@ -4,9 +4,15 @@ type Query {
 
 type User {
   suggestions: [GameLink]
+  next: ProblemSpec
 }
 
-type GameLink {
+type ProblemSpec {
+  gridSpec: String!
+  teamsSpec: String!
+}
+
+type ProblemLink {
   path: String!
   name: String!
 }

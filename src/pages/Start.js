@@ -3,15 +3,6 @@ import { useHistory, Link } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 
-const GET_GAME_SUGGESTIONS = gql`
-  query GetGameSuggestions {
-    suggestions @client {
-      path
-      name
-    }
-  }
-`;
-
 function VisitGameButton({ path, name }) {
   const history = useHistory();
 
@@ -30,16 +21,28 @@ function VisitGameButton({ path, name }) {
 }
 
 function Play() {
-  const { loading, error, data } = useQuery(GET_GAME_SUGGESTIONS, {
-    fetchPolicy: "no-cache",
-  });
+  const { loading, error, data } = useQuery(
+    gql`
+      query GetGameSuggestions {
+        current_user @client {
+          suggestions @client {
+            path
+            name
+          }
+        }
+      }
+    `,
+    {
+      fetchPolicy: "no-cache",
+    }
+  );
 
   return (
     <>
       <h1 className="title">Play</h1>
       {!loading && !error && (
         <div className="buttons">
-          {data.suggestions.map((s) => {
+          {data.current_user.suggestions.map((s) => {
             return <VisitGameButton key={s.path} path={s.path} name={s.name} />;
           })}
         </div>

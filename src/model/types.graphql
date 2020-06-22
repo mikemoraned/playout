@@ -1,0 +1,12 @@
+type Query {
+  current_user: User!
+}
+
+type User {
+  suggestions: [GameLink]
+}
+
+type GameLink {
+  path: String!
+  name: String!
+}

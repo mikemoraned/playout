@@ -3,8 +3,8 @@ import { useLocalStore } from "mobx-react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { gql } from "apollo-boost";
 import { randomEasyProblem, randomHardProblem } from "../model/problem";
+import { loader } from "graphql.macro";
 
 export const StoreContext = React.createContext(null);
 
@@ -19,16 +19,7 @@ export const StoreProvider = ({ initialStore, children }) => {
 };
 
 export const GraphQLProvider = ({ children }) => {
-  const typeDefs = gql`
-    type Query {
-      suggestions: [GameLink]
-    }
-
-    type GameLink {
-      path: String
-      name: String
-    }
-  `;
+  const typeDefs = loader("./types.graphql");
   function randomEasyLink() {
     const problem = randomEasyProblem();
     const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
@@ -44,7 +35,14 @@ export const GraphQLProvider = ({ children }) => {
     cache,
     resolvers: {
       Query: {
-        suggestions: (_root, _args, _context, _info) => {
+        current_user: (_root, _args, _context, _info) => {
+          return {
+            __typename: "User",
+          };
+        },
+      },
+      User: {
+        suggestions: (_user, _args, _context, _info) => {
           return [randomEasyLink(), randomHardLink()];
         },
       },

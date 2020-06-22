@@ -8,8 +8,9 @@ import { Biases } from "../components/Biases";
 import { useParams, Redirect } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
 import "./Play.scss";
+import { observer } from "mobx-react";
 
-function Instance(problem) {
+const Instance = observer(() => {
   return (
     <div className="container">
       <div className="mt-3 sticky-evaluation">
@@ -53,7 +54,7 @@ function Instance(problem) {
       </div>
     </div>
   );
-}
+});
 
 export default function Play() {
   const { gridSpec, teamsSpec } = useParams();

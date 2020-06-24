@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
+import "./Grid.scss";
 
 function Desktop({ visibility }) {
   return (
@@ -22,7 +23,7 @@ export const Grid = observer(() => {
   const { store } = useContext(StoreContext);
   const { width, height } = store.grid;
   return (
-    <div className="table-container">
+    <div className="grid table-container">
       <table width={"100%"} className="table" style={{ tableLayout: "fixed" }}>
         <tbody>
           {[...Array(height).keys()].map((y) => {

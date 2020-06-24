@@ -1,0 +1,6 @@
+$duration: 1.5s;
+
+.grid td {
+  transition: background-color $duration ease-in-out,
+    color $duration ease-in-out;
+}

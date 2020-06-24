@@ -1,30 +1,36 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { observer } from "mobx-react";
-// import { gql } from "apollo-boost";
-// import { useQuery } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import { StoreContext } from "../model/contexts.js";
 import { Progress } from "./Progress";
 import { Scoring } from "./Scoring";
-import { randomEasyProblem } from "../model/problem.js";
+import { randomProblemWithGridSize } from "../model/problem.js";
 
 export const NextProblem = observer(() => {
   const history = useHistory();
+  const [isLoading, setLoading] = useState(false);
   const { store } = useContext(StoreContext);
   const { progress } = store.evaluation;
   const complete = progress.value === progress.max;
 
   function visitRandomProblem() {
-    const problem = randomEasyProblem();
+    const problem = randomProblemWithGridSize(
+      store.grid.width,
+      store.grid.height
+    );
     const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
-    history.push(path);
+    setLoading(true);
+    setTimeout(() => {
+      history.push(path);
+      setLoading(false);
+    }, 1000);
   }
 
   return (
     <>
       <button
-        className="button is-hidden-mobile"
+        className={`button is-hidden-mobile ${isLoading ? "is-loading" : ""}`}
         disabled={!complete}
         onClick={() => visitRandomProblem()}
       >
@@ -34,7 +40,7 @@ export const NextProblem = observer(() => {
         </span>
       </button>
       <button
-        className="button is-hidden-tablet"
+        className={`button is-hidden-tablet ${isLoading ? "is-loading" : ""}`}
         disabled={!complete}
         onClick={() => visitRandomProblem()}
       >

@@ -23,12 +23,8 @@ export const Grid = observer(() => {
   const { store } = useContext(StoreContext);
   const { width, height } = store.grid;
   return (
-    <div className="table-container">
-      <table
-        width={"100%"}
-        className="grid table"
-        style={{ tableLayout: "fixed" }}
-      >
+    <div className="grid table-container">
+      <table width={"100%"} className="table" style={{ tableLayout: "fixed" }}>
         <tbody>
           {[...Array(height).keys()].map((y) => {
             return (

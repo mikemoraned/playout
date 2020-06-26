@@ -19,21 +19,25 @@ const Instance = observer(() => {
   const fullURL = new URL(path, base);
   return (
     <div className="container">
-      <div className="columns mt-3 ml-3">
+      <div className="columns mt-3 ml-3 is-mobile">
         <div className="column">
-          <div className="tabs is-medium is-boxed is-toggle">
-            <ul>
-              <li className={store.mode.name === "Build" ? "is-active" : ""}>
-                <a href="#build" onClick={() => store.mode.setBuildMode()}>
-                  Edit
-                </a>
-              </li>
-              <li className={store.mode.name === "Play" ? "is-active" : ""}>
-                <a href="#play" onClick={() => store.mode.setPlayMode()}>
-                  Play Test
-                </a>
-              </li>
-            </ul>
+          <div className="buttons has-addons">
+            <button
+              className={`button is-info ${
+                store.mode.name === "Build" ? "" : "is-light"
+              }`}
+              onClick={() => store.mode.setBuildMode()}
+            >
+              Edit
+            </button>
+            <button
+              className={`button is-info ${
+                store.mode.name === "Play" ? "" : "is-light"
+              }`}
+              onClick={() => store.mode.setPlayMode()}
+            >
+              Play Test
+            </button>
           </div>
         </div>
         <div className="column">
@@ -47,7 +51,8 @@ const Instance = observer(() => {
             <span className="icon">
               <i className="fas fa-external-link-alt"></i>
             </span>
-            <span>Open in new tab</span>
+            <span>Open</span>
+            <span className="is-hidden-mobile">&nbsp;in new tab</span>
           </button>
         </div>
       </div>

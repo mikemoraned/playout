@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/store.js";
 import { positionFor } from "../model/grid/grid";
+import "./Grid.scss";
 
 function Desktop({ visibility }) {
   return (
@@ -23,7 +24,11 @@ export const Grid = observer(() => {
   const { width, height } = store.grid;
   return (
     <div className="table-container">
-      <table width={"100%"} className="table" style={{ tableLayout: "fixed" }}>
+      <table
+        width={"100%"}
+        className="grid table"
+        style={{ tableLayout: "fixed" }}
+      >
         <tbody>
           {[...Array(height).keys()].map((y) => {
             return (
@@ -32,9 +37,12 @@ export const Grid = observer(() => {
                   const position = positionFor(x, y);
                   const has_seat = store.grid.hasSeat(position);
                   const occupancy = store.grid.findOccupancy(position);
+                  const cornerAdjacencies = adjacencies(store, x, y);
                   return (
                     <td
-                      className={`${has_seat ? "has-background-info" : ""}`}
+                      className={`${
+                        has_seat ? "has-background-info" : ""
+                      } ${cornerAdjacencies}`}
                       onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{
@@ -75,3 +83,48 @@ export const Grid = observer(() => {
     </div>
   );
 });
+
+function adjacencies(store, x, y) {
+  function occupancyCode(x, y) {
+    return store.grid.hasSeat(positionFor(x, y)) ? "o" : "e";
+  }
+
+  // the "clock" starts to left of current seat, not
+  // at top as a normal clock would
+  const clockwiseOccupancyCodes = [
+    occupancyCode(x - 1, y),
+    occupancyCode(x - 1, y - 1),
+    occupancyCode(x, y - 1),
+    occupancyCode(x + 1, y - 1),
+    occupancyCode(x + 1, y),
+    occupancyCode(x + 1, y + 1),
+    occupancyCode(x, y + 1),
+    occupancyCode(x - 1, y + 1),
+  ];
+
+  const topLeftCorner = [
+    clockwiseOccupancyCodes[0],
+    clockwiseOccupancyCodes[1],
+    clockwiseOccupancyCodes[2],
+  ].join("");
+
+  const topRightCorner = [
+    clockwiseOccupancyCodes[2],
+    clockwiseOccupancyCodes[3],
+    clockwiseOccupancyCodes[4],
+  ].join("");
+
+  const bottomRightCorner = [
+    clockwiseOccupancyCodes[4],
+    clockwiseOccupancyCodes[5],
+    clockwiseOccupancyCodes[6],
+  ].join("");
+
+  const bottomLeftCorner = [
+    clockwiseOccupancyCodes[6],
+    clockwiseOccupancyCodes[7],
+    clockwiseOccupancyCodes[0],
+  ].join("");
+
+  return `tl-${topLeftCorner} tr-${topRightCorner} br-${bottomRightCorner} bl-${bottomLeftCorner}`;
+}

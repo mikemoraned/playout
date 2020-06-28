@@ -50,6 +50,13 @@ export function defaultTeamsSpec() {
   });
 }
 
+export function randomProblemWithGridSize(width, height) {
+  return Problem.create({
+    grid: randomGridSpec(width, height),
+    teams: defaultTeamsSpec(),
+  });
+}
+
 export function randomEasyProblem() {
   return Problem.create({
     grid: randomGridSpec(10, 10),

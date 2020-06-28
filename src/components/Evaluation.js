@@ -1,9 +1,10 @@
 import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
-import { StoreContext } from "../model/store.js";
+import { StoreContext } from "../model/contexts.js";
 import { Progress } from "./Progress";
 import { Scoring } from "./Scoring";
+import { NextProblem } from "./NextProblem";
 
 export const Evaluation = observer(() => {
   const { store } = useContext(StoreContext);
@@ -16,7 +17,7 @@ export const Evaluation = observer(() => {
   return (
     <div className="box">
       <div className="columns is-mobile is-vcentered">
-        <div className="column is-2 has-text-right">
+        <div className="column is-narrow has-text-right">
           <span
             style={{
               fontFamily: "monospace",
@@ -25,11 +26,14 @@ export const Evaluation = observer(() => {
             {percentDone.padStart(3, nonBreakingSpace)}%
           </span>
         </div>
-        <div className="column is-6">
+        <div className="column">
           <Progress />
         </div>
         <div className="column is-4 has-text-centered">
           <Scoring />
+        </div>
+        <div className="column is-3 has-text-centered">
+          <NextProblem />
         </div>
       </div>
     </div>

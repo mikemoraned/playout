@@ -1,0 +1,23 @@
+type Query {
+  current_user: User!
+}
+
+type User {
+  suggestions: [GameLink]
+  next: ProblemSpec
+  recentlyCompleted: [ProblemSpec]
+}
+
+type ProblemSpec {
+  gridSpec: String!
+  teamsSpec: String!
+}
+
+type ProblemLink {
+  path: String!
+  name: String!
+}
+
+type Mutation {
+  problemCompleted(problemSpec: ProblemSpec): ProblemSpec!
+}

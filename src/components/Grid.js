@@ -2,7 +2,7 @@ import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
-import { StoreContext } from "../model/store.js";
+import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
 import "./Grid.scss";
 
@@ -23,12 +23,8 @@ export const Grid = observer(() => {
   const { store } = useContext(StoreContext);
   const { width, height } = store.grid;
   return (
-    <div className="table-container">
-      <table
-        width={"100%"}
-        className="grid table"
-        style={{ tableLayout: "fixed" }}
-      >
+    <div className="grid table-container">
+      <table width={"100%"} className="table" style={{ tableLayout: "fixed" }}>
         <tbody>
           {[...Array(height).keys()].map((y) => {
             return (

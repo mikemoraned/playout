@@ -23,7 +23,7 @@ export const NextProblem = observer(() => {
   const [isLoading, setLoading] = useState(false);
   const { store } = useContext(StoreContext);
   const { progress } = store.evaluation;
-  const complete = progress.value === progress.max;
+  const complete = true; //progress.value === progress.max;
   const fakeDelay = 500;
 
   function startLoading() {

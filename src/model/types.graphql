@@ -1,11 +1,11 @@
 type Query {
   current_user: User!
-  recently_completed(limit: Int!): [ProblemSpec]
 }
 
 type User {
   suggestions: [GameLink]
   next: ProblemSpec
+  recentlyCompleted: [ProblemSpec]
 }
 
 type ProblemSpec {

@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
+import { parseProblemFrom } from "../model/problem";
 
 function VisitGameButton({ path, name }) {
   const history = useHistory();
@@ -51,6 +52,51 @@ function Play() {
   );
 }
 
+function RecentlyCompleted() {
+  const { loading, error, data } = useQuery(
+    gql`
+      query GetRecentlyCompleted {
+        current_user @client {
+          recentlyCompleted @client {
+            gridSpec
+            teamsSpec
+          }
+        }
+      }
+    `
+  );
+
+  if (!loading && !error) {
+    const recentlyCompleted = data.current_user.recentlyCompleted;
+    if (recentlyCompleted.length > 0) {
+      return (
+        <section className="section">
+          <div className="container">
+            <h1 className="title is-4">Recently Completed</h1>
+            {recentlyCompleted.map((problemSpec, index) => {
+              const { gridSpec, teamsSpec } = problemSpec;
+              const problem = parseProblemFrom(gridSpec, teamsSpec);
+              const { width, height } = problem.grid;
+              const path = `/play/${gridSpec}/${teamsSpec}`;
+              return (
+                <article className="message is-link" key={index}>
+                  <div className="message-body">
+                    <VisitGameButton
+                      path={path}
+                      name={`${width}x${height} Game`}
+                    />
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    }
+  }
+  return <></>;
+}
+
 function Build() {
   return (
     <>
@@ -79,19 +125,23 @@ function Build() {
 
 export default function Start() {
   return (
-    <section className="hero is-medium is-primary is-bold">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns">
-            <div className="column">
-              <Play />
-            </div>
-            <div className="column">
-              <Build />
+    <>
+      <section className="hero is-medium is-primary is-bold">
+        <div className="hero-body">
+          <div className="container">
+            <div className="columns">
+              <div className="column">
+                <Play />
+              </div>
+              <div className="column">
+                <Build />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <RecentlyCompleted />
+    </>
   );
 }

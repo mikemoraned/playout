@@ -5,6 +5,7 @@ type Query {
 type User {
   suggestions: [GameLink]
   next: ProblemSpec
+  recentlyCompleted: [ProblemSpec]
 }
 
 type ProblemSpec {
@@ -18,5 +19,5 @@ type ProblemLink {
 }
 
 type Mutation {
-  problemCompleted(width: Int!, height: Int!): ProblemSpec!
+  problemCompleted(problemSpec: ProblemSpec): ProblemSpec!
 }

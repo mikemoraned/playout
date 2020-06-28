@@ -6,9 +6,11 @@ import {
   randomEasyProblem,
   randomHardProblem,
   randomProblemWithGridSize,
+  parseProblemFrom,
 } from "../model/problem";
 import {} from "../model/problem.js";
 import { loader } from "graphql.macro";
+import { gql } from "apollo-boost";
 
 export const StoreContext = React.createContext(null);
 
@@ -33,6 +35,14 @@ export const GraphQLProvider = ({ children }) => {
     return { __typename: "ProblemLink", path, name: "Random Hard Game" };
   }
   const cache = new InMemoryCache();
+  cache.writeData({
+    data: {
+      current_user: {
+        __typename: "User",
+        recentlyCompleted: [],
+      },
+    },
+  });
   const client = new ApolloClient({
     cache,
     resolvers: {
@@ -57,13 +67,46 @@ export const GraphQLProvider = ({ children }) => {
         },
       },
       Mutation: {
-        problemCompleted: (_root, args, _context, _info) => {
-          const { width, height } = args;
-          const problem = randomProblemWithGridSize(width, height);
+        problemCompleted: (_root, args, context, _info) => {
+          const {
+            problemSpec: { gridSpec, teamsSpec },
+          } = args;
+          const completedProblem = parseProblemFrom(gridSpec, teamsSpec);
+
+          const { cache } = context;
+          const query = gql`
+            query GetRecentlyCompleted {
+              current_user @client {
+                recentlyCompleted @client {
+                  gridSpec
+                  teamsSpec
+                }
+              }
+            }
+          `;
+          const previousData = cache.readQuery({ query });
+          const nextData = {
+            current_user: {
+              __typename: "User",
+              recentlyCompleted: [
+                {
+                  __typename: "ProblemSpec",
+                  gridSpec,
+                  teamsSpec,
+                },
+              ].concat(previousData.current_user.recentlyCompleted),
+            },
+          };
+          cache.writeQuery({ query, data: nextData });
+
+          const nextProblem = randomProblemWithGridSize(
+            completedProblem.grid.width,
+            completedProblem.grid.height
+          );
           return {
             __typename: "ProblemSpec",
-            gridSpec: problem.grid.toVersion2Format(),
-            teamsSpec: problem.teams.toVersion1Format(),
+            gridSpec: nextProblem.grid.toVersion2Format(),
+            teamsSpec: nextProblem.teams.toVersion1Format(),
           };
         },
       },

@@ -16,3 +16,7 @@ type ProblemLink {
   path: String!
   name: String!
 }
+
+type Mutation {
+  problemCompleted(width: Int!, height: Int!): ProblemSpec!
+}

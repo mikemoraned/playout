@@ -88,15 +88,13 @@ export const GraphQLProvider = ({ children }) => {
           const nextData = {
             current_user: {
               __typename: "User",
-              recentlyCompleted: previousData.current_user.recentlyCompleted.concat(
-                [
-                  {
-                    __typename: "ProblemSpec",
-                    gridSpec,
-                    teamsSpec,
-                  },
-                ]
-              ),
+              recentlyCompleted: [
+                {
+                  __typename: "ProblemSpec",
+                  gridSpec,
+                  teamsSpec,
+                },
+              ].concat(previousData.current_user.recentlyCompleted),
             },
           };
           cache.writeQuery({ query, data: nextData });

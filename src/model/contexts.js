@@ -2,7 +2,12 @@ import React from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { randomEasyProblem, randomHardProblem } from "../model/problem";
+import {
+  randomEasyProblem,
+  randomHardProblem,
+  randomProblemWithGridSize,
+} from "../model/problem";
+import {} from "../model/problem.js";
 import { loader } from "graphql.macro";
 
 export const StoreContext = React.createContext(null);
@@ -44,6 +49,17 @@ export const GraphQLProvider = ({ children }) => {
         },
         next: (_user, _args, _context, _info) => {
           const problem = randomEasyProblem();
+          return {
+            __typename: "ProblemSpec",
+            gridSpec: problem.grid.toVersion2Format(),
+            teamsSpec: problem.teams.toVersion1Format(),
+          };
+        },
+      },
+      Mutation: {
+        problemCompleted: (_root, args, _context, _info) => {
+          const { width, height } = args;
+          const problem = randomProblemWithGridSize(width, height);
           return {
             __typename: "ProblemSpec",
             gridSpec: problem.grid.toVersion2Format(),

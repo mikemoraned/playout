@@ -3,26 +3,46 @@ import { useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { useHistory } from "react-router-dom";
 import { StoreContext } from "../model/contexts.js";
-import { randomProblemWithGridSize } from "../model/problem.js";
+import { useMutation } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
+
+const PROBLEM_COMPLETED = gql`
+  mutation ProblemCompleted($width: Int!, $height: Int!) {
+    next: problemCompleted(width: $width, height: $height) @client {
+      gridSpec
+      teamsSpec
+    }
+  }
+`;
 
 export const NextProblem = observer(() => {
   const history = useHistory();
+  const [problemCompleted] = useMutation(PROBLEM_COMPLETED, {
+    onCompleted: onLoaded,
+  });
   const [isLoading, setLoading] = useState(false);
   const { store } = useContext(StoreContext);
   const { progress } = store.evaluation;
   const complete = progress.value === progress.max;
+  const fakeDelay = 500;
 
-  function visitRandomProblem() {
-    const problem = randomProblemWithGridSize(
-      store.grid.width,
-      store.grid.height
-    );
-    const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
+  function startLoading() {
     setLoading(true);
+    const problem = store.toProblem();
+    const { width, height } = problem.grid;
     setTimeout(() => {
-      history.push(path);
-      setLoading(false);
-    }, 1000);
+      problemCompleted({ variables: { width, height } });
+    }, fakeDelay);
+  }
+
+  function onLoaded(data) {
+    const {
+      next: { gridSpec, teamsSpec },
+    } = data;
+
+    const path = `/play/${gridSpec}/${teamsSpec}`;
+    setLoading(false);
+    history.push(path);
   }
 
   return (
@@ -30,7 +50,7 @@ export const NextProblem = observer(() => {
       <button
         className={`button is-hidden-mobile ${isLoading ? "is-loading" : ""}`}
         disabled={!complete}
-        onClick={() => visitRandomProblem()}
+        onClick={() => startLoading()}
       >
         <span>Next</span>
         <span className="icon">
@@ -40,7 +60,7 @@ export const NextProblem = observer(() => {
       <button
         className={`button is-hidden-tablet ${isLoading ? "is-loading" : ""}`}
         disabled={!complete}
-        onClick={() => visitRandomProblem()}
+        onClick={() => startLoading()}
       >
         <span className="icon">
           <i className="fas fa-angle-double-right fa-2x"></i>

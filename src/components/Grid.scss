@@ -1,0 +1,23 @@
+$border-radius: 15px;
+
+.grid {
+  td.tl-eee,
+  td.tl-eoe {
+    border-top-left-radius: $border-radius;
+  }
+
+  td.tr-eee,
+  td.tr-eoe {
+    border-top-right-radius: $border-radius;
+  }
+
+  td.br-eee,
+  td.br-eoe {
+    border-bottom-right-radius: $border-radius;
+  }
+
+  td.bl-eee,
+  td.bl-eoe {
+    border-bottom-left-radius: $border-radius;
+  }
+}

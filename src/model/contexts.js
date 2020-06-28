@@ -6,6 +6,7 @@ import {
   randomEasyProblem,
   randomHardProblem,
   randomProblemWithGridSize,
+  parseProblemFrom,
 } from "../model/problem";
 import {} from "../model/problem.js";
 import { loader } from "graphql.macro";
@@ -58,12 +59,18 @@ export const GraphQLProvider = ({ children }) => {
       },
       Mutation: {
         problemCompleted: (_root, args, _context, _info) => {
-          const { width, height } = args;
-          const problem = randomProblemWithGridSize(width, height);
+          const {
+            problemSpec: { gridSpec, teamsSpec },
+          } = args;
+          const completedProblem = parseProblemFrom(gridSpec, teamsSpec);
+          const nextProblem = randomProblemWithGridSize(
+            completedProblem.grid.width,
+            completedProblem.grid.height
+          );
           return {
             __typename: "ProblemSpec",
-            gridSpec: problem.grid.toVersion2Format(),
-            teamsSpec: problem.teams.toVersion1Format(),
+            gridSpec: nextProblem.grid.toVersion2Format(),
+            teamsSpec: nextProblem.teams.toVersion1Format(),
           };
         },
       },

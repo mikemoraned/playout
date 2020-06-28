@@ -7,8 +7,8 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
 const PROBLEM_COMPLETED = gql`
-  mutation ProblemCompleted($width: Int!, $height: Int!) {
-    next: problemCompleted(width: $width, height: $height) @client {
+  mutation ProblemCompleted($problemSpec: ProblemSpec) {
+    next: problemCompleted(problemSpec: $problemSpec) @client {
       gridSpec
       teamsSpec
     }
@@ -29,9 +29,16 @@ export const NextProblem = observer(() => {
   function startLoading() {
     setLoading(true);
     const problem = store.toProblem();
-    const { width, height } = problem.grid;
+    const problemSpec = {
+      gridSpec: problem.grid.toVersion2Format(),
+      teamsSpec: problem.teams.toVersion1Format(),
+    };
     setTimeout(() => {
-      problemCompleted({ variables: { width, height } });
+      problemCompleted({
+        variables: {
+          problemSpec,
+        },
+      });
     }, fakeDelay);
   }
 

@@ -1,5 +1,6 @@
 type Query {
   current_user: User!
+  recently_completed(limit: Int!): [ProblemSpec]
 }
 
 type User {
@@ -18,5 +19,5 @@ type ProblemLink {
 }
 
 type Mutation {
-  problemCompleted(width: Int!, height: Int!): ProblemSpec!
+  problemCompleted(problemSpec: ProblemSpec): ProblemSpec!
 }

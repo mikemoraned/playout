@@ -12,11 +12,31 @@ import {
 } from "react-router-dom";
 import { defaultTeamsSpec } from "./model/problem";
 import { GraphQLProvider } from "./model/contexts";
+import Start from "./pages/Start";
 
-const Build = lazy(() => import("./pages/Build"));
-const Play = lazy(() => import("./pages/Play"));
-const About = lazy(() => import("./pages/About"));
-const Start = lazy(() => import("./pages/Start"));
+const deferred = [];
+function defer(fn) {
+  deferred.push(fn);
+  return lazy(fn);
+}
+function triggerDeferred() {
+  console.log("Triggering deferred");
+  deferred.forEach((fn, index) => {
+    console.log("Triggering", index);
+    fn();
+  });
+}
+window.addEventListener("load", () => {
+  triggerDeferred();
+});
+
+const Play = defer(() => import(/* webpackChunkName: "Play" */ "./pages/Play"));
+const Build = defer(() =>
+  import(/* webpackChunkName: "Build" */ "./pages/Build")
+);
+const About = defer(() =>
+  import(/* webpackChunkName: "About" */ "./pages/About")
+);
 
 function App() {
   return (

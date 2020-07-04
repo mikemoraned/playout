@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { StoreContext } from "../model/contexts.js";
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 
 const PROBLEM_COMPLETED = gql`
   mutation ProblemCompleted($problemSpec: ProblemSpec) {
@@ -61,7 +63,7 @@ export const NextProblem = observer(() => {
       >
         <span>Next</span>
         <span className="icon">
-          <i className="fas fa-angle-double-right"></i>
+          <FontAwesomeIcon icon={faAngleDoubleRight} />
         </span>
       </button>
       <button
@@ -70,7 +72,7 @@ export const NextProblem = observer(() => {
         onClick={() => startLoading()}
       >
         <span className="icon">
-          <i className="fas fa-angle-double-right fa-2x"></i>
+          <FontAwesomeIcon icon={faAngleDoubleRight} size="2x" />
         </span>
       </button>
     </>

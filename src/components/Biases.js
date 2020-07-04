@@ -4,12 +4,23 @@ import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
 import { BiasKind, canRotate } from "../model/teams/bias";
 import { ScoreFaceIcon, ScoringBreakdown } from "./Scoring";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserSlash,
+  faAsterisk,
+  faUserFriends,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 
 const iconForBiasKind = {};
-iconForBiasKind[BiasKind.DISTANT] = "fas fa-user-slash";
-iconForBiasKind[BiasKind.NO_BIAS] = "fas fa-asterisk";
-iconForBiasKind[BiasKind.NEARBY] = "fas fa-user-friends fa-lg";
-iconForBiasKind[BiasKind.NEXT_TO] = "fas fa-users fa-lg";
+iconForBiasKind[BiasKind.DISTANT] = <FontAwesomeIcon icon={faUserSlash} />;
+iconForBiasKind[BiasKind.NO_BIAS] = <FontAwesomeIcon icon={faAsterisk} />;
+iconForBiasKind[BiasKind.NEARBY] = (
+  <FontAwesomeIcon icon={faUserFriends} size="lg" />
+);
+iconForBiasKind[BiasKind.NEXT_TO] = (
+  <FontAwesomeIcon icon={faUsers} size="lg" />
+);
 iconForBiasKind[BiasKind.NEXT_TO_SAME_TEAM] = iconForBiasKind[BiasKind.NEXT_TO];
 
 const EditableBias = observer(({ biasKind, fromTeamName, toTeamName }) => {
@@ -23,9 +34,7 @@ const EditableBias = observer(({ biasKind, fromTeamName, toTeamName }) => {
       title={biasKind}
       disabled={disabled}
     >
-      <span className="icon">
-        <i className={`${iconForBiasKind[biasKind]}`}></i>
-      </span>
+      <span className="icon">{iconForBiasKind[biasKind]}</span>
     </button>
   );
 });

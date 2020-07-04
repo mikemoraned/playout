@@ -7,8 +7,10 @@ import { StoreProvider } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
 import { useParams, Redirect } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
-import "./Play.scss";
 import { observer } from "mobx-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBorderAll, faUser, faStar } from "@fortawesome/free-solid-svg-icons";
+import "./Play.scss";
 
 const Instance = observer(() => {
   return (
@@ -22,7 +24,7 @@ const Instance = observer(() => {
             <h1 className="title is-4">Layout</h1>
             <p className="subtitle is-6">
               <span className="icon">
-                <i className="fas fa-border-all"></i>
+                <FontAwesomeIcon icon={faBorderAll} />
               </span>{" "}
               Place Team Members in Seats
             </p>
@@ -35,7 +37,7 @@ const Instance = observer(() => {
             <h1 className="title is-4">Teams</h1>
             <p className="subtitle is-6">
               <span className="icon">
-                <i className="fas fa-user"></i>
+                <FontAwesomeIcon icon={faUser} />
               </span>
             </p>
             <TeamsFull />
@@ -44,7 +46,7 @@ const Instance = observer(() => {
             <h1 className="title is-4">Biases</h1>
             <p className="subtitle is-6">
               <span className="icon">
-                <i className="fas fa-star"></i>
+                <FontAwesomeIcon icon={faStar} />
               </span>{" "}
               Who wants what?
             </p>

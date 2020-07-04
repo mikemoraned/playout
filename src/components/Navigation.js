@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Logo } from "./Logo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 export function Navigation({ version }) {
   const [activeMobile, setActiveMobile] = useState(false);
@@ -46,7 +48,7 @@ export function Navigation({ version }) {
             activeClassName="is-active"
           >
             <span className="icon is-medium">
-              <i className="fas fa-info-circle fa-2x"></i>
+              <FontAwesomeIcon icon={faInfoCircle} size="2x" />
             </span>
           </NavLink>
         </div>

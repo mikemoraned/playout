@@ -4,6 +4,8 @@ import { observer } from "mobx-react";
 import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDesktop } from "@fortawesome/free-solid-svg-icons";
 import "./Grid.scss";
 
 function Desktop({ visibility }) {
@@ -14,7 +16,7 @@ function Desktop({ visibility }) {
         visibility,
       }}
     >
-      <i className="fas fa-desktop"></i>
+      <FontAwesomeIcon icon={faDesktop} />
     </span>
   );
 }

@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faSmile } from "@fortawesome/free-regular-svg-icons";
 
 export function Logo({ fontSize }) {
   return (
@@ -10,11 +12,11 @@ export function Logo({ fontSize }) {
     >
       P L{" "}
       <span className="icon is-small">
-        <i className="far fa-user fa-xs"></i>
+        <FontAwesomeIcon icon={faUser} size="xs" />
       </span>{" "}
       Y{" "}
       <span className="icon is-small">
-        <i className={`far fa-smile fa-xs`}></i>
+        <FontAwesomeIcon icon={faSmile} size="xs" />
       </span>{" "}
       U T
     </span>

@@ -3,7 +3,13 @@ import { useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
 import { Rules } from "./Rules";
-import "./Scoring.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMeh,
+  faSmile,
+  faSmileBeam,
+  faGrinStars,
+} from "@fortawesome/free-regular-svg-icons";
 
 function mapScoreToCategory(score, max, numCategories) {
   const fractionDone = score / max;
@@ -12,17 +18,17 @@ function mapScoreToCategory(score, max, numCategories) {
 
 export function ScoreFaceIcon({ max, score, size }) {
   const faces = [
-    // "sad-cry",
-    // "frown",
-    "meh",
-    "smile",
-    "smile-beam",
-    "grin-stars",
+    // faSadCry,
+    // faFrown,
+    faMeh,
+    faSmile,
+    faSmileBeam,
+    faGrinStars,
   ];
   const face = faces[mapScoreToCategory(score, max, faces.length)];
   return (
     <span className={`icon is-${size}`}>
-      <i className={`far fa-${face} ${size === "medium" ? "fa-2x" : ""}`}></i>
+      <FontAwesomeIcon icon={face} size={size === "medium" ? "2x" : "1x"} />
     </span>
   );
 }

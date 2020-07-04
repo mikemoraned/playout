@@ -2,8 +2,9 @@ import React from "react";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
-import "./animate_team_selection.scss";
 import { ScoreFaceIcon } from "./Scoring.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faUndo } from "@fortawesome/free-solid-svg-icons";
 
 export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);
@@ -14,7 +15,7 @@ export const TeamsMini = observer(() => {
         <label className="label">
           Next{" "}
           <span className="icon">
-            <i className="fas fa-user"></i>
+            <FontAwesomeIcon icon={faUser} />
           </span>{" "}
           from:
         </label>
@@ -48,7 +49,7 @@ export const TeamsMini = observer(() => {
               onClick={() => store.undo()}
             >
               <span className="icon">
-                <i className="fas fa-undo"></i>
+                <FontAwesomeIcon icon={faUndo} />
               </span>
             </button>
           </div>

@@ -1,5 +1,4 @@
 import React, { Suspense, lazy } from "react";
-import "./App.scss";
 import { Navigation } from "./components/Navigation";
 import { Footer } from "./components/Footer";
 import { version } from "../package.json";
@@ -13,6 +12,7 @@ import {
 import { defaultTeamsSpec } from "./model/problem";
 import { GraphQLProvider } from "./model/contexts";
 import Start from "./pages/Start";
+import "./App.scss";
 
 const deferred = [];
 function defer(fn) {

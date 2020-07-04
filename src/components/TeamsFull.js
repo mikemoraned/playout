@@ -3,13 +3,14 @@ import { useContext } from "react";
 import { StoreContext } from "../model/contexts.js";
 import { TeamMember } from "./TeamMember";
 import { observer } from "mobx-react";
-import "./animate_team_selection.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 function AddRemoveMembersHeader() {
   return (
     <div>
       <span className="icon">
-        <i className="fas fa-user-plus"></i>
+        <FontAwesomeIcon icon={faUserPlus} />
       </span>
     </div>
   );
@@ -26,7 +27,7 @@ function AddRemoveMembers({ team }) {
           onClick={() => store.addTeamMember(team.name)}
         >
           <span className="icon">
-            <i className="fas fa-user-plus"></i>
+            <FontAwesomeIcon icon={faUserPlus} />
           </span>
         </button>
       </div>
@@ -97,7 +98,7 @@ export const TeamsFull = observer(() => {
               onClick={() => store.addTeam()}
             >
               <span className="icon">
-                <i className="fas fa-users"></i>
+                <FontAwesomeIcon icon={faUsers} />
               </span>
               <span>Add Team</span>
             </button>

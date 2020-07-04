@@ -3,6 +3,8 @@ import { useHistory, Link } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { parseProblemFrom } from "../model/problem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faChessBoard } from "@fortawesome/free-solid-svg-icons";
 
 function VisitGameButton({ path, name }) {
   const history = useHistory();
@@ -14,7 +16,7 @@ function VisitGameButton({ path, name }) {
   return (
     <button className="button is-link is-light" onClick={() => visitGame()}>
       <span className="icon">
-        <i className="fas fa-play"></i>
+        <FontAwesomeIcon icon={faPlay} />
       </span>
       <span>{name}</span>
     </button>
@@ -105,7 +107,7 @@ function Build() {
         <button className="button is-link is-light">
           <Link to="/build/5x5">
             <span className="icon">
-              <i className="fas fa-chess-board"></i>
+              <FontAwesomeIcon icon={faChessBoard} />
             </span>
             <span>5 x 5</span>
           </Link>
@@ -113,7 +115,7 @@ function Build() {
         <button className="button is-link is-light">
           <Link to="/build/10x10">
             <span className="icon">
-              <i className="fas fa-chess-board"></i>
+              <FontAwesomeIcon icon={faChessBoard} />
             </span>
             <span>10 x 10</span>
           </Link>

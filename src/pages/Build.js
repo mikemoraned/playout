@@ -7,6 +7,13 @@ import { useContext } from "react";
 import { StoreContext } from "../model/contexts.js";
 import { useParams, Redirect } from "react-router-dom";
 import { Problem, defaultTeamsSpec } from "../model/problem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faExternalLinkAlt,
+  faBorderAll,
+  faUserEdit,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
@@ -49,7 +56,7 @@ const Instance = observer(() => {
             }}
           >
             <span className="icon">
-              <i className="fas fa-external-link-alt"></i>
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
             </span>
             <span>Open</span>
             <span className="is-hidden-mobile">&nbsp;in new tab</span>
@@ -62,7 +69,7 @@ const Instance = observer(() => {
             <h1 className="title is-4">Layout</h1>
             <p className="subtitle is-6">
               <span className="icon">
-                <i className="fas fa-border-all"></i>
+                <FontAwesomeIcon icon={faBorderAll} />
               </span>{" "}
               Edit layout
             </p>
@@ -74,7 +81,7 @@ const Instance = observer(() => {
             <h1 className="title is-4">Teams</h1>
             <p className="subtitle is-6">
               <span className="icon">
-                <i className="fas fa-user-edit"></i>
+                <FontAwesomeIcon icon={faUserEdit} />
               </span>{" "}
               Edit Teams
             </p>
@@ -84,7 +91,7 @@ const Instance = observer(() => {
             <h1 className="title is-4">Biases</h1>
             <p className="subtitle is-6">
               <span className="icon">
-                <i className="fas fa-star"></i>
+                <FontAwesomeIcon icon={faStar} />
               </span>{" "}
               Edit Biases
             </p>

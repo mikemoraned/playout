@@ -1,6 +1,8 @@
 import React from "react";
 import { Logo } from "./Logo";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopyright } from "@fortawesome/free-regular-svg-icons";
 
 export function Footer() {
   return (
@@ -15,7 +17,7 @@ export function Footer() {
                 </Link>{" "}
                 is{" "}
                 <span className="icon is-small">
-                  <i className="far fa-copyright"></i>
+                  <FontAwesomeIcon icon={faCopyright} />
                 </span>{" "}
                 2020 by <a href="https://houseofmoran.com/">Mike Moran</a>. The
                 source code is licensed under{" "}

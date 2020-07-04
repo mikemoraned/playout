@@ -5,7 +5,6 @@ import { StoreContext } from "../model/contexts.js";
 import { ScoreFaceIcon } from "./Scoring.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUndo } from "@fortawesome/free-solid-svg-icons";
-import "./animate_team_selection.scss";
 
 export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);

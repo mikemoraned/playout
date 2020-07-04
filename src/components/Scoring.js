@@ -3,7 +3,6 @@ import { useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
 import { Rules } from "./Rules";
-import "./Scoring.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMeh,

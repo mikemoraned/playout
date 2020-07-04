@@ -5,7 +5,6 @@ import { TeamMember } from "./TeamMember";
 import { observer } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
-import "./animate_team_selection.scss";
 
 function AddRemoveMembersHeader() {
   return (

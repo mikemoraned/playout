@@ -1,6 +1,7 @@
 import { types, getSnapshot } from "mobx-state-tree";
 import { Occupancy } from "./occupancy";
 import { GridSpec } from "./grid_spec";
+import { Md5 } from "ts-md5/dist/md5";
 
 export const Grid = types
   .model("Grid", {
@@ -33,9 +34,6 @@ export const Grid = types
     },
     clearSeats() {
       self.seats = [];
-    },
-    clearDecorations() {
-      self.decorations = [];
     },
     addDecoration(position) {
       self.decorations.push(position);
@@ -76,14 +74,30 @@ export const Grid = types
       if (self.seats.length === 0) {
         return [];
       }
+
+      const md5 = new Md5();
+      for (let x = 0; x < self.width; x++) {
+        for (let y = 0; y < self.height; y++) {
+          const position = positionFor(x, y);
+          if (self.hasSeat(position)) {
+            md5.appendAsciiStr("1");
+          } else {
+            md5.appendAsciiStr("0");
+          }
+        }
+      }
+      const randomSource = md5.end(true);
+
       let decorations = [];
       for (let x = 0; x < self.width; x++) {
         for (let y = 0; y < self.height; y++) {
           const position = positionFor(x, y);
+          const coinFlip =
+            randomSource[(y * self.width + x) % randomSource.length] % 2 === 0;
           if (
             !self.hasSeat(position) &&
             freedomsOfPosition(self, x, y).length >= 3 &&
-            Math.random() < 0.5
+            coinFlip
           ) {
             decorations.push(position);
           }

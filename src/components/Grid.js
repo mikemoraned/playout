@@ -24,7 +24,11 @@ function Desktop({ visibility }) {
 function Plant() {
   return (
     <span className="icon is-small plant">
-      <FontAwesomeIcon icon={faSeedling} />
+      <span class="fa-layers">
+        <FontAwesomeIcon icon={faSeedling} transform="shrink-2 up-6" />
+        <FontAwesomeIcon icon={faSeedling} transform="shrink-2" />
+        <FontAwesomeIcon icon={faSeedling} transform="shrink-2 down-6" />
+      </span>
     </span>
   );
 }

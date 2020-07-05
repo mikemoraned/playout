@@ -98,6 +98,17 @@ export const Store = types
         self.toggleMemberPlacement(position);
       }
     },
+    removeAllSeats() {
+      const occupiedPositions = self.grid.occupied.map((o) => o.position);
+      occupiedPositions.forEach((p) => {
+        self.toggleSeat(p);
+      });
+      self.grid.clearSeats();
+    },
+    randomiseSeats() {
+      self.removeAllSeats();
+      self.grid.randomlyAddSeats(self.teams.totalMembers);
+    },
     rotateBias(fromTeamName, toTeamName) {
       self.teams.rotateBias(fromTeamName, toTeamName);
     },

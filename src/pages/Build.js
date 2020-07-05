@@ -13,17 +13,48 @@ import {
   faBorderAll,
   faUserEdit,
   faStar,
+  faSync,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
 
-const Instance = observer(() => {
+const BuildControls = observer(() => {
   const { store } = useContext(StoreContext);
   const problem = store.toProblem();
   const base = window.location.href;
   const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
   const fullURL = new URL(path, base);
+
+  return (
+    <div className="box">
+      <div className="buttons">
+        <button className="button" onClick={() => store.randomiseSeats()}>
+          <span className="icon">
+            <FontAwesomeIcon icon={faSync} />
+          </span>
+          <span>Randomise</span>
+        </button>
+        <button
+          className="button is-success"
+          disabled={!store.solvable}
+          onClick={() => {
+            window.open(fullURL, "_blank");
+          }}
+        >
+          <span className="icon">
+            <FontAwesomeIcon icon={faExternalLinkAlt} />
+          </span>
+          <span>Open</span>
+          <span className="is-hidden-mobile">&nbsp;in new tab</span>
+        </button>
+      </div>
+    </div>
+  );
+});
+
+const Instance = observer(() => {
+  const { store } = useContext(StoreContext);
   return (
     <div className="container">
       <div className="columns mt-3 ml-3 is-mobile">
@@ -47,21 +78,6 @@ const Instance = observer(() => {
             </button>
           </div>
         </div>
-        <div className="column">
-          <button
-            className="button is-success"
-            disabled={!store.solvable}
-            onClick={() => {
-              window.open(fullURL, "_blank");
-            }}
-          >
-            <span className="icon">
-              <FontAwesomeIcon icon={faExternalLinkAlt} />
-            </span>
-            <span>Open</span>
-            <span className="is-hidden-mobile">&nbsp;in new tab</span>
-          </button>
-        </div>
       </div>
       <div className="columns">
         <div className="column is-two-thirds">
@@ -73,6 +89,7 @@ const Instance = observer(() => {
               </span>{" "}
               Edit layout
             </p>
+            <BuildControls />
             <Grid />
           </section>
         </div>

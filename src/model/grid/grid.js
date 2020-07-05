@@ -7,6 +7,7 @@ export const Grid = types
     width: types.number,
     height: types.number,
     seats: types.array(types.string),
+    decorations: types.array(types.string),
     occupied: types.array(Occupancy),
   })
   .actions((self) => ({
@@ -26,10 +27,19 @@ export const Grid = types
         self.seats = self.seats.filter((s) => s !== position);
       } else {
         self.seats.push(position);
+        if (self.hasDecoration(position)) {
+          self.decorations = self.decorations.filter((s) => s !== position);
+        }
       }
     },
     clearSeats() {
       self.seats = [];
+    },
+    clearDecorations() {
+      self.decorations = [];
+    },
+    addDecoration(position) {
+      self.decorations.push(position);
     },
     randomlyAddSeats(minimumSeats) {
       function nieghbours(x, y) {
@@ -74,11 +84,28 @@ export const Grid = types
           }
         }
       }
+
+      self.clearDecorations();
+      for (let x = 0; x < self.width; x++) {
+        for (let y = 0; y < self.height; y++) {
+          const position = positionFor(x, y);
+          if (
+            !self.hasSeat(position) &&
+            freedomsOfPosition(x, y).length >= 3 &&
+            Math.random() < 0.5
+          ) {
+            self.addDecoration(position);
+          }
+        }
+      }
     },
   }))
   .views((self) => ({
     hasSeat(position) {
       return self.seats.indexOf(position) !== -1;
+    },
+    hasDecoration(position) {
+      return self.decorations.indexOf(position) !== -1;
     },
     findOccupancy(position) {
       return self.occupied.find((o) => o.position === position);

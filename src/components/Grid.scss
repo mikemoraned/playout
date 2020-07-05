@@ -1,7 +1,11 @@
 $border-radius: 15px;
 $duration: 1.5s;
+@import "bulma/sass/utilities/_all.sass";
 
 .grid {
+  .plant {
+    color: $green;
+  }
   td.tl-eee,
   td.tl-eoe {
     border-top-left-radius: $border-radius;

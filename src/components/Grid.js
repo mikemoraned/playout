@@ -5,7 +5,7 @@ import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDesktop } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faSeedling } from "@fortawesome/free-solid-svg-icons";
 import "./Grid.scss";
 
 function Desktop({ visibility }) {
@@ -17,6 +17,14 @@ function Desktop({ visibility }) {
       }}
     >
       <FontAwesomeIcon icon={faDesktop} />
+    </span>
+  );
+}
+
+function Plant() {
+  return (
+    <span className="icon is-small plant">
+      <FontAwesomeIcon icon={faSeedling} />
     </span>
   );
 }
@@ -35,6 +43,7 @@ export const Grid = observer(() => {
                   const position = positionFor(x, y);
                   const has_seat = store.grid.hasSeat(position);
                   const occupancy = store.grid.findOccupancy(position);
+                  const hasPlant = store.grid.hasDecoration(position);
                   const cornerAdjacencies = adjacencies(store, x, y);
                   return (
                     <td
@@ -57,12 +66,16 @@ export const Grid = observer(() => {
                           />
                         )}
                         {!occupancy && <TeamMemberPlaceholder />}
+                        {hasPlant && <Plant />}
                       </span>
                       <span className="is-hidden-tablet">
                         {has_seat && !occupancy && (
                           <Desktop visibility={"visible"} />
                         )}
-                        {!has_seat && <Desktop visibility={"hidden"} />}
+                        {!has_seat && !hasPlant && (
+                          <Desktop visibility={"hidden"} />
+                        )}
+                        {hasPlant && <Plant />}
                         {occupancy && (
                           <TeamMember
                             teamName={occupancy.member.team}

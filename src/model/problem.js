@@ -51,7 +51,7 @@ export function defaultTeamsSpec() {
 
 export function randomProblemWithGridSize(width, height) {
   const emptyProblem = Problem.create({
-    grid: gridFor(width, height),
+    grid: gridFor(width, height).toGridSpec(),
     teams: defaultTeamsSpec(),
   });
 

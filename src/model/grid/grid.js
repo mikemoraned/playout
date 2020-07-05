@@ -28,6 +28,23 @@ export const Grid = types
         self.seats.push(position);
       }
     },
+    clearSeats() {
+      self.seats = [];
+    },
+    randomlyAddSeats(minimumSeats) {
+      while (self.totalSeats < minimumSeats) {
+        for (let x = 0; x < self.width; x++) {
+          for (let y = 0; y < self.height; y++) {
+            if (Math.random() < 0.5) {
+              const position = positionFor(x, y);
+              if (!self.hasSeat(position)) {
+                self.addSeat(position);
+              }
+            }
+          }
+        }
+      }
+    },
   }))
   .views((self) => ({
     hasSeat(position) {

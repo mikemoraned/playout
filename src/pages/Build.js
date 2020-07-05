@@ -18,6 +18,18 @@ import {
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
 
+const GridHelpers = observer(() => {
+  const { store } = useContext(StoreContext);
+
+  return (
+    <div>
+      <button className="button" onClick={() => store.randomiseSeats()}>
+        Randomise!
+      </button>
+    </div>
+  );
+});
+
 const Instance = observer(() => {
   const { store } = useContext(StoreContext);
   const problem = store.toProblem();
@@ -73,6 +85,7 @@ const Instance = observer(() => {
               </span>{" "}
               Edit layout
             </p>
+            <GridHelpers />
             <Grid />
           </section>
         </div>

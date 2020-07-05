@@ -7,7 +7,6 @@ export const Grid = types
     width: types.number,
     height: types.number,
     seats: types.array(types.string),
-    decorations: types.array(types.string),
     occupied: types.array(Occupancy),
   })
   .actions((self) => ({
@@ -42,32 +41,6 @@ export const Grid = types
       self.decorations.push(position);
     },
     randomlyAddSeats(minimumSeats) {
-      function nieghbours(x, y) {
-        return [
-          positionFor(x - 1, y),
-          positionFor(x, y - 1),
-          positionFor(x + 1, y),
-          positionFor(x, y + 1),
-        ];
-      }
-
-      function freedomsOfPosition(x, y) {
-        return nieghbours(x, y).filter((p) => !self.hasSeat(p));
-      }
-
-      function hasSomeFreedomsInPosition(x, y) {
-        return freedomsOfPosition(x, y).length > 0;
-      }
-
-      function claimsLastFreedomOfNieghbour(x, y) {
-        const thisPosition = positionFor(x, y);
-        return nieghbours(x, y).some((p) => {
-          const [nx, ny] = coordsFromPosition(p);
-          const freedoms = freedomsOfPosition(nx, ny);
-          return freedoms.length === 1 && freedoms.indexOf(thisPosition) !== -1;
-        });
-      }
-
       while (self.totalSeats < minimumSeats) {
         for (let x = 0; x < self.width; x++) {
           for (let y = 0; y < self.height; y++) {
@@ -75,26 +48,12 @@ export const Grid = types
               const position = positionFor(x, y);
               if (
                 !self.hasSeat(position) &&
-                hasSomeFreedomsInPosition(x, y) &&
-                !claimsLastFreedomOfNieghbour(x, y)
+                hasSomeFreedomsInPosition(self, x, y) &&
+                !claimsLastFreedomOfNieghbour(self, x, y)
               ) {
                 self.addSeat(position);
               }
             }
-          }
-        }
-      }
-
-      self.clearDecorations();
-      for (let x = 0; x < self.width; x++) {
-        for (let y = 0; y < self.height; y++) {
-          const position = positionFor(x, y);
-          if (
-            !self.hasSeat(position) &&
-            freedomsOfPosition(x, y).length >= 3 &&
-            Math.random() < 0.5
-          ) {
-            self.addDecoration(position);
           }
         }
       }
@@ -113,6 +72,25 @@ export const Grid = types
     get totalSeats() {
       return self.seats.length;
     },
+    get decorations() {
+      if (self.seats.length === 0) {
+        return [];
+      }
+      let decorations = [];
+      for (let x = 0; x < self.width; x++) {
+        for (let y = 0; y < self.height; y++) {
+          const position = positionFor(x, y);
+          if (
+            !self.hasSeat(position) &&
+            freedomsOfPosition(self, x, y).length >= 3 &&
+            Math.random() < 0.5
+          ) {
+            decorations.push(position);
+          }
+        }
+      }
+      return decorations;
+    },
     toGridSpec() {
       return GridSpec.create({
         width: self.width,
@@ -121,6 +99,32 @@ export const Grid = types
       });
     },
   }));
+
+function nieghbours(x, y) {
+  return [
+    positionFor(x - 1, y),
+    positionFor(x, y - 1),
+    positionFor(x + 1, y),
+    positionFor(x, y + 1),
+  ];
+}
+
+function freedomsOfPosition(grid, x, y) {
+  return nieghbours(x, y).filter((p) => !grid.hasSeat(p));
+}
+
+function hasSomeFreedomsInPosition(grid, x, y) {
+  return freedomsOfPosition(grid, x, y).length > 0;
+}
+
+function claimsLastFreedomOfNieghbour(grid, x, y) {
+  const thisPosition = positionFor(x, y);
+  return nieghbours(x, y).some((p) => {
+    const [nx, ny] = coordsFromPosition(p);
+    const freedoms = freedomsOfPosition(grid, nx, ny);
+    return freedoms.length === 1 && freedoms.indexOf(thisPosition) !== -1;
+  });
+}
 
 export function gridFor(width, height) {
   return {

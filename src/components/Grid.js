@@ -83,45 +83,45 @@ export const Grid = observer(() => {
 });
 
 function adjacencies(store, x, y) {
-  function occupancyCode(x, y) {
+  function adjacencyCode(x, y) {
     return store.grid.hasSeat(positionFor(x, y)) ? "o" : "e";
   }
 
   // the "clock" starts to left of current seat, not
   // at top as a normal clock would
-  const clockwiseOccupancyCodes = [
-    occupancyCode(x - 1, y),
-    occupancyCode(x - 1, y - 1),
-    occupancyCode(x, y - 1),
-    occupancyCode(x + 1, y - 1),
-    occupancyCode(x + 1, y),
-    occupancyCode(x + 1, y + 1),
-    occupancyCode(x, y + 1),
-    occupancyCode(x - 1, y + 1),
+  const clockwiseAdjacencyCodes = [
+    adjacencyCode(x - 1, y),
+    adjacencyCode(x - 1, y - 1),
+    adjacencyCode(x, y - 1),
+    adjacencyCode(x + 1, y - 1),
+    adjacencyCode(x + 1, y),
+    adjacencyCode(x + 1, y + 1),
+    adjacencyCode(x, y + 1),
+    adjacencyCode(x - 1, y + 1),
   ];
 
   const topLeftCorner = [
-    clockwiseOccupancyCodes[0],
-    clockwiseOccupancyCodes[1],
-    clockwiseOccupancyCodes[2],
+    clockwiseAdjacencyCodes[0],
+    clockwiseAdjacencyCodes[1],
+    clockwiseAdjacencyCodes[2],
   ].join("");
 
   const topRightCorner = [
-    clockwiseOccupancyCodes[2],
-    clockwiseOccupancyCodes[3],
-    clockwiseOccupancyCodes[4],
+    clockwiseAdjacencyCodes[2],
+    clockwiseAdjacencyCodes[3],
+    clockwiseAdjacencyCodes[4],
   ].join("");
 
   const bottomRightCorner = [
-    clockwiseOccupancyCodes[4],
-    clockwiseOccupancyCodes[5],
-    clockwiseOccupancyCodes[6],
+    clockwiseAdjacencyCodes[4],
+    clockwiseAdjacencyCodes[5],
+    clockwiseAdjacencyCodes[6],
   ].join("");
 
   const bottomLeftCorner = [
-    clockwiseOccupancyCodes[6],
-    clockwiseOccupancyCodes[7],
-    clockwiseOccupancyCodes[0],
+    clockwiseAdjacencyCodes[6],
+    clockwiseAdjacencyCodes[7],
+    clockwiseAdjacencyCodes[0],
   ].join("");
 
   return `tl-${topLeftCorner} tr-${topRightCorner} br-${bottomRightCorner} bl-${bottomLeftCorner}`;

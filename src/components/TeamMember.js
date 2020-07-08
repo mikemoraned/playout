@@ -4,7 +4,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export function TeamMember({ teamName, number }) {
   return (
-    <span>
+    <span style={{ whiteSpace: "nowrap" }}>
       <FontAwesomeIcon icon={faUser} />
       <sub>{teamName}</sub>
     </span>
@@ -13,7 +13,7 @@ export function TeamMember({ teamName, number }) {
 
 export function TeamMemberPlaceholder() {
   return (
-    <span style={{ visibility: "hidden" }}>
+    <span style={{ whiteSpace: "nowrap", visibility: "hidden" }}>
       <FontAwesomeIcon icon="faUser" />
       <sub>A</sub>
     </span>

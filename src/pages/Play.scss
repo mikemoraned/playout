@@ -1,7 +1,60 @@
 @import "../variables.scss";
+@import "bulma/sass/utilities/_all.sass";
 
 .sticky-evaluation {
   position: sticky;
   top: 0;
   z-index: $sticky-z;
+}
+
+.teams-mini {
+  .button {
+    --max-percent: 100%;
+    background-color: $white;
+    background: linear-gradient(90deg, $green 0%, $white var(--max-percent));
+  }
+
+  .button.percent-remaining-0 {
+    --max-percent: 5%;
+  }
+
+  .button.percent-remaining-10 {
+    --max-percent: 10%;
+  }
+
+  .button.percent-remaining-20 {
+    --max-percent: 20%;
+  }
+
+  .button.percent-remaining-30 {
+    --max-percent: 30%;
+  }
+
+  .button.percent-remaining-40 {
+    --max-percent: 40%;
+  }
+
+  .button.percent-remaining-50 {
+    --max-percent: 50%;
+  }
+
+  .button.percent-remaining-60 {
+    --max-percent: 60%;
+  }
+
+  .button.percent-remaining-70 {
+    --max-percent: 70%;
+  }
+
+  .button.percent-remaining-80 {
+    --max-percent: 80%;
+  }
+
+  .button.percent-remaining-90 {
+    --max-percent: 90%;
+  }
+
+  .button.percent-remaining-100 {
+    --max-percent: 100%;
+  }
 }

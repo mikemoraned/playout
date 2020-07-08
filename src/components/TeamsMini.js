@@ -10,7 +10,7 @@ export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);
   const { scoring } = store.evaluation;
   return (
-    <div className="field is-horizontal">
+    <div className="teams-mini field is-horizontal">
       <div className="field-label is-normal">
         <label className="label">
           Next{" "}
@@ -27,10 +27,14 @@ export const TeamsMini = observer(() => {
               {store.teams.list.map((t) => {
                 const isNext = store.teams.next === t.name;
                 const teamScoring = scoring.teams[t.name];
+                const bucketedPercentRemaining =
+                  10 * Math.floor((10 * t.remaining) / t.size);
                 return (
                   <button
                     key={t.name}
-                    className={`button ${isNext ? "is-primary" : ""}`}
+                    className={`button percent-remaining-${bucketedPercentRemaining} ${
+                      isNext ? "is-primary" : ""
+                    }`}
                     onClick={() => store.selectTeam(t.name)}
                   >
                     <ScoreFaceIcon {...teamScoring} />

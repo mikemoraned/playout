@@ -7,6 +7,10 @@
   z-index: $sticky-z;
 }
 
+.grid td span {
+  color: $white;
+}
+
 .teams-mini {
   .button {
     --max-percent: 100%;

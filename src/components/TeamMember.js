@@ -1,18 +1,21 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export function TeamMember({ teamName, number }) {
   return (
     <span>
-      {teamName}
-      <sub>{number}</sub>
+      <FontAwesomeIcon icon={faUser} />
+      <sub>{teamName}</sub>
     </span>
   );
 }
 
-export function TeamMemberPlaceholder({ teamName, number }) {
+export function TeamMemberPlaceholder() {
   return (
     <span style={{ visibility: "hidden" }}>
-      M<sub>9</sub>
+      <FontAwesomeIcon icon="faUser" />
+      <sub>A</sub>
     </span>
   );
 }

@@ -1,6 +1,6 @@
 import { GridSpec } from "./grid_spec";
 import { parseGridSpec } from "./grid_spec.format";
-import { randomGridSpec } from "../problem";
+import { randomGridSpec, randomProblemWithGridSize } from "../problem";
 import { getSnapshot } from "mobx-state-tree";
 
 describe("v1 grid spec parsing", () => {
@@ -258,7 +258,7 @@ describe("large example parsing", () => {
 // 10x10.~.~~..~.~.~~.~~...~.....~~~.~...~~~....~~~~..~..~.~...~~.~..~~~~~.~~..~.~.....~~..~~.~.~....~..~~.._v1
 
 describe("random examples", () => {
-  const original = randomGridSpec(10, 10);
+  const original = randomProblemWithGridSize(10, 10).grid;
 
   test("can roundtrip via v1 grid spec", () => {
     const formatted = original.toVersion1Format();

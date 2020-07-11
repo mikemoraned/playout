@@ -28,6 +28,53 @@ export const Grid = types
         self.seats.push(position);
       }
     },
+    clearSeats() {
+      self.seats = [];
+    },
+    randomlyAddSeats(minimumSeats) {
+      function nieghbours(x, y) {
+        return [
+          positionFor(x - 1, y),
+          positionFor(x, y - 1),
+          positionFor(x + 1, y),
+          positionFor(x, y + 1),
+        ];
+      }
+
+      function freedomsOfPosition(x, y) {
+        return nieghbours(x, y).filter((p) => !self.hasSeat(p));
+      }
+
+      function hasSomeFreedomsInPosition(x, y) {
+        return freedomsOfPosition(x, y).length > 0;
+      }
+
+      function claimsLastFreedomOfNieghbour(x, y) {
+        const thisPosition = positionFor(x, y);
+        return nieghbours(x, y).some((p) => {
+          const [nx, ny] = coordsFromPosition(p);
+          const freedoms = freedomsOfPosition(nx, ny);
+          return freedoms.length === 1 && freedoms.indexOf(thisPosition) !== -1;
+        });
+      }
+
+      while (self.totalSeats < minimumSeats) {
+        for (let x = 0; x < self.width; x++) {
+          for (let y = 0; y < self.height; y++) {
+            if (Math.random() < 0.5) {
+              const position = positionFor(x, y);
+              if (
+                !self.hasSeat(position) &&
+                hasSomeFreedomsInPosition(x, y) &&
+                !claimsLastFreedomOfNieghbour(x, y)
+              ) {
+                self.addSeat(position);
+              }
+            }
+          }
+        }
+      }
+    },
   }))
   .views((self) => ({
     hasSeat(position) {
@@ -59,6 +106,11 @@ export function gridFor(width, height) {
 
 export function positionFor(x, y) {
   return `${x}_${y}`;
+}
+
+export function coordsFromPosition(position) {
+  const [xString, yString] = position.split("_");
+  return [parseInt(xString), parseInt(yString)];
 }
 
 export function expandToNextToArea(position, dimensions) {

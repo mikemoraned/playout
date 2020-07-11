@@ -3,19 +3,18 @@ type Query {
 }
 
 type User {
-  suggestions: [GameLink]
-  next: ProblemSpec
-  recentlyCompleted: [ProblemSpec]
+  suggestions: [GradedProblem]
+  recentlyCompleted: [GradedProblem]
+}
+
+type GradedProblem {
+  grade: String!
+  problemSpec: ProblemSpec!
 }
 
 type ProblemSpec {
   gridSpec: String!
   teamsSpec: String!
-}
-
-type ProblemLink {
-  path: String!
-  name: String!
 }
 
 type Mutation {

@@ -1,7 +1,12 @@
 @import "../variables.scss";
+@import "bulma/sass/utilities/_all.sass";
 
 .sticky-evaluation {
   position: sticky;
   top: 0;
   z-index: $sticky-z;
+}
+
+.grid td span {
+  color: $white;
 }

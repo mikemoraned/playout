@@ -45,7 +45,7 @@ export const Grid = observer(() => {
                       key={x}
                       style={{
                         textAlign: "center",
-                        border: "1px solid black",
+                        // border: "1px solid black",
                       }}
                     >
                       <span className="is-hidden-mobile">

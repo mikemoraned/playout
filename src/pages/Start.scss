@@ -1,19 +1,13 @@
 @import "../variables.scss";
 
-.sticky-evaluation {
-  position: sticky;
-  top: 0;
-  z-index: $sticky-z;
-}
-
-.evaluation.grade-easy {
+.button.grade-easy {
   background-color: $easy-grade-color;
 }
 
-.evaluation.grade-medium {
+.button.grade-medium {
   background-color: $medium-grade-color;
 }
 
-.evaluation.grade-hard {
+.button.grade-hard {
   background-color: $hard-grade-color;
 }

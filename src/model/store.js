@@ -5,6 +5,7 @@ import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { Problem } from "./problem";
+import { gradeFromProblemSpec } from "./grade";
 
 export const Mode = types
   .model("Mode", {
@@ -98,6 +99,17 @@ export const Store = types
         self.toggleMemberPlacement(position);
       }
     },
+    removeAllSeats() {
+      const occupiedPositions = self.grid.occupied.map((o) => o.position);
+      occupiedPositions.forEach((p) => {
+        self.toggleSeat(p);
+      });
+      self.grid.clearSeats();
+    },
+    randomiseSeats() {
+      self.removeAllSeats();
+      self.grid.randomlyAddSeats(self.teams.totalMembers);
+    },
     rotateBias(fromTeamName, toTeamName) {
       self.teams.rotateBias(fromTeamName, toTeamName);
     },
@@ -119,6 +131,9 @@ export const Store = types
     },
     get solvable() {
       return self.teams.totalMembers <= self.grid.totalSeats;
+    },
+    get grade() {
+      return gradeFromProblemSpec(self.toProblem());
     },
     toProblem() {
       const gridSpec = self.grid.toGridSpec();

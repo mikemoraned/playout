@@ -2,7 +2,6 @@ import { types } from "mobx-state-tree";
 import { storeFor } from "./store";
 import makeInspectable from "mobx-devtools-mst";
 import { gridFor } from "./grid/grid";
-import { positionFor } from "./grid/grid";
 import { parseGridSpec } from "./grid/grid_spec.format";
 import { parseTeamsSpec } from "./teams/team_spec.format";
 import { GridSpec } from "./grid/grid_spec";
@@ -51,42 +50,20 @@ export function defaultTeamsSpec() {
 }
 
 export function randomProblemWithGridSize(width, height) {
-  return Problem.create({
-    grid: randomGridSpec(width, height),
+  const emptyProblem = Problem.create({
+    grid: gridFor(width, height).toGridSpec(),
     teams: defaultTeamsSpec(),
   });
+
+  const store = emptyProblem.toStore();
+  store.randomiseSeats();
+  return store.toProblem();
 }
 
 export function randomEasyProblem() {
-  return Problem.create({
-    grid: randomGridSpec(10, 10),
-    teams: defaultTeamsSpec(),
-  });
+  return randomProblemWithGridSize(10, 10);
 }
 
 export function randomHardProblem() {
-  return Problem.create({
-    grid: randomGridSpec(5, 5),
-    teams: defaultTeamsSpec(),
-  });
-}
-
-export function randomGridSpec(width, height) {
-  const minimumSeats = defaultTeamsSpec().toTeams().totalMembers;
-  const seats = [];
-  while (seats.length < minimumSeats) {
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
-        if (Math.random() < 0.5) {
-          const position = positionFor(x, y);
-          seats.push(position);
-        }
-      }
-    }
-  }
-  return GridSpec.create({
-    width,
-    height,
-    seats,
-  });
+  return randomProblemWithGridSize(5, 5);
 }

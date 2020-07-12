@@ -5,7 +5,7 @@ import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDesktop } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faSeedling } from "@fortawesome/free-solid-svg-icons";
 import "./Grid.scss";
 
 function Desktop({ visibility }) {
@@ -17,6 +17,18 @@ function Desktop({ visibility }) {
       }}
     >
       <FontAwesomeIcon icon={faDesktop} />
+    </span>
+  );
+}
+
+function Plant() {
+  return (
+    <span className="icon is-small plant">
+      <span className="fa-layers">
+        <FontAwesomeIcon icon={faSeedling} transform="shrink-2 up-6" />
+        <FontAwesomeIcon icon={faSeedling} transform="shrink-2" />
+        <FontAwesomeIcon icon={faSeedling} transform="shrink-2 down-6" />
+      </span>
     </span>
   );
 }
@@ -35,17 +47,18 @@ export const Grid = observer(() => {
                   const position = positionFor(x, y);
                   const has_seat = store.grid.hasSeat(position);
                   const occupancy = store.grid.findOccupancy(position);
+                  const hasPlant = store.grid.hasDecoration(position);
                   const cornerAdjacencies = adjacencies(store, x, y);
                   return (
                     <td
-                      className={`${
-                        has_seat ? "has-background-info" : ""
+                      className={`${has_seat ? "has-background-info" : ""} ${
+                        has_seat ? "seat" : ""
                       } ${cornerAdjacencies}`}
                       onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{
                         textAlign: "center",
-                        border: "1px solid black",
+                        // border: "1px solid black",
                       }}
                     >
                       <span className="is-hidden-mobile">
@@ -57,12 +70,16 @@ export const Grid = observer(() => {
                           />
                         )}
                         {!occupancy && <TeamMemberPlaceholder />}
+                        {hasPlant && <Plant />}
                       </span>
                       <span className="is-hidden-tablet">
                         {has_seat && !occupancy && (
                           <Desktop visibility={"visible"} />
                         )}
-                        {!has_seat && <Desktop visibility={"hidden"} />}
+                        {!has_seat && !hasPlant && (
+                          <Desktop visibility={"hidden"} />
+                        )}
+                        {hasPlant && <Plant />}
                         {occupancy && (
                           <TeamMember
                             teamName={occupancy.member.team}

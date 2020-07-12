@@ -1,6 +1,7 @@
 import { types, getSnapshot } from "mobx-state-tree";
 import { Occupancy } from "./occupancy";
 import { GridSpec } from "./grid_spec";
+import { Md5 } from "ts-md5/dist/md5";
 
 export const Grid = types
   .model("Grid", {
@@ -26,6 +27,30 @@ export const Grid = types
         self.seats = self.seats.filter((s) => s !== position);
       } else {
         self.seats.push(position);
+        if (self.hasDecoration(position)) {
+          self.decorations = self.decorations.filter((s) => s !== position);
+        }
+      }
+    },
+    clearSeats() {
+      self.seats = [];
+    },
+    randomlyAddSeats(minimumSeats) {
+      while (self.totalSeats < minimumSeats) {
+        for (let x = 0; x < self.width; x++) {
+          for (let y = 0; y < self.height; y++) {
+            if (Math.random() < 0.5) {
+              const position = positionFor(x, y);
+              if (
+                !self.hasSeat(position) &&
+                hasSomeFreedomsInPosition(self, x, y) &&
+                !claimsLastFreedomOfNieghbour(self, x, y)
+              ) {
+                self.addSeat(position);
+              }
+            }
+          }
+        }
       }
     },
   }))
@@ -33,11 +58,49 @@ export const Grid = types
     hasSeat(position) {
       return self.seats.indexOf(position) !== -1;
     },
+    hasDecoration(position) {
+      return self.decorations.indexOf(position) !== -1;
+    },
     findOccupancy(position) {
       return self.occupied.find((o) => o.position === position);
     },
     get totalSeats() {
       return self.seats.length;
+    },
+    get decorations() {
+      if (self.totalSeats === 0) {
+        return [];
+      }
+
+      const md5 = new Md5();
+      for (let x = 0; x < self.width; x++) {
+        for (let y = 0; y < self.height; y++) {
+          const position = positionFor(x, y);
+          if (self.hasSeat(position)) {
+            md5.appendAsciiStr("1");
+          } else {
+            md5.appendAsciiStr("0");
+          }
+        }
+      }
+      const randomSource = md5.end(true);
+
+      let decorations = [];
+      for (let x = 0; x < self.width; x++) {
+        for (let y = 0; y < self.height; y++) {
+          const position = positionFor(x, y);
+          const allowed =
+            randomSource[(y * self.width + x) % randomSource.length] % 3 === 0;
+          if (
+            allowed &&
+            !self.hasSeat(position) &&
+            freedomsOfPosition(self, x, y).length >= 3
+          ) {
+            decorations.push(position);
+          }
+        }
+      }
+      return decorations;
     },
     toGridSpec() {
       return GridSpec.create({
@@ -48,17 +111,48 @@ export const Grid = types
     },
   }));
 
+function nieghbours(x, y) {
+  return [
+    positionFor(x - 1, y),
+    positionFor(x, y - 1),
+    positionFor(x + 1, y),
+    positionFor(x, y + 1),
+  ];
+}
+
+function freedomsOfPosition(grid, x, y) {
+  return nieghbours(x, y).filter((p) => !grid.hasSeat(p));
+}
+
+function hasSomeFreedomsInPosition(grid, x, y) {
+  return freedomsOfPosition(grid, x, y).length > 0;
+}
+
+function claimsLastFreedomOfNieghbour(grid, x, y) {
+  const thisPosition = positionFor(x, y);
+  return nieghbours(x, y).some((p) => {
+    const [nx, ny] = coordsFromPosition(p);
+    const freedoms = freedomsOfPosition(grid, nx, ny);
+    return freedoms.length === 1 && freedoms.indexOf(thisPosition) !== -1;
+  });
+}
+
 export function gridFor(width, height) {
-  return {
+  return Grid.create({
     width,
     height,
     seats: [],
     occupied: [],
-  };
+  });
 }
 
 export function positionFor(x, y) {
   return `${x}_${y}`;
+}
+
+export function coordsFromPosition(position) {
+  const [xString, yString] = position.split("_");
+  return [parseInt(xString), parseInt(yString)];
 }
 
 export function expandToNextToArea(position, dimensions) {

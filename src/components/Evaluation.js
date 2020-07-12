@@ -15,7 +15,7 @@ export const Evaluation = observer(() => {
   ).toFixed(0);
   const nonBreakingSpace = "\xa0";
   return (
-    <div className="box">
+    <div className={`evaluation box grade-${store.grade.name.toLowerCase()}`}>
       <div className="columns is-mobile is-vcentered">
         <div className="column is-narrow has-text-right">
           <span

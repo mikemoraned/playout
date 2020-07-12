@@ -1,5 +1,5 @@
 import { testStore } from "../testStore";
-import { positionFor, expandToNextToArea } from "./grid";
+import { positionFor, expandToNextToArea, gridFor } from "./grid";
 import { memberFor } from "./member";
 import { getSnapshot } from "mobx-state-tree";
 import { Store } from "../store";
@@ -147,5 +147,28 @@ describe("positions and areas", () => {
       positionFor(1, 1),
       positionFor(1, 2),
     ]);
+  });
+});
+
+describe("decorations", () => {
+  test("an empty grid has no decorations", () => {
+    const emptyGrid = gridFor(2, 2);
+    expect(emptyGrid.seats).toEqual([]);
+    expect(emptyGrid.decorations).toEqual([]);
+  });
+
+  test("decorations are unique to seat layouts", () => {
+    const grid = gridFor(5, 5);
+    expect(grid.decorations).toEqual([]);
+    grid.toggleSeat(positionFor(1, 1));
+    const decorationsCopy = [...grid.decorations];
+    expect(grid.decorations.length).toBeGreaterThan(0);
+    expect(grid.decorations).toEqual(decorationsCopy);
+
+    grid.toggleSeat(positionFor(1, 1));
+    expect(grid.decorations).toEqual([]);
+
+    grid.toggleSeat(positionFor(1, 1));
+    expect(grid.decorations).toEqual(decorationsCopy);
   });
 });

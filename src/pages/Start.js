@@ -4,8 +4,9 @@ import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faChessBoard } from "@fortawesome/free-solid-svg-icons";
+import "./Start.scss";
 
-function VisitGameButton({ path, name }) {
+function VisitGameButton({ path, grade, name }) {
   const history = useHistory();
 
   function visitGame() {
@@ -13,7 +14,10 @@ function VisitGameButton({ path, name }) {
   }
 
   return (
-    <button className="button is-link is-light" onClick={() => visitGame()}>
+    <button
+      className={`button grade grade-${grade.toLowerCase()}`}
+      onClick={() => visitGame()}
+    >
       <span className="icon">
         <FontAwesomeIcon icon={faPlay} />
       </span>
@@ -28,7 +32,7 @@ function Play() {
       query GetGameSuggestions {
         current_user @client {
           suggestions @client {
-            name
+            grade
             problemSpec {
               gridSpec
               teamsSpec
@@ -49,7 +53,14 @@ function Play() {
         <div className="buttons">
           {data.current_user.suggestions.map((s) => {
             const path = `/play/${s.problemSpec.gridSpec}/${s.problemSpec.teamsSpec}`;
-            return <VisitGameButton key={path} path={path} name={s.grade} />;
+            return (
+              <VisitGameButton
+                key={path}
+                path={path}
+                grade={s.grade}
+                name={s.grade}
+              />
+            );
           })}
         </div>
       )}
@@ -89,6 +100,7 @@ function RecentlyCompleted() {
                   <div className="message-body">
                     <VisitGameButton
                       path={path}
+                      grade={gradedProblem.grade}
                       name={`${gradedProblem.grade} Game`}
                     />
                   </div>

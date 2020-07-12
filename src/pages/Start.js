@@ -2,7 +2,6 @@ import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
-import { parseProblemFrom } from "../model/problem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faChessBoard } from "@fortawesome/free-solid-svg-icons";
 
@@ -29,8 +28,11 @@ function Play() {
       query GetGameSuggestions {
         current_user @client {
           suggestions @client {
-            path
             name
+            problemSpec {
+              gridSpec
+              teamsSpec
+            }
           }
         }
       }
@@ -46,7 +48,8 @@ function Play() {
       {!loading && !error && (
         <div className="buttons">
           {data.current_user.suggestions.map((s) => {
-            return <VisitGameButton key={s.path} path={s.path} name={s.name} />;
+            const path = `/play/${s.problemSpec.gridSpec}/${s.problemSpec.teamsSpec}`;
+            return <VisitGameButton key={path} path={path} name={s.grade} />;
           })}
         </div>
       )}
@@ -60,8 +63,11 @@ function RecentlyCompleted() {
       query GetRecentlyCompleted {
         current_user @client {
           recentlyCompleted @client {
-            gridSpec
-            teamsSpec
+            grade
+            problemSpec {
+              gridSpec
+              teamsSpec
+            }
           }
         }
       }
@@ -75,17 +81,15 @@ function RecentlyCompleted() {
         <section className="section">
           <div className="container">
             <h1 className="title is-4">Recently Completed</h1>
-            {recentlyCompleted.map((problemSpec, index) => {
-              const { gridSpec, teamsSpec } = problemSpec;
-              const problem = parseProblemFrom(gridSpec, teamsSpec);
-              const { width, height } = problem.grid;
+            {recentlyCompleted.map((gradedProblem, index) => {
+              const { gridSpec, teamsSpec } = gradedProblem.problemSpec;
               const path = `/play/${gridSpec}/${teamsSpec}`;
               return (
                 <article className="message is-link" key={index}>
                   <div className="message-body">
                     <VisitGameButton
                       path={path}
-                      name={`${width}x${height} Game`}
+                      name={`${gradedProblem.grade} Game`}
                     />
                   </div>
                 </article>

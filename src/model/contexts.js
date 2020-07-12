@@ -2,13 +2,8 @@ import React from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import {
-  randomEasyProblem,
-  randomHardProblem,
-  randomProblemWithGridSize,
-  parseProblemFrom,
-} from "../model/problem";
-import {} from "../model/problem.js";
+import { parseProblemFrom } from "./problem";
+import { Grade, gradeFromProblemSpec } from "./grade";
 import { loader } from "graphql.macro";
 import { gql } from "apollo-boost";
 
@@ -24,15 +19,18 @@ export const StoreProvider = ({ initialStore, children }) => {
 
 export const GraphQLProvider = ({ children }) => {
   const typeDefs = loader("./types.graphql");
-  function randomEasyLink() {
-    const problem = randomEasyProblem();
-    const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
-    return { __typename: "ProblemLink", path, name: "Random Easy Game" };
-  }
-  function randomHardLink() {
-    const problem = randomHardProblem();
-    const path = `/play/${problem.grid.toVersion2Format()}/${problem.teams.toVersion1Format()}`;
-    return { __typename: "ProblemLink", path, name: "Random Hard Game" };
+  function gradedProblem(name) {
+    const grade = Grade.create({ name });
+    const problemSpec = grade.randomProblemSpec();
+    return {
+      __typename: "GradeProblem",
+      grade: name,
+      problemSpec: {
+        __typename: "ProblemSpec",
+        gridSpec: problemSpec.grid.toVersion2Format(),
+        teamsSpec: problemSpec.teams.toVersion1Format(),
+      },
+    };
   }
   const cache = new InMemoryCache();
   cache.writeData({
@@ -55,15 +53,11 @@ export const GraphQLProvider = ({ children }) => {
       },
       User: {
         suggestions: (_user, _args, _context, _info) => {
-          return [randomEasyLink(), randomHardLink()];
-        },
-        next: (_user, _args, _context, _info) => {
-          const problem = randomEasyProblem();
-          return {
-            __typename: "ProblemSpec",
-            gridSpec: problem.grid.toVersion2Format(),
-            teamsSpec: problem.teams.toVersion1Format(),
-          };
+          return [
+            gradedProblem("Easy"),
+            gradedProblem("Medium"),
+            gradedProblem("Hard"),
+          ];
         },
       },
       Mutation: {
@@ -72,14 +66,18 @@ export const GraphQLProvider = ({ children }) => {
             problemSpec: { gridSpec, teamsSpec },
           } = args;
           const completedProblem = parseProblemFrom(gridSpec, teamsSpec);
+          const grade = gradeFromProblemSpec(completedProblem);
 
           const { cache } = context;
           const query = gql`
             query GetRecentlyCompleted {
               current_user @client {
                 recentlyCompleted @client {
-                  gridSpec
-                  teamsSpec
+                  grade
+                  problemSpec {
+                    gridSpec
+                    teamsSpec
+                  }
                 }
               }
             }
@@ -90,19 +88,20 @@ export const GraphQLProvider = ({ children }) => {
               __typename: "User",
               recentlyCompleted: [
                 {
-                  __typename: "ProblemSpec",
-                  gridSpec,
-                  teamsSpec,
+                  __typename: "GradedProblem",
+                  grade: grade.name,
+                  problemSpec: {
+                    __typename: "ProblemSpec",
+                    gridSpec,
+                    teamsSpec,
+                  },
                 },
               ].concat(previousData.current_user.recentlyCompleted),
             },
           };
           cache.writeQuery({ query, data: nextData });
 
-          const nextProblem = randomProblemWithGridSize(
-            completedProblem.grid.width,
-            completedProblem.grid.height
-          );
+          const nextProblem = grade.randomProblemSpec();
           return {
             __typename: "ProblemSpec",
             gridSpec: nextProblem.grid.toVersion2Format(),

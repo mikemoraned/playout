@@ -13,6 +13,15 @@ $section-padding: 2rem 1rem;
 @import "bulma/sass/components/modal.sass";
 @import "bulma/sass/components/message.sass";
 
+.button {
+  // this has the effect of disabling accidental zoom which can happen
+  // when a button is accidentally double-clicked
+  //
+  // see https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action#manipulation
+  // for reference
+  touch-action: manipulation;
+}
+
 // allows Link component from React Router to be unclickable
 // when disabled
 // see https://github.com/ReactTraining/react-router/issues/1082#issuecomment-160348163

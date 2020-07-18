@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -6,6 +6,17 @@ import { parseProblemFrom } from "./problem";
 import { Grade, gradeFromProblemSpec } from "./grade";
 import { loader } from "graphql.macro";
 import { gql } from "apollo-boost";
+
+export const TutorialContext = React.createContext(null);
+
+export const TutorialProvider = ({ children }) => {
+  const [showTutorial, setShowTutorial] = useState(false);
+  return (
+    <TutorialContext.Provider value={[showTutorial, setShowTutorial]}>
+      {children}
+    </TutorialContext.Provider>
+  );
+};
 
 export const StoreContext = React.createContext(null);
 

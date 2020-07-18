@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faQuestionCircle,
@@ -7,8 +7,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faStopCircle } from "@fortawesome/free-regular-svg-icons";
 import Joyride, { STATUS } from "react-joyride";
-import { TutorialContext } from "../model/contexts.js";
+import { TutorialContext, StoreContext } from "../model/contexts.js";
 import colors from "./Tutorial.colors.scss";
+import "./Tutorial.scss";
 
 const TutorialTooltip = ({ step, tooltipProps, skipProps, primaryProps }) => {
   return (
@@ -109,5 +110,44 @@ export const TutorialSetup = () => {
         },
       }}
     />
+  );
+};
+
+export const TutorialGradeIntro = () => {
+  const firstTime = true;
+  const [showTutorial, setShowTutorial] = useContext(TutorialContext);
+  const [active, setActive] = useState(firstTime && !showTutorial);
+
+  function onClose() {
+    setActive(false);
+    setShowTutorial(true);
+  }
+
+  return active && <TutorialGradeIntroModal closeCallback={onClose} />;
+};
+
+export const TutorialGradeIntroModal = ({ closeCallback }) => {
+  const { store } = useContext(StoreContext);
+
+  return (
+    <div
+      className={`grade-intro grade-${store.grade.name.toLowerCase()} modal is-active has-text-justified`}
+    >
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">{store.grade.name} level</p>
+          <button
+            className="delete"
+            aria-label="close"
+            onClick={() => closeCallback()}
+          ></button>
+        </header>
+        <section className="modal-card-body">
+          <div>Welcome to {store.grade.name} level.</div>
+        </section>
+        <footer className="modal-card-foot"></footer>
+      </div>
+    </div>
   );
 };

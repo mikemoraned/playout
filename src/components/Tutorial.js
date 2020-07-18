@@ -4,11 +4,14 @@ import {
   faQuestionCircle,
   faArrowCircleRight,
   faWindowClose,
+  faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import { faStopCircle } from "@fortawesome/free-regular-svg-icons";
 import Joyride, { STATUS } from "react-joyride";
-import { TutorialContext } from "../model/contexts.js";
+import { TutorialContext, StoreContext } from "../model/contexts.js";
 import colors from "./Tutorial.colors.scss";
+import "./Tutorial.scss";
+import { observer } from "mobx-react";
 
 const TutorialTooltip = ({ step, tooltipProps, skipProps, primaryProps }) => {
   return (
@@ -16,7 +19,6 @@ const TutorialTooltip = ({ step, tooltipProps, skipProps, primaryProps }) => {
       <article className="message is-info">
         <div className="message-header">
           <p>Step</p>
-
           <button className="button is-info" aria-label="delete" {...skipProps}>
             <span className="icon">
               <FontAwesomeIcon icon={faWindowClose} size="2x" />
@@ -48,7 +50,7 @@ const TutorialTooltip = ({ step, tooltipProps, skipProps, primaryProps }) => {
 };
 
 export const TutorialButton = () => {
-  const [showTutorial, setShowTutorial] = useContext(TutorialContext);
+  const { showTutorial, setShowTutorial } = useContext(TutorialContext);
   return (
     <button
       className="button is-small is-info"
@@ -64,7 +66,7 @@ export const TutorialButton = () => {
 };
 
 export const TutorialSetup = () => {
-  const [showTutorial, setShowTutorial] = useContext(TutorialContext);
+  const { showTutorial, setShowTutorial } = useContext(TutorialContext);
   const steps = [
     {
       target: ".grid .seat",
@@ -111,3 +113,98 @@ export const TutorialSetup = () => {
     />
   );
 };
+
+export const TutorialGradeIntro = observer(() => {
+  const { store } = useContext(StoreContext);
+  const {
+    showTutorial,
+    setShowTutorial,
+    explainedEasy,
+    setExplainedEasy,
+    explainedMedium,
+    setExplainedMedium,
+    explainedHard,
+    setExplainedHard,
+  } = useContext(TutorialContext);
+
+  function onClose(tutorialWanted) {
+    if (store.grade.name === "Easy") {
+      setExplainedEasy(true);
+    }
+    if (store.grade.name === "Medium") {
+      setExplainedMedium(true);
+    }
+    if (store.grade.name === "Hard") {
+      setExplainedHard(true);
+    }
+    setShowTutorial(tutorialWanted);
+  }
+
+  const needToExplain =
+    (store.grade.name === "Easy" && !explainedEasy) ||
+    (store.grade.name === "Medium" && !explainedMedium) ||
+    (store.grade.name === "Hard" && !explainedHard);
+
+  return (
+    needToExplain &&
+    !showTutorial && <TutorialGradeIntroModal closeCallback={onClose} />
+  );
+});
+
+export const TutorialGradeIntroModal = observer(({ closeCallback }) => {
+  const { store } = useContext(StoreContext);
+  const explanations = {
+    Easy: <div>Welcome to Easy level.</div>,
+    Medium: (
+      <div>
+        Welcome to Medium level. You may see smaller offices or complicated Team
+        Preferences.
+      </div>
+    ),
+    Hard: (
+      <div>
+        Welcome to Hard level. You'll see small offices and complicated Team
+        Preferences.
+      </div>
+    ),
+  };
+
+  return (
+    <div
+      className={`grade-intro grade-${store.grade.name.toLowerCase()} modal is-active has-text-justified`}
+    >
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">{store.grade.name} level</p>
+          <button
+            className="delete"
+            aria-label="close"
+            onClick={() => closeCallback(true)}
+          ></button>
+        </header>
+        <section className="modal-card-body">
+          <div className="content">{explanations[store.grade.name]}</div>
+          <div className="buttons are-small is-right">
+            <button
+              className="button is-info"
+              onClick={() => closeCallback(true)}
+            >
+              <span className="icon">
+                <FontAwesomeIcon icon={faArrowCircleRight} />
+              </span>{" "}
+              <span>Tutorial</span>
+            </button>
+            <button className="button" onClick={() => closeCallback(false)}>
+              <span className="icon">
+                <FontAwesomeIcon icon={faBan} />
+              </span>{" "}
+              <span>Skip</span>
+            </button>
+          </div>
+        </section>
+        <footer className="modal-card-foot"></footer>
+      </div>
+    </div>
+  );
+});

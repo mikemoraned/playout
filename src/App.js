@@ -9,6 +9,8 @@ import {
   Redirect,
   useParams,
 } from "react-router-dom";
+
+import { TutorialProvider } from "./model/contexts.js";
 import { defaultTeamsSpec } from "./model/problem";
 import { GraphQLProvider } from "./model/contexts";
 import Start from "./pages/Start";
@@ -42,35 +44,37 @@ function App() {
   return (
     <div className="App">
       <GraphQLProvider>
-        <Router>
-          <Navigation version={version} />
-          <Suspense fallback={<div></div>}>
-            <Switch>
-              <Route path="/about">
-                <About />
-              </Route>
-              <Route path="/play/:gridSpec/:teamsSpec">
-                <Play />
-              </Route>
-              <Route path="/play/:gridSpec">
-                <FallbackWhenTeamSpecMissing />
-              </Route>
-              <Route path="/play">
-                <Redirect to="/" />;
-              </Route>
-              <Route path="/build/:areaSpec">
-                <Build />
-              </Route>
-              <Route path="/build/">
-                <FallbackWhenAreaSpecMissing />
-              </Route>
-              <Route path="/">
-                <Start />
-              </Route>
-            </Switch>
-          </Suspense>
-          <Footer />
-        </Router>
+        <TutorialProvider>
+          <Router>
+            <Navigation version={version} />
+            <Suspense fallback={<div></div>}>
+              <Switch>
+                <Route path="/about">
+                  <About />
+                </Route>
+                <Route path="/play/:gridSpec/:teamsSpec">
+                  <Play />
+                </Route>
+                <Route path="/play/:gridSpec">
+                  <FallbackWhenTeamSpecMissing />
+                </Route>
+                <Route path="/play">
+                  <Redirect to="/" />;
+                </Route>
+                <Route path="/build/:areaSpec">
+                  <Build />
+                </Route>
+                <Route path="/build/">
+                  <FallbackWhenAreaSpecMissing />
+                </Route>
+                <Route path="/">
+                  <Start />
+                </Route>
+              </Switch>
+            </Suspense>
+            <Footer />
+          </Router>
+        </TutorialProvider>
       </GraphQLProvider>
     </div>
   );

@@ -88,7 +88,7 @@ export const ScoringBreakdown = observer(() => {
 
 export const Scoring = observer(() => {
   const { store } = useContext(StoreContext);
-  const [showTutorial, setShowTutorial] = useContext(TutorialContext);
+  const { showTutorial, setShowTutorial } = useContext(TutorialContext);
   const { scoring } = store.evaluation;
   const buttonKinds = [
     "is-info",

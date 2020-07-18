@@ -105,12 +105,12 @@ const Instance = observer(() => {
             <TeamsFull />
           </section>
           <section className="section">
-            <h1 className="title is-4">Biases</h1>
+            <h1 className="title is-4">Team preferences</h1>
             <p className="subtitle is-6">
               <span className="icon">
                 <FontAwesomeIcon icon={faStar} />
               </span>{" "}
-              Edit Biases
+              Edit preferences
             </p>
             <Biases />
           </section>

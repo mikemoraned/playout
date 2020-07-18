@@ -1,7 +1,6 @@
 import React from "react";
 import { Grid } from "../components/Grid";
 import { TeamsMini } from "../components/TeamsMini";
-import { TeamsFull } from "../components/TeamsFull";
 import { Evaluation } from "../components/Evaluation";
 import { StoreProvider, TutorialProvider } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
@@ -10,7 +9,7 @@ import { useParams, Redirect } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
 import { observer } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBorderAll, faUser, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faBorderAll, faStar } from "@fortawesome/free-solid-svg-icons";
 import "./Play.scss";
 
 const Instance = observer(() => {
@@ -33,21 +32,11 @@ const Instance = observer(() => {
                   Place Team Members in Seats <TutorialButton />
                 </span>
               </p>
-
               <TeamsMini />
               <Grid />
             </section>
           </div>
           <div className="column">
-            <section className="section">
-              <h1 className="title is-4">Teams</h1>
-              <p className="subtitle is-6">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faUser} />
-                </span>
-              </p>
-              <TeamsFull />
-            </section>
             <section className="section">
               <h1 className="title is-4">Biases</h1>
               <p className="subtitle is-6">
@@ -56,7 +45,6 @@ const Instance = observer(() => {
                 </span>{" "}
                 Who wants what?
               </p>
-
               <Biases />
             </section>
           </div>

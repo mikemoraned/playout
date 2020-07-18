@@ -68,24 +68,23 @@ export const TutorialSetup = () => {
   const steps = [
     {
       target: ".grid .seat",
-      content: "Place a Team Member by touching the Seat ...",
-    },
-    {
-      target: ".evaluation .scoring",
-      content: "... which increases your Score ...",
+      content: "Place a Team Member by clicking on the Seat.",
     },
     {
       target: ".tut-biases-explanation",
-      content: "... by understanding team Biases",
+      content: "Satisfy your Teams Preferences \u2026",
     },
-
+    {
+      target: ".evaluation .scoring",
+      content: "\u2026 to maximise your overall Score.",
+    },
     {
       target: ".evaluation .completed",
-      content: "Place all of your Team Members ...",
+      content: "Once you've placed all of your Team Members \u2026",
     },
     {
       target: ".evaluation .next",
-      content: "... and move on to the next Game",
+      content: "\u2026 you can move on to the next Game.",
     },
   ];
 

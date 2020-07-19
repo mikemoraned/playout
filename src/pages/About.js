@@ -1,11 +1,39 @@
 import React from "react";
 import { Rules } from "../components/Rules";
+import { faHome, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Breadcrumb } from "../components/Breadcrumb";
+
+const BreadcrumbList = () => {
+  return (
+    <ul>
+      <li>
+        <Link to={"/"}>
+          <span className="icon">
+            <FontAwesomeIcon icon={faHome} />
+          </span>{" "}
+          <span>Home</span>
+        </Link>
+      </li>
+      <li className="is-active">
+        <span className="icon">
+          <FontAwesomeIcon icon={faInfoCircle} />
+        </span>{" "}
+        <span>About</span>
+      </li>
+    </ul>
+  );
+};
 
 export default function About() {
   return (
     <>
-      <section className="section">
-        <div className="container">
+      <Breadcrumb>
+        <BreadcrumbList />
+      </Breadcrumb>
+      <div className="container">
+        <section className="section">
           <div className="columns">
             <div className="column is-two-thirds">
               <h1 className="title">About</h1>
@@ -22,17 +50,15 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <section className="section">
-        <div className="container">
+        </section>
+        <section className="section">
           <div className="columns">
             <div className="column is-two-thirds">
               <Rules />
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
 }

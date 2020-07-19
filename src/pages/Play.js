@@ -1,24 +1,55 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Grid } from "../components/Grid";
 import { TeamsMini } from "../components/TeamsMini";
 import { Evaluation } from "../components/Evaluation";
-import { StoreProvider } from "../model/contexts.js";
+import { StoreProvider, StoreContext } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
 import {
   TutorialButton,
   TutorialSetup,
   TutorialGradeIntro,
 } from "../components/Tutorial";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect, Link } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
 import { observer } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBorderAll, faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBorderAll,
+  faStar,
+  faPlay,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+import { Breadcrumb } from "../components/Breadcrumb";
 import "./Play.scss";
+
+const BreadcrumbList = observer(() => {
+  const { store } = useContext(StoreContext);
+  return (
+    <ul>
+      <li>
+        <Link to={"/"}>
+          <span className="icon">
+            <FontAwesomeIcon icon={faHome} />
+          </span>{" "}
+          <span>Home</span>
+        </Link>
+      </li>
+      <li className="is-active">
+        <span className="icon">
+          <FontAwesomeIcon icon={faPlay} />
+        </span>{" "}
+        <span>{store.grade.name}</span>
+      </li>
+    </ul>
+  );
+});
 
 const Instance = observer(() => {
   return (
     <>
+      <Breadcrumb>
+        <BreadcrumbList />
+      </Breadcrumb>
       <TutorialGradeIntro />
       <div className="container">
         <TutorialSetup />

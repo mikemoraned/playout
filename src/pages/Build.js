@@ -5,7 +5,7 @@ import { StoreProvider } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
 import { useContext } from "react";
 import { StoreContext } from "../model/contexts.js";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect, Link } from "react-router-dom";
 import { Problem, defaultTeamsSpec } from "../model/problem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,10 +14,37 @@ import {
   faUserEdit,
   faStar,
   faSync,
+  faHome,
+  faChessBoard,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
+import { Breadcrumb } from "../components/Breadcrumb";
+
+const BreadcrumbList = observer(() => {
+  const { store } = useContext(StoreContext);
+  return (
+    <ul>
+      <li>
+        <Link to={"/"}>
+          <span className="icon">
+            <FontAwesomeIcon icon={faHome} />
+          </span>{" "}
+          <span>Home</span>
+        </Link>
+      </li>
+      <li className="is-active">
+        <span className="icon">
+          <FontAwesomeIcon icon={faChessBoard} />
+        </span>{" "}
+        <span>
+          Build {store.grid.width} x {store.grid.height}
+        </span>
+      </li>
+    </ul>
+  );
+});
 
 const BuildControls = observer(() => {
   const { store } = useContext(StoreContext);
@@ -56,67 +83,72 @@ const BuildControls = observer(() => {
 const Instance = observer(() => {
   const { store } = useContext(StoreContext);
   return (
-    <div className="container">
-      <div className="columns mt-3 ml-3 is-mobile">
-        <div className="column">
-          <div className="buttons has-addons">
-            <button
-              className={`button is-info ${
-                store.mode.name === "Build" ? "" : "is-light"
-              }`}
-              onClick={() => store.mode.setBuildMode()}
-            >
-              Edit
-            </button>
-            <button
-              className={`button is-info ${
-                store.mode.name === "Play" ? "" : "is-light"
-              }`}
-              onClick={() => store.mode.setPlayMode()}
-            >
-              Play Test
-            </button>
+    <>
+      <Breadcrumb>
+        <BreadcrumbList />
+      </Breadcrumb>
+      <div className="container">
+        <div className="columns mt-3 ml-3 is-mobile">
+          <div className="column">
+            <div className="buttons has-addons">
+              <button
+                className={`button is-info ${
+                  store.mode.name === "Build" ? "" : "is-light"
+                }`}
+                onClick={() => store.mode.setBuildMode()}
+              >
+                Edit
+              </button>
+              <button
+                className={`button is-info ${
+                  store.mode.name === "Play" ? "" : "is-light"
+                }`}
+                onClick={() => store.mode.setPlayMode()}
+              >
+                Play Test
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="columns">
+          <div className="column is-two-thirds">
+            <section className="section">
+              <h1 className="title is-4">Layout</h1>
+              <p className="subtitle is-6">
+                <span className="icon">
+                  <FontAwesomeIcon icon={faBorderAll} />
+                </span>{" "}
+                Edit layout
+              </p>
+              <BuildControls />
+              <Grid />
+            </section>
+          </div>
+          <div className="column">
+            <section className="section">
+              <h1 className="title is-4">Teams</h1>
+              <p className="subtitle is-6">
+                <span className="icon">
+                  <FontAwesomeIcon icon={faUserEdit} />
+                </span>{" "}
+                Edit Teams
+              </p>
+              <TeamsFull />
+            </section>
+            <section className="section">
+              <h1 className="title is-4">Team preferences</h1>
+              <p className="subtitle is-6">
+                <span className="icon">
+                  <FontAwesomeIcon icon={faStar} />
+                </span>{" "}
+                Edit preferences
+              </p>
+              <Biases />
+            </section>
           </div>
         </div>
       </div>
-      <div className="columns">
-        <div className="column is-two-thirds">
-          <section className="section">
-            <h1 className="title is-4">Layout</h1>
-            <p className="subtitle is-6">
-              <span className="icon">
-                <FontAwesomeIcon icon={faBorderAll} />
-              </span>{" "}
-              Edit layout
-            </p>
-            <BuildControls />
-            <Grid />
-          </section>
-        </div>
-        <div className="column">
-          <section className="section">
-            <h1 className="title is-4">Teams</h1>
-            <p className="subtitle is-6">
-              <span className="icon">
-                <FontAwesomeIcon icon={faUserEdit} />
-              </span>{" "}
-              Edit Teams
-            </p>
-            <TeamsFull />
-          </section>
-          <section className="section">
-            <h1 className="title is-4">Team preferences</h1>
-            <p className="subtitle is-6">
-              <span className="icon">
-                <FontAwesomeIcon icon={faStar} />
-              </span>{" "}
-              Edit preferences
-            </p>
-            <Biases />
-          </section>
-        </div>
-      </div>
-    </div>
+    </>
   );
 });
 

@@ -26,13 +26,13 @@ export const Evaluation = observer(() => {
             {percentDone.padStart(3, nonBreakingSpace)}%
           </span>
         </div>
-        <div className="column">
+        <div className="completed column">
           <Progress />
         </div>
-        <div className="column is-4 has-text-centered">
+        <div className="scoring column is-4 has-text-centered">
           <Scoring />
         </div>
-        <div className="column is-3 has-text-centered">
+        <div className="next column is-3 has-text-centered">
           <NextProblem />
         </div>
       </div>

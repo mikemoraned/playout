@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -6,6 +6,46 @@ import { parseProblemFrom } from "./problem";
 import { Grade, gradeFromProblemSpec } from "./grade";
 import { loader } from "graphql.macro";
 import { gql } from "apollo-boost";
+
+const SETTING_PREFIX = "v1_";
+function useSetting(key, booleanDefaultValue) {
+  const fullKey = `${SETTING_PREFIX}${key}`;
+  const [state, setState] = React.useState(
+    () => JSON.parse(localStorage.getItem(fullKey)) || booleanDefaultValue
+  );
+  useEffect(() => {
+    localStorage.setItem(fullKey, JSON.stringify(state));
+  }, [fullKey, state]);
+  return [state, setState];
+}
+
+export const TutorialContext = React.createContext(null);
+
+export const TutorialProvider = ({ children }) => {
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [explainedEasy, setExplainedEasy] = useSetting("explainedEasy", false);
+  const [explainedMedium, setExplainedMedium] = useSetting(
+    "explainedMedium",
+    false
+  );
+  const [explainedHard, setExplainedHard] = useSetting("explainedHard", false);
+  return (
+    <TutorialContext.Provider
+      value={{
+        showTutorial,
+        setShowTutorial,
+        explainedEasy,
+        setExplainedEasy,
+        explainedMedium,
+        setExplainedMedium,
+        explainedHard,
+        setExplainedHard,
+      }}
+    >
+      {children}
+    </TutorialContext.Provider>
+  );
+};
 
 export const StoreContext = React.createContext(null);
 

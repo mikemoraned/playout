@@ -1,0 +1,22 @@
+@import "../variables.scss";
+
+.grade-intro.grade-easy {
+  .modal-card-head,
+  .modal-card-foot {
+    background-color: $easy-grade-color;
+  }
+}
+
+.grade-intro.grade-medium {
+  .modal-card-head,
+  .modal-card-foot {
+    background-color: $medium-grade-color;
+  }
+}
+
+.grade-intro.grade-hard {
+  .modal-card-head,
+  .modal-card-foot {
+    background-color: $hard-grade-color;
+  }
+}

@@ -1,8 +1,7 @@
 import React from "react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { observer } from "mobx-react";
-import { StoreContext } from "../model/contexts.js";
-import { Rules } from "./Rules";
+import { StoreContext, TutorialContext } from "../model/contexts.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMeh,
@@ -87,33 +86,10 @@ export const ScoringBreakdown = observer(() => {
   );
 });
 
-export const ScoringBreakdownModal = ({ closeCallback }) => {
-  return (
-    <div className="modal is-active has-text-justified">
-      <div className="modal-background"></div>
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">Scoring</p>
-          <button
-            className="delete"
-            aria-label="close"
-            onClick={() => closeCallback()}
-          ></button>
-        </header>
-        <section className="modal-card-body">
-          <ScoringBreakdown />
-          <Rules />
-        </section>
-        <footer className="modal-card-foot"></footer>
-      </div>
-    </div>
-  );
-};
-
 export const Scoring = observer(() => {
   const { store } = useContext(StoreContext);
+  const { showTutorial, setShowTutorial } = useContext(TutorialContext);
   const { scoring } = store.evaluation;
-  const [showBreakdown, setShowBreakdown] = useState(false);
   const buttonKinds = [
     "is-info",
     "is-warning",
@@ -128,13 +104,11 @@ export const Scoring = observer(() => {
     <>
       <button
         className={`button scoring ${buttonKind}`}
-        onClick={() => setShowBreakdown(true)}
+        onClick={() => setShowTutorial(true)}
+        disabled={showTutorial}
       >
         <ScoreFaceWithScore scoring={scoring} size="medium" />
       </button>
-      {showBreakdown && (
-        <ScoringBreakdownModal closeCallback={() => setShowBreakdown(false)} />
-      )}
     </>
   );
 });

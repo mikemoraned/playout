@@ -94,7 +94,7 @@ const BiasesExplanation = observer(() => {
   const teamNames = store.teams.names;
 
   return (
-    <>
+    <div className="tut-biases-explanation">
       <p>
         All {teamNames.join(", ")} team members prefer to be next to their own
         team-mates.
@@ -118,7 +118,7 @@ const BiasesExplanation = observer(() => {
         );
       })}
       <ScoringBreakdown />
-    </>
+    </div>
   );
 });
 

@@ -2,9 +2,13 @@ import React from "react";
 import { Grid } from "../components/Grid";
 import { TeamsMini } from "../components/TeamsMini";
 import { Evaluation } from "../components/Evaluation";
-import { StoreProvider, TutorialProvider } from "../model/contexts.js";
+import { StoreProvider } from "../model/contexts.js";
 import { Biases } from "../components/Biases";
-import { TutorialButton, TutorialSetup } from "../components/Tutorial";
+import {
+  TutorialButton,
+  TutorialSetup,
+  TutorialGradeIntro,
+} from "../components/Tutorial";
 import { useParams, Redirect } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
 import { observer } from "mobx-react";
@@ -14,7 +18,8 @@ import "./Play.scss";
 
 const Instance = observer(() => {
   return (
-    <TutorialProvider>
+    <>
+      <TutorialGradeIntro />
       <div className="container">
         <TutorialSetup />
         <div className="mt-3 sticky-evaluation">
@@ -50,7 +55,7 @@ const Instance = observer(() => {
           </div>
         </div>
       </div>
-    </TutorialProvider>
+    </>
   );
 });
 

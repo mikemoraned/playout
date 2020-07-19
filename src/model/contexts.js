@@ -11,8 +11,22 @@ export const TutorialContext = React.createContext(null);
 
 export const TutorialProvider = ({ children }) => {
   const [showTutorial, setShowTutorial] = useState(false);
+  const [explainedEasy, setExplainedEasy] = useState(false);
+  const [explainedMedium, setExplainedMedium] = useState(false);
+  const [explainedHard, setExplainedHard] = useState(false);
   return (
-    <TutorialContext.Provider value={[showTutorial, setShowTutorial]}>
+    <TutorialContext.Provider
+      value={{
+        showTutorial,
+        setShowTutorial,
+        explainedEasy,
+        setExplainedEasy,
+        explainedMedium,
+        setExplainedMedium,
+        explainedHard,
+        setExplainedHard,
+      }}
+    >
       {children}
     </TutorialContext.Provider>
   );

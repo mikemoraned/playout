@@ -39,6 +39,9 @@ const Build = defer(() =>
 const About = defer(() =>
   import(/* webpackChunkName: "About" */ "./pages/About")
 );
+const Settings = defer(() =>
+  import(/* webpackChunkName: "Settings" */ "./pages/Settings")
+);
 
 function App() {
   return (
@@ -66,6 +69,9 @@ function App() {
                 </Route>
                 <Route path="/build/">
                   <FallbackWhenAreaSpecMissing />
+                </Route>
+                <Route path="/settings">
+                  <Settings />
                 </Route>
                 <Route path="/">
                   <Start />

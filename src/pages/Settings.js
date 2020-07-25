@@ -1,7 +1,34 @@
 import React, { useContext } from "react";
 import { TutorialContext } from "../model/contexts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandsHelping } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHandsHelping,
+  faHome,
+  faUserCog,
+} from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { Breadcrumb } from "../components/Breadcrumb";
+
+const BreadcrumbList = () => {
+  return (
+    <ul>
+      <li>
+        <Link to={"/"}>
+          <span className="icon">
+            <FontAwesomeIcon icon={faHome} />
+          </span>{" "}
+          <span>Home</span>
+        </Link>
+      </li>
+      <li className="is-active">
+        <span className="icon">
+          <FontAwesomeIcon icon={faUserCog} />
+        </span>{" "}
+        <span>Settings</span>
+      </li>
+    </ul>
+  );
+};
 
 export default function Settings() {
   const {
@@ -15,8 +42,11 @@ export default function Settings() {
   console.log(explainedEasy, explainedMedium, explainedHard);
   return (
     <>
-      <section className="section">
-        <div className="container">
+      <Breadcrumb>
+        <BreadcrumbList />
+      </Breadcrumb>
+      <div className="container">
+        <section className="section">
           <div className="columns">
             <div className="column is-two-thirds">
               <h1 className="title">Settings</h1>
@@ -57,8 +87,8 @@ export default function Settings() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
 }

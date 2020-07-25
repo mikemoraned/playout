@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faUserCog } from "@fortawesome/free-solid-svg-icons";
 
 export function Navigation({ version }) {
   const [activeMobile, setActiveMobile] = useState(false);
@@ -41,14 +41,15 @@ export function Navigation({ version }) {
           activeMobile ? "navbar-menu-mobile-active" : ""
         }`}
       >
-        <div className="navbar-start">
-          <NavLink
-            to="/about"
-            className="navbar-item"
-            activeClassName="is-active"
-          >
+        <div className="navbar-end">
+          <NavLink to="/about" className="navbar-item">
             <span className="icon is-medium">
               <FontAwesomeIcon icon={faInfoCircle} size="2x" />
+            </span>
+          </NavLink>
+          <NavLink to="/settings" className="navbar-item">
+            <span className="icon is-medium">
+              <FontAwesomeIcon icon={faUserCog} size="2x" />
             </span>
           </NavLink>
         </div>

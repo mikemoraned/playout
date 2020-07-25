@@ -16,6 +16,8 @@ import {
   faSync,
   faHome,
   faChessBoard,
+  faPlay,
+  faDesktop,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { observer } from "mobx-react";
@@ -57,8 +59,12 @@ const BuildControls = observer(() => {
     <div className="box">
       <div className="buttons">
         <button className="button" onClick={() => store.randomiseSeats()}>
-          <span className="icon">
-            <FontAwesomeIcon icon={faSync} />
+          <span className="icon fa-layers fa-fw">
+            <FontAwesomeIcon icon={faDesktop} />
+            <FontAwesomeIcon
+              icon={faSync}
+              transform="shrink-8 down-10 right-10"
+            />
           </span>
           <span>Randomise Seats</span>
         </button>
@@ -69,8 +75,12 @@ const BuildControls = observer(() => {
             window.open(fullURL, "_blank");
           }}
         >
-          <span className="icon">
-            <FontAwesomeIcon icon={faExternalLinkAlt} />
+          <span className="icon fa-layers fa-fw">
+            <FontAwesomeIcon icon={faPlay} />
+            <FontAwesomeIcon
+              icon={faExternalLinkAlt}
+              transform="shrink-7 down-8 right-8"
+            />
           </span>
           <span>Play</span>
           <span className="is-hidden-mobile">&nbsp;test in new tab</span>
@@ -81,7 +91,6 @@ const BuildControls = observer(() => {
 });
 
 const Instance = observer(() => {
-  const { store } = useContext(StoreContext);
   return (
     <>
       <Breadcrumb>

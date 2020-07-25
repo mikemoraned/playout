@@ -60,7 +60,7 @@ const BuildControls = observer(() => {
           <span className="icon">
             <FontAwesomeIcon icon={faSync} />
           </span>
-          <span>Randomise</span>
+          <span>Randomise Seats</span>
         </button>
         <button
           className="button is-success"
@@ -72,8 +72,8 @@ const BuildControls = observer(() => {
           <span className="icon">
             <FontAwesomeIcon icon={faExternalLinkAlt} />
           </span>
-          <span>Open</span>
-          <span className="is-hidden-mobile">&nbsp;in new tab</span>
+          <span>Play</span>
+          <span className="is-hidden-mobile">&nbsp;test in new tab</span>
         </button>
       </div>
     </div>
@@ -88,28 +88,6 @@ const Instance = observer(() => {
         <BreadcrumbList />
       </Breadcrumb>
       <div className="container">
-        <div className="columns mt-3 ml-3 is-mobile">
-          <div className="column">
-            <div className="buttons has-addons">
-              <button
-                className={`button is-info ${
-                  store.mode.name === "Build" ? "" : "is-light"
-                }`}
-                onClick={() => store.mode.setBuildMode()}
-              >
-                Edit
-              </button>
-              <button
-                className={`button is-info ${
-                  store.mode.name === "Play" ? "" : "is-light"
-                }`}
-                onClick={() => store.mode.setPlayMode()}
-              >
-                Play Test
-              </button>
-            </div>
-          </div>
-        </div>
         <div className="columns">
           <div className="column is-two-thirds">
             <section className="section">

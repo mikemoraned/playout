@@ -8,7 +8,7 @@ import {
   faSmile,
   faSmileBeam,
   faGrinStars,
-} from "@fortawesome/free-regular-svg-icons";
+} from "@fortawesome/pro-regular-svg-icons";
 
 function mapScoreToCategory(score, max, numCategories) {
   const fractionDone = score / max;

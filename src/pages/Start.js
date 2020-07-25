@@ -3,7 +3,8 @@ import { useHistory } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faChessBoard } from "@fortawesome/free-solid-svg-icons";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faGameBoard } from "@fortawesome/pro-regular-svg-icons";
 import "./Start.scss";
 
 function VisitGameButton({ path, grade, name }) {
@@ -19,7 +20,7 @@ function VisitGameButton({ path, grade, name }) {
       onClick={() => visitGame()}
     >
       <span className="icon">
-        <FontAwesomeIcon icon={faPlay} />
+        <FontAwesomeIcon icon={faPlay} swapOpacity />
       </span>
       <span>{name}</span>
     </button>
@@ -126,7 +127,7 @@ function Build() {
           onClick={() => history.push("/build/5x5")}
         >
           <span className="icon">
-            <FontAwesomeIcon icon={faChessBoard} />
+            <FontAwesomeIcon icon={faGameBoard} swapOpacity />
           </span>
           <span>5 x 5</span>
         </button>
@@ -135,7 +136,7 @@ function Build() {
           onClick={() => history.push("/build/10x10")}
         >
           <span className="icon">
-            <FontAwesomeIcon icon={faChessBoard} />
+            <FontAwesomeIcon icon={faGameBoard} swapOpacity />
           </span>
           <span>10 x 10</span>
         </button>

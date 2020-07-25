@@ -5,7 +5,8 @@ import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDesktop, faSeedling } from "@fortawesome/free-solid-svg-icons";
+import { faSeedling } from "@fortawesome/pro-duotone-svg-icons";
+import { faDesktop } from "@fortawesome/pro-light-svg-icons";
 import "./Grid.scss";
 
 function Desktop({ visibility }) {

@@ -13,12 +13,9 @@ import { useParams, Redirect, Link } from "react-router-dom";
 import { parseProblemFrom } from "../model/problem";
 import { observer } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBorderAll,
-  faStar,
-  faPlay,
-  faHome,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBorderAll, faHome } from "@fortawesome/pro-duotone-svg-icons";
+import { faStar } from "@fortawesome/pro-regular-svg-icons";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumb } from "../components/Breadcrumb";
 import "./Play.scss";
 

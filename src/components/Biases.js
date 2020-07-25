@@ -7,10 +7,10 @@ import { ScoringBreakdown } from "./Scoring";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserSlash,
-  faAsterisk,
   faUserFriends,
   faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/pro-duotone-svg-icons";
+import { faAsterisk } from "@fortawesome/pro-regular-svg-icons";
 
 const iconForBiasKind = {};
 iconForBiasKind[BiasKind.DISTANT] = <FontAwesomeIcon icon={faUserSlash} />;

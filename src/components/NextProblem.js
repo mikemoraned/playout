@@ -6,7 +6,7 @@ import { StoreContext } from "../model/contexts.js";
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDoubleRight } from "@fortawesome/pro-duotone-svg-icons";
 
 const PROBLEM_COMPLETED = gql`
   mutation ProblemCompleted($problemSpec: ProblemSpec) {

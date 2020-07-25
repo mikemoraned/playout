@@ -1,6 +1,6 @@
 import React from "react";
 import { Rules } from "../components/Rules";
-import { faHome, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faInfoCircle } from "@fortawesome/pro-duotone-svg-icons";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Breadcrumb } from "../components/Breadcrumb";

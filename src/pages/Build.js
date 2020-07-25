@@ -23,6 +23,7 @@ import {
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
 import { Breadcrumb } from "../components/Breadcrumb";
+import "./Build.scss";
 
 const BreadcrumbList = observer(() => {
   const { store } = useContext(StoreContext);
@@ -56,7 +57,7 @@ const BuildControls = observer(() => {
   const fullURL = new URL(path, base);
 
   return (
-    <div className="box">
+    <div className={`box controls grade-${store.grade.name.toLowerCase()}`}>
       <div className="buttons">
         <button className="button" onClick={() => store.randomiseSeats()}>
           <span className="icon fa-layers fa-fw">

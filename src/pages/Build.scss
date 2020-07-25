@@ -1,0 +1,13 @@
+@import "../variables.scss";
+
+.controls.grade-easy {
+  background-color: $easy-grade-color;
+}
+
+.controls.grade-medium {
+  background-color: $medium-grade-color;
+}
+
+.controls.grade-hard {
+  background-color: $hard-grade-color;
+}

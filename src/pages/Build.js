@@ -16,11 +16,14 @@ import {
   faSync,
   faHome,
   faChessBoard,
+  faPlay,
+  faDesktop,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
 import { Breadcrumb } from "../components/Breadcrumb";
+import "./Build.scss";
 
 const BreadcrumbList = observer(() => {
   const { store } = useContext(StoreContext);
@@ -54,13 +57,17 @@ const BuildControls = observer(() => {
   const fullURL = new URL(path, base);
 
   return (
-    <div className="box">
+    <div className={`box controls grade-${store.grade.name.toLowerCase()}`}>
       <div className="buttons">
         <button className="button" onClick={() => store.randomiseSeats()}>
-          <span className="icon">
-            <FontAwesomeIcon icon={faSync} />
+          <span className="icon fa-layers fa-fw">
+            <FontAwesomeIcon icon={faDesktop} />
+            <FontAwesomeIcon
+              icon={faSync}
+              transform="shrink-8 down-10 right-10"
+            />
           </span>
-          <span>Randomise</span>
+          <span>Randomise Seats</span>
         </button>
         <button
           className="button is-success"
@@ -69,11 +76,15 @@ const BuildControls = observer(() => {
             window.open(fullURL, "_blank");
           }}
         >
-          <span className="icon">
-            <FontAwesomeIcon icon={faExternalLinkAlt} />
+          <span className="icon fa-layers fa-fw">
+            <FontAwesomeIcon icon={faPlay} />
+            <FontAwesomeIcon
+              icon={faExternalLinkAlt}
+              transform="shrink-7 down-8 right-8"
+            />
           </span>
-          <span>Open</span>
-          <span className="is-hidden-mobile">&nbsp;in new tab</span>
+          <span>Play</span>
+          <span className="is-hidden-mobile">&nbsp;test in new tab</span>
         </button>
       </div>
     </div>
@@ -81,35 +92,12 @@ const BuildControls = observer(() => {
 });
 
 const Instance = observer(() => {
-  const { store } = useContext(StoreContext);
   return (
     <>
       <Breadcrumb>
         <BreadcrumbList />
       </Breadcrumb>
       <div className="container">
-        <div className="columns mt-3 ml-3 is-mobile">
-          <div className="column">
-            <div className="buttons has-addons">
-              <button
-                className={`button is-info ${
-                  store.mode.name === "Build" ? "" : "is-light"
-                }`}
-                onClick={() => store.mode.setBuildMode()}
-              >
-                Edit
-              </button>
-              <button
-                className={`button is-info ${
-                  store.mode.name === "Play" ? "" : "is-light"
-                }`}
-                onClick={() => store.mode.setPlayMode()}
-              >
-                Play Test
-              </button>
-            </div>
-          </div>
-        </div>
         <div className="columns">
           <div className="column is-two-thirds">
             <section className="section">

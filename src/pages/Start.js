@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -116,25 +116,28 @@ function RecentlyCompleted() {
 }
 
 function Build() {
+  const history = useHistory();
   return (
     <>
       <h1 className="title">Build</h1>
       <div className="buttons">
-        <button className="button is-link is-light">
-          <Link to="/build/5x5">
-            <span className="icon">
-              <FontAwesomeIcon icon={faChessBoard} />
-            </span>
-            <span>5 x 5</span>
-          </Link>
+        <button
+          className="button is-link is-light"
+          onClick={() => history.push("/build/5x5")}
+        >
+          <span className="icon">
+            <FontAwesomeIcon icon={faChessBoard} />
+          </span>
+          <span>5 x 5</span>
         </button>
-        <button className="button is-link is-light">
-          <Link to="/build/10x10">
-            <span className="icon">
-              <FontAwesomeIcon icon={faChessBoard} />
-            </span>
-            <span>10 x 10</span>
-          </Link>
+        <button
+          className="button is-link is-light"
+          onClick={() => history.push("/build/10x10")}
+        >
+          <span className="icon">
+            <FontAwesomeIcon icon={faChessBoard} />
+          </span>
+          <span>10 x 10</span>
         </button>
       </div>
     </>

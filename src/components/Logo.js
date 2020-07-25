@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSmile } from "@fortawesome/free-regular-svg-icons";
+import { faUser, faSmile } from "@fortawesome/pro-duotone-svg-icons";
 
 export function Logo({ fontSize }) {
   return (

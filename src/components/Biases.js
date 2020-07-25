@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
 import { BiasKind, canRotate } from "../model/teams/bias";
-import { ScoreFaceIcon, ScoringBreakdown } from "./Scoring";
+import { ScoringBreakdown } from "./Scoring";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserSlash,
@@ -51,12 +51,7 @@ const EditableBiases = observer(() => {
         <tr>
           <th>from:</th>
           {store.teams.list.map((fromTeam) => {
-            const scoring = store.evaluation.scoring.teams[fromTeam.name];
-            return (
-              <th key={fromTeam.name}>
-                {fromTeam.name} <ScoreFaceIcon {...scoring} size="small" />{" "}
-              </th>
-            );
+            return <th key={fromTeam.name}>{fromTeam.name}</th>;
           })}
         </tr>
       </thead>

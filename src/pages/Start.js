@@ -5,7 +5,14 @@ import { useQuery } from "@apollo/react-hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { faGameBoard } from "@fortawesome/pro-regular-svg-icons";
+import {
+  faTwitter,
+  faTwitterSquare,
+  // faFacebook,
+  // faFacebookSquare,
+} from "@fortawesome/free-brands-svg-icons";
 import "./Start.scss";
+// import { randomHardProblemSpec } from "../model/grade";
 
 function VisitGameButton({ path, grade, name }) {
   const history = useHistory();
@@ -88,6 +95,16 @@ function RecentlyCompleted() {
 
   if (!loading && !error) {
     const recentlyCompleted = data.current_user.recentlyCompleted;
+    // const randomProblem = randomHardProblemSpec();
+    // const recentlyCompleted = [
+    //   {
+    //     grade: "Hard",
+    //     problemSpec: {
+    //       gridSpec: randomProblem.grid.toVersion2Format(),
+    //       teamsSpec: randomProblem.teams.toVersion1Format(),
+    //     },
+    //   },
+    // ];
     if (recentlyCompleted.length > 0) {
       return (
         <section className="section">
@@ -99,11 +116,14 @@ function RecentlyCompleted() {
               return (
                 <article className="message is-link" key={index}>
                   <div className="message-body">
-                    <VisitGameButton
-                      path={path}
-                      grade={gradedProblem.grade}
-                      name={`${gradedProblem.grade} Game`}
-                    />
+                    <div className="buttons">
+                      <VisitGameButton
+                        path={path}
+                        grade={gradedProblem.grade}
+                        name={`${gradedProblem.grade} Game`}
+                      />
+                      <TwitterShareButton path={path} />
+                    </div>
                   </div>
                 </article>
               );
@@ -115,6 +135,68 @@ function RecentlyCompleted() {
   }
   return <></>;
 }
+
+function TwitterShareButton({ path }) {
+  const twitterBlue = "#1DA1F2";
+  const problemLink = `https://playout.houseofmoran.io${path}`;
+  const tweetText = `check%20out%20@playoutgame%20${problemLink}`;
+  const shareLink = `https://twitter.com/intent/tweet?text=${tweetText}`;
+  return (
+    <>
+      <button
+        className="button is-hidden-mobile"
+        style={{ backgroundColor: twitterBlue, color: "white" }}
+        onClick={() => window.open(shareLink, "_blank")}
+      >
+        <span className="icon">
+          <FontAwesomeIcon icon={faTwitter} />
+        </span>
+
+        <span className="is-hidden-mobile">Share</span>
+      </button>
+      <button
+        className="button is-hidden-tablet"
+        style={{ backgroundColor: "transparent", borderColor: "transparent" }}
+        onClick={() => window.open(shareLink, "_blank")}
+      >
+        <span
+          className="icon"
+          style={{ backgroundColor: "white", color: twitterBlue }}
+        >
+          <FontAwesomeIcon icon={faTwitterSquare} size="3x" />
+        </span>
+      </button>
+    </>
+  );
+}
+
+// function FacebookShareButton() {
+//   const facebookBlue = "#4267B2";
+//   return (
+//     <>
+//       <button
+//         className="button is-hidden-mobile"
+//         style={{ backgroundColor: facebookBlue, color: "white" }}
+//       >
+//         <span className="icon">
+//           <FontAwesomeIcon icon={faFacebook} />
+//         </span>
+//         <span className="is-hidden-mobile">Share</span>
+//       </button>
+//       <button
+//         className="button is-hidden-tablet"
+//         style={{ backgroundColor: "transparent", borderColor: "transparent" }}
+//       >
+//         <span
+//           className="icon"
+//           style={{ backgroundColor: "white", color: facebookBlue }}
+//         >
+//           <FontAwesomeIcon icon={faFacebookSquare} size="3x" />
+//         </span>
+//       </button>
+//     </>
+//   );
+// }
 
 function Build() {
   const history = useHistory();

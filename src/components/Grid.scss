@@ -2,13 +2,20 @@ $border-radius: 15px;
 $duration: 1.5s;
 @import "bulma/sass/utilities/_all.sass";
 
+$soil-color: #916443;
+
 .grid {
   .seat {
     color: $white;
   }
 
-  .plant {
-    color: $green;
+  .plant-pot {
+    .pot {
+      color: $soil-color;
+    }
+    .plant {
+      color: $turquoise;
+    }
   }
 
   td.tl-eee,

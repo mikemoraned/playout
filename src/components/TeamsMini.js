@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
 import { ScoreFaceIcon } from "./Scoring.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUndo } from "@fortawesome/free-solid-svg-icons";
+import { faUndo } from "@fortawesome/pro-regular-svg-icons";
 
 export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);

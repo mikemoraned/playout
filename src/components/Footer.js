@@ -2,7 +2,7 @@ import React from "react";
 import { Logo } from "./Logo";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopyright } from "@fortawesome/free-regular-svg-icons";
+import { faCopyright } from "@fortawesome/pro-light-svg-icons";
 
 export function Footer() {
   return (

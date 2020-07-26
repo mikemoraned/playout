@@ -9,7 +9,6 @@ import {
   Redirect,
   useParams,
 } from "react-router-dom";
-
 import { TutorialProvider } from "./model/contexts.js";
 import { defaultTeamsSpec } from "./model/problem";
 import { GraphQLProvider } from "./model/contexts";

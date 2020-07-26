@@ -5,7 +5,9 @@ import { TeamMember, TeamMemberPlaceholder } from "./TeamMember";
 import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDesktop, faSeedling } from "@fortawesome/free-solid-svg-icons";
+import { faSeedling } from "@fortawesome/free-solid-svg-icons";
+import { faSquareFull } from "@fortawesome/pro-light-svg-icons";
+import { faDesktop } from "@fortawesome/pro-light-svg-icons";
 import "./Grid.scss";
 
 function Desktop({ visibility }) {
@@ -23,12 +25,33 @@ function Desktop({ visibility }) {
 
 function Plant() {
   return (
-    <span className="icon is-small plant">
-      <span className="fa-layers">
-        <FontAwesomeIcon icon={faSeedling} transform="shrink-2 up-6" />
-        <FontAwesomeIcon icon={faSeedling} transform="shrink-2" />
-        <FontAwesomeIcon icon={faSeedling} transform="shrink-2 down-6" />
-      </span>
+    <span className="icon is-small plant-pot fa-layers">
+      <FontAwesomeIcon
+        icon={faSquareFull}
+        transform="left-1 down-5"
+        className="pot"
+      />
+      <FontAwesomeIcon
+        icon={faSeedling}
+        transform="shrink-2 rotate--15 left-3 up-6"
+        className="plant"
+      />
+      <FontAwesomeIcon
+        icon={faSeedling}
+        transform="shrink-2 rotate-15 right-3"
+        swapOpacity
+        className="plant"
+      />
+      <FontAwesomeIcon
+        icon={faSeedling}
+        transform="shrink-2 rotate--15 left-3 down-5"
+        className="plant"
+      />
+      <FontAwesomeIcon
+        icon={faSeedling}
+        transform="shrink-2 rotate-15 right-3 down-5"
+        className="plant"
+      />
     </span>
   );
 }

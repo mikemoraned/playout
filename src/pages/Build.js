@@ -9,16 +9,18 @@ import { useParams, Redirect, Link } from "react-router-dom";
 import { Problem, defaultTeamsSpec } from "../model/problem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faExternalLinkAlt,
   faBorderAll,
   faUserEdit,
-  faStar,
-  faSync,
   faHome,
-  faChessBoard,
-  faPlay,
-  faDesktop,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/pro-duotone-svg-icons";
+import {
+  faSync,
+  faGameBoard,
+  faExternalLinkAlt,
+  faStar,
+} from "@fortawesome/pro-regular-svg-icons";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop } from "@fortawesome/pro-light-svg-icons";
 
 import { observer } from "mobx-react";
 import { parseAreaSpec } from "../model/grid/area_spec.format";
@@ -39,7 +41,7 @@ const BreadcrumbList = observer(() => {
       </li>
       <li className="is-active">
         <span className="icon">
-          <FontAwesomeIcon icon={faChessBoard} />
+          <FontAwesomeIcon icon={faGameBoard} />
         </span>{" "}
         <span>
           Build {store.grid.width} x {store.grid.height}

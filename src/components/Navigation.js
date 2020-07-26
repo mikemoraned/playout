@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle, faUserCog } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faUserCog } from "@fortawesome/pro-duotone-svg-icons";
 
 export function Navigation({ version }) {
   const [activeMobile, setActiveMobile] = useState(false);

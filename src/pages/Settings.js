@@ -5,7 +5,7 @@ import {
   faHandsHelping,
   faHome,
   faUserCog,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/pro-duotone-svg-icons";
 import { Link } from "react-router-dom";
 import { Breadcrumb } from "../components/Breadcrumb";
 

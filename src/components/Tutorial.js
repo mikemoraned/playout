@@ -5,8 +5,8 @@ import {
   faArrowCircleRight,
   faWindowClose,
   faBan,
-} from "@fortawesome/free-solid-svg-icons";
-import { faStopCircle } from "@fortawesome/free-regular-svg-icons";
+} from "@fortawesome/pro-duotone-svg-icons";
+import { faStopCircle } from "@fortawesome/pro-duotone-svg-icons";
 import Joyride, { STATUS } from "react-joyride";
 import { TutorialContext, StoreContext } from "../model/contexts.js";
 import colors from "./Tutorial.colors.scss";

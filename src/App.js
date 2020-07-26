@@ -41,6 +41,12 @@ const About = defer(() =>
 const Settings = defer(() =>
   import(/* webpackChunkName: "Settings" */ "./pages/Settings")
 );
+const Promo = defer(() =>
+  import(/* webpackChunkName: "Promo" */ "./pages/Promo")
+);
+const RandomGrid = defer(() =>
+  import(/* webpackChunkName: "RandomGrid" */ "./pages/RandomGrid")
+);
 
 function App() {
   return (
@@ -48,14 +54,23 @@ function App() {
       <GraphQLProvider>
         <TutorialProvider>
           <Router>
-            <Navigation version={version} />
             <Suspense fallback={<div></div>}>
               <Switch>
+                <Route path="/promo/random">
+                  <RandomGrid />
+                </Route>
+                <Route path="/promo">
+                  <Promo />
+                </Route>
                 <Route path="/about">
-                  <About />
+                  <Wrapped>
+                    <About />
+                  </Wrapped>
                 </Route>
                 <Route path="/play/:gridSpec/:teamsSpec">
-                  <Play />
+                  <Wrapped>
+                    <Play />
+                  </Wrapped>
                 </Route>
                 <Route path="/play/:gridSpec">
                   <FallbackWhenTeamSpecMissing />
@@ -64,24 +79,39 @@ function App() {
                   <Redirect to="/" />;
                 </Route>
                 <Route path="/build/:areaSpec">
-                  <Build />
+                  <Wrapped>
+                    <Build />
+                  </Wrapped>
                 </Route>
                 <Route path="/build/">
                   <FallbackWhenAreaSpecMissing />
                 </Route>
                 <Route path="/settings">
-                  <Settings />
+                  <Wrapped>
+                    <Settings />
+                  </Wrapped>
                 </Route>
                 <Route path="/">
-                  <Start />
+                  <Wrapped>
+                    <Start />
+                  </Wrapped>
                 </Route>
               </Switch>
             </Suspense>
-            <Footer />
           </Router>
         </TutorialProvider>
       </GraphQLProvider>
     </div>
+  );
+}
+
+function Wrapped({ children }) {
+  return (
+    <>
+      <Navigation version={version} />
+      {children}
+      <Footer />
+    </>
   );
 }
 

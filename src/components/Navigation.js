@@ -15,7 +15,7 @@ export function Navigation({ version }) {
     >
       <div className="navbar-brand">
         <Link to="/" className="navbar-item">
-          <Logo fontSize="25px" />
+          <Logo fontSize="25px" style={{ marginLeft: "0.5em" }} />
         </Link>
         <a
           className="navbar-item"

@@ -6,7 +6,7 @@ import { StoreContext } from "../model/contexts.js";
 import { positionFor } from "../model/grid/grid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSeedling } from "@fortawesome/free-solid-svg-icons";
-import { faSquareFull } from "@fortawesome/pro-duotone-svg-icons";
+import { faSquareFull } from "@fortawesome/pro-light-svg-icons";
 import { faDesktop } from "@fortawesome/pro-light-svg-icons";
 import "./Grid.scss";
 
@@ -32,11 +32,6 @@ function Plant() {
         className="pot"
       />
       <FontAwesomeIcon
-        icon={faSquareFull}
-        transform="right-1 down-7"
-        className="pot"
-      />
-      <FontAwesomeIcon
         icon={faSeedling}
         transform="shrink-2 rotate--15 left-3 up-6"
         className="plant"
@@ -49,12 +44,12 @@ function Plant() {
       />
       <FontAwesomeIcon
         icon={faSeedling}
-        transform="shrink-2 rotate--15 left-3 down-6"
+        transform="shrink-2 rotate--15 left-3 down-5"
         className="plant"
       />
       <FontAwesomeIcon
         icon={faSeedling}
-        transform="shrink-2 rotate-15 right-3 down-6"
+        transform="shrink-2 rotate-15 right-3 down-5"
         className="plant"
       />
     </span>

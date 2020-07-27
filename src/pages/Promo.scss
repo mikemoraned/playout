@@ -1,0 +1,33 @@
+.promo {
+  position: relative;
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+  }
+  .background {
+    overflow: hidden;
+    .examples {
+      filter: opacity(60%) saturate(150%);
+      width: 200%;
+      height: 300%;
+      transform-origin: left top;
+      transform: rotate(-23deg) translateX(-400px);
+      background: linear-gradient(90deg, #eee 1%, transparent 1%) 1px 0, #fff;
+      background-size: 200px 1px;
+      iframe {
+        width: 400px;
+        height: 450px;
+        padding-right: 30px;
+      }
+    }
+  }
+  .logo {
+    background-color: transparent;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+  }
+}

@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/pro-duotone-svg-icons";
 import { faSmile } from "@fortawesome/pro-regular-svg-icons";
 
-export function Logo({ fontSize }) {
+export function Logo({ fontSize, style }) {
   return (
     <span
       style={{
-        marginLeft: "0.5em",
+        ...style,
         font: `small-caps bold ${fontSize} monospace`,
       }}
     >

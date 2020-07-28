@@ -9,8 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleRight } from "@fortawesome/pro-duotone-svg-icons";
 
 const PROBLEM_COMPLETED = gql`
-  mutation ProblemCompleted($problemSpec: ProblemSpec) {
-    next: problemCompleted(problemSpec: $problemSpec) @client {
+  mutation ProblemCompleted($problemSpec: ProblemSpec, $score: Int) {
+    next: problemCompleted(problemSpec: $problemSpec, score: $score) @client {
       gridSpec
       teamsSpec
     }
@@ -35,10 +35,12 @@ export const NextProblem = observer(() => {
       gridSpec: problem.grid.toVersion2Format(),
       teamsSpec: problem.teams.toVersion1Format(),
     };
+    const score = store.evaluation.scoring.score;
     setTimeout(() => {
       problemCompleted({
         variables: {
           problemSpec,
+          score,
         },
       });
     }, fakeDelay);

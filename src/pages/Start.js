@@ -82,10 +82,13 @@ function RecentlyCompleted() {
       query GetRecentlyCompleted {
         current_user @client {
           recentlyCompleted @client {
-            grade
-            problemSpec {
-              gridSpec
-              teamsSpec
+            score
+            problem {
+              grade
+              problemSpec {
+                gridSpec
+                teamsSpec
+              }
             }
           }
         }
@@ -110,8 +113,11 @@ function RecentlyCompleted() {
         <section className="section">
           <div className="container">
             <h1 className="title is-4">Recently Completed</h1>
-            {recentlyCompleted.map((gradedProblem, index) => {
-              const { gridSpec, teamsSpec } = gradedProblem.problemSpec;
+            {recentlyCompleted.map((completedProblem, index) => {
+              const {
+                gridSpec,
+                teamsSpec,
+              } = completedProblem.problem.problemSpec;
               const path = `/play/${gridSpec}/${teamsSpec}`;
               return (
                 <article className="message is-link" key={index}>
@@ -119,10 +125,14 @@ function RecentlyCompleted() {
                     <div className="buttons">
                       <VisitGameButton
                         path={path}
-                        grade={gradedProblem.grade}
-                        name={`${gradedProblem.grade} Game`}
+                        grade={completedProblem.problem.grade}
+                        name={`${completedProblem.problem.grade} Game`}
                       />
-                      <TwitterShareButton path={path} />
+                      <TwitterShareButton
+                        path={path}
+                        score={completedProblem.score}
+                        grade={completedProblem.problem.grade}
+                      />
                     </div>
                   </div>
                 </article>
@@ -136,10 +146,13 @@ function RecentlyCompleted() {
   return <></>;
 }
 
-function TwitterShareButton({ path }) {
+function TwitterShareButton({ path, score, grade }) {
   const twitterBlue = "#1DA1F2";
   const problemLink = `https://playout.houseofmoran.io${path}`;
-  const tweetText = `check%20out%20@playoutgame%20${problemLink}`;
+  const tweetText = `I scored ${score} on ${grade} level of @playoutgame ${problemLink}`.replace(
+    " ",
+    "%20"
+  );
   const shareLink = `https://twitter.com/intent/tweet?text=${tweetText}`;
   return (
     <>

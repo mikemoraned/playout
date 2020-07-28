@@ -104,6 +104,7 @@ export const GraphQLProvider = ({ children }) => {
         problemCompleted: (_root, args, context, _info) => {
           const {
             problemSpec: { gridSpec, teamsSpec },
+            score,
           } = args;
           const completedProblem = parseProblemFrom(gridSpec, teamsSpec);
           const grade = gradeFromProblemSpec(completedProblem);
@@ -113,10 +114,13 @@ export const GraphQLProvider = ({ children }) => {
             query GetRecentlyCompleted {
               current_user @client {
                 recentlyCompleted @client {
-                  grade
-                  problemSpec {
-                    gridSpec
-                    teamsSpec
+                  score
+                  problem {
+                    grade
+                    problemSpec {
+                      gridSpec
+                      teamsSpec
+                    }
                   }
                 }
               }
@@ -128,12 +132,16 @@ export const GraphQLProvider = ({ children }) => {
               __typename: "User",
               recentlyCompleted: [
                 {
-                  __typename: "GradedProblem",
-                  grade: grade.name,
-                  problemSpec: {
-                    __typename: "ProblemSpec",
-                    gridSpec,
-                    teamsSpec,
+                  __typename: "CompletedProblem",
+                  score,
+                  problem: {
+                    __typename: "GradedProblem",
+                    grade: grade.name,
+                    problemSpec: {
+                      __typename: "ProblemSpec",
+                      gridSpec,
+                      teamsSpec,
+                    },
                   },
                 },
               ].concat(previousData.current_user.recentlyCompleted),

@@ -4,7 +4,12 @@ type Query {
 
 type User {
   suggestions: [GradedProblem]
-  recentlyCompleted: [GradedProblem]
+  recentlyCompleted: [CompletedProblem]
+}
+
+type CompletedProblem {
+  score: Int!
+  problem: GradedProblem!
 }
 
 type GradedProblem {
@@ -18,5 +23,5 @@ type ProblemSpec {
 }
 
 type Mutation {
-  problemCompleted(problemSpec: ProblemSpec): ProblemSpec!
+  problemCompleted(problemSpec: ProblemSpec, score: Int): ProblemSpec!
 }

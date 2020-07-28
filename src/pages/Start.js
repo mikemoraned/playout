@@ -230,7 +230,7 @@ function Build() {
 export default function Start() {
   return (
     <>
-      <section className="hero is-medium is-primary is-bold">
+      <section className="hero is-medium">
         <div className="hero-body">
           <div className="container">
             <div className="columns">

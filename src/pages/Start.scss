@@ -1,4 +1,15 @@
 @import "../variables.scss";
+@import "bulma/sass/utilities/_all.sass";
+
+.hero {
+  .button,
+  .button.is-link {
+    border: 1px solid $grey;
+  }
+
+  background-color: white;
+  background-image: url("/promo_bg.nologo.landscape.long.tinify.png");
+}
 
 .button.grade-easy {
   background-color: $easy-grade-color;

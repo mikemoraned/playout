@@ -8,11 +8,10 @@ import { faGameBoard } from "@fortawesome/pro-regular-svg-icons";
 import {
   faTwitter,
   faTwitterSquare,
-  // faFacebook,
-  // faFacebookSquare,
+  faFacebook,
+  faFacebookSquare,
 } from "@fortawesome/free-brands-svg-icons";
 import "./Start.scss";
-// import { randomHardProblemSpec } from "../model/grade";
 
 function VisitGameButton({ path, grade, name }) {
   const history = useHistory();
@@ -98,16 +97,6 @@ function RecentlyCompleted() {
 
   if (!loading && !error) {
     const recentlyCompleted = data.current_user.recentlyCompleted;
-    // const randomProblem = randomHardProblemSpec();
-    // const recentlyCompleted = [
-    //   {
-    //     grade: "Hard",
-    //     problemSpec: {
-    //       gridSpec: randomProblem.grid.toVersion2Format(),
-    //       teamsSpec: randomProblem.teams.toVersion1Format(),
-    //     },
-    //   },
-    // ];
     if (recentlyCompleted.length > 0) {
       return (
         <section className="section">
@@ -133,6 +122,7 @@ function RecentlyCompleted() {
                         score={completedProblem.score}
                         grade={completedProblem.problem.grade}
                       />
+                      <FacebookShareButton path={path} />
                     </div>
                   </div>
                 </article>
@@ -183,33 +173,38 @@ function TwitterShareButton({ path, score, grade }) {
   );
 }
 
-// function FacebookShareButton() {
-//   const facebookBlue = "#4267B2";
-//   return (
-//     <>
-//       <button
-//         className="button is-hidden-mobile"
-//         style={{ backgroundColor: facebookBlue, color: "white" }}
-//       >
-//         <span className="icon">
-//           <FontAwesomeIcon icon={faFacebook} />
-//         </span>
-//         <span className="is-hidden-mobile">Share</span>
-//       </button>
-//       <button
-//         className="button is-hidden-tablet"
-//         style={{ backgroundColor: "transparent", borderColor: "transparent" }}
-//       >
-//         <span
-//           className="icon"
-//           style={{ backgroundColor: "white", color: facebookBlue }}
-//         >
-//           <FontAwesomeIcon icon={faFacebookSquare} size="3x" />
-//         </span>
-//       </button>
-//     </>
-//   );
-// }
+function FacebookShareButton({ path }) {
+  const facebookBlue = "#4267B2";
+  const problemLink = `https://playout.houseofmoran.io${path}`;
+  const encodedHref = encodeURIComponent(problemLink);
+  const shareLink = `https://www.facebook.com/dialog/share?app_id=3263552610376375&display=popup&href=${encodedHref}`;
+  return (
+    <>
+      <button
+        className="button is-hidden-mobile"
+        style={{ backgroundColor: facebookBlue, color: "white" }}
+        onClick={() => window.open(shareLink, "_blank")}
+      >
+        <span className="icon">
+          <FontAwesomeIcon icon={faFacebook} />
+        </span>
+        <span className="is-hidden-mobile">Share</span>
+      </button>
+      <button
+        className="button is-hidden-tablet"
+        style={{ backgroundColor: "transparent", borderColor: "transparent" }}
+        onClick={() => window.open(shareLink, "_blank")}
+      >
+        <span
+          className="icon"
+          style={{ backgroundColor: "white", color: facebookBlue }}
+        >
+          <FontAwesomeIcon icon={faFacebookSquare} size="3x" />
+        </span>
+      </button>
+    </>
+  );
+}
 
 function Build() {
   const history = useHistory();

@@ -138,7 +138,7 @@ function RecentlyCompleted() {
 
 function TwitterShareButton({ path, score, grade }) {
   const twitterBlue = "#1DA1F2";
-  const problemLink = `https://playout.houseofmoran.io${path}`;
+  const problemLink = `https://playoutgame.app${path}`;
   const tweetText = `I scored ${score} on ${grade} level of @playoutgame ${problemLink}`.replace(
     " ",
     "%20"
@@ -175,7 +175,7 @@ function TwitterShareButton({ path, score, grade }) {
 
 function FacebookShareButton({ path }) {
   const facebookBlue = "#4267B2";
-  const problemLink = `https://playout.houseofmoran.io${path}`;
+  const problemLink = `https://playoutgame.app${path}`;
   const encodedHref = encodeURIComponent(problemLink);
   const shareLink = `https://www.facebook.com/dialog/share?app_id=3263552610376375&display=popup&href=${encodedHref}`;
   return (

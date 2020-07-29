@@ -1,6 +1,6 @@
 {
   "name": "playout",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "private": true,
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",

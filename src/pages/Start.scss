@@ -7,8 +7,14 @@
     border: 1px solid $grey;
   }
 
+  $alpha: 0.6;
+
   background-color: white;
-  background-image: url("/promo_bg.nologo.landscape.long.tinify.png");
+  background-image: linear-gradient(
+      rgba(255, 255, 255, $alpha),
+      rgba(255, 255, 255, $alpha)
+    ),
+    url("/promo_bg.nologo.landscape.long.tinify.png");
 }
 
 .button.grade-easy {

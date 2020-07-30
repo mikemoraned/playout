@@ -9,6 +9,13 @@ import {
   faSmileBeam,
   faGrinStars,
 } from "@fortawesome/pro-regular-svg-icons";
+import {
+  faSignal1,
+  faSignal2,
+  faSignal3,
+  faSignal4,
+  faSignal,
+} from "@fortawesome/pro-solid-svg-icons";
 
 function mapScoreToCategory(score, max, numCategories) {
   const fractionDone = score / max;
@@ -32,6 +39,17 @@ export function ScoreFaceIcon({ max, score, size }) {
   );
 }
 
+function SignalIcon({ max, score, size }) {
+  const icons = [faSignal1, faSignal2, faSignal3, faSignal4, faSignal];
+  const icon = icons[mapScoreToCategory(score, max, icons.length)];
+  return (
+    <span className={`icon is-${size} fa-layers`}>
+      <FontAwesomeIcon icon={faSignal} style={{ color: "lightgray" }} />
+      {score !== 0 && <FontAwesomeIcon icon={icon} />}
+    </span>
+  );
+}
+
 export function ScoreFaceWithScore({ scoring, size }) {
   const nonBreakingSpace = "\xa0";
   return (
@@ -45,6 +63,7 @@ export function ScoreFaceWithScore({ scoring, size }) {
       >
         {scoring.score.toFixed(0).padStart(4, nonBreakingSpace)}
       </span>
+      <SignalIcon {...scoring} size={size} />
     </>
   );
 }

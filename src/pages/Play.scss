@@ -42,17 +42,14 @@
   background-color: blue;
 }
 
-.team-member.team-a {
-  background-color: white;
-  color: red;
+td.seat.occupied-by-team-a {
+  background-color: red;
 }
 
-.team-member.team-b {
-  background-color: white;
-  color: green;
+td.seat.occupied-by-team-b {
+  background-color: green;
 }
 
-.team-member.team-c {
-  background-color: white;
-  color: blue;
+td.seat.occupied-by-team-c {
+  background-color: blue;
 }

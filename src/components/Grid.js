@@ -72,11 +72,16 @@ export const Grid = observer(() => {
                   const occupancy = store.grid.findOccupancy(position);
                   const hasPlant = store.grid.hasDecoration(position);
                   const cornerAdjacencies = adjacencies(store, x, y);
+                  const teamOccupancyClass = occupancy
+                    ? `occupied-by-team-${occupancy.member.team.toLowerCase()}`
+                    : "";
                   return (
                     <td
-                      className={`${has_seat ? "has-background-info" : ""} ${
+                      className={`${
+                        has_seat && !occupancy ? "has-background-info" : ""
+                      } ${
                         has_seat ? "seat" : ""
-                      } ${cornerAdjacencies}`}
+                      } ${cornerAdjacencies} ${teamOccupancyClass}`}
                       onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{

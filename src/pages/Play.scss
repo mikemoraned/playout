@@ -17,3 +17,42 @@
 .evaluation.grade-hard {
   background-color: $hard-grade-color;
 }
+
+.teams-mini .button.team.team-a {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.teams-mini .button.team.team-a.is-primary {
+  background-color: red;
+}
+
+.teams-mini .button.team.team-b {
+  background-color: rgba(0, 255, 0, 0.5);
+}
+
+.teams-mini .button.team.team-b.is-primary {
+  background-color: green;
+}
+
+.teams-mini .button.team.team-c {
+  background-color: rgba(0, 0, 255, 0.5);
+}
+
+.teams-mini .button.team.team-c.is-primary {
+  background-color: blue;
+}
+
+.team-member.team-a {
+  background-color: white;
+  color: red;
+}
+
+.team-member.team-b {
+  background-color: white;
+  color: green;
+}
+
+.team-member.team-c {
+  background-color: white;
+  color: blue;
+}

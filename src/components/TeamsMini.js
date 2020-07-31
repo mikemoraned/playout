@@ -11,7 +11,7 @@ export const TeamsMini = observer(() => {
   const { store } = useContext(StoreContext);
   const { scoring } = store.evaluation;
   return (
-    <div className="buttons are-medium has-addons">
+    <div className="teams-mini buttons are-medium has-addons">
       {/* <button
         className="button is-medium"
         disabled={!store.canUndo()}
@@ -37,7 +37,9 @@ export const TeamsMini = observer(() => {
         return (
           <button
             key={t.name}
-            className={`button ${isNext ? "is-primary" : ""}`}
+            className={`button team team-${t.name.toLowerCase()} ${
+              isNext ? "is-primary" : ""
+            }`}
             onClick={() => store.selectTeam(t.name)}
           >
             <ScoreFaceIcon {...teamScoring} />

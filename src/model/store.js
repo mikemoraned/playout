@@ -121,10 +121,19 @@ export const Store = types
       undoCommand.apply(self);
       self.undos.pop();
     },
+    removeAllPlacements() {
+      const occupiedPositions = self.grid.occupied.map((o) => o.position);
+      occupiedPositions.forEach((p) => {
+        self.toggleMemberPlacement(p);
+      });
+    },
   }))
   .views((self) => ({
     canUndo() {
       return self.undos.length > 0;
+    },
+    hasPlacements() {
+      return self.grid.occupied.length > 0;
     },
     get evaluation() {
       return evaluate(self);

@@ -157,9 +157,7 @@ export function coordsFromPosition(position) {
 
 export function expandToNextToArea(position, dimensions) {
   const { width, height } = dimensions;
-  const match = /(\d+)_(\d+)/.exec(position);
-  const x = parseInt(match[1]);
-  const y = parseInt(match[2]);
+  const [x, y] = coordsFromPosition(position);
   const areaPositions = [];
   for (let xArea = x - 1; xArea <= x + 1; xArea++) {
     for (let yArea = y - 1; yArea <= y + 1; yArea++) {

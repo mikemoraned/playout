@@ -68,6 +68,8 @@ export const Grid = observer(() => {
               <tr key={y}>
                 {[...Array(width).keys()].map((x) => {
                   const position = positionFor(x, y);
+                  const needs = store.needsForPosition(position);
+                  // console.log(needs);
                   const has_seat = store.grid.hasSeat(position);
                   const occupancy = store.grid.findOccupancy(position);
                   const hasPlant = store.grid.hasDecoration(position);

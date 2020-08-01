@@ -146,7 +146,11 @@ export const Store = types
       return gradeFromProblemSpec(self.toProblem());
     },
     needsForPosition(position) {
-      return needs(self).filter((n) => n.from.position === position);
+      if (self.grid.findOccupancy(position) !== null) {
+        return needs(self).filter((n) => n.from.position === position);
+      } else {
+        return [];
+      }
     },
     toProblem() {
       const gridSpec = self.grid.toGridSpec();

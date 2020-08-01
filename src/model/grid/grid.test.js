@@ -39,6 +39,24 @@ describe("team member placement", () => {
     ]);
   });
 
+  test("remove all placements", () => {
+    expect(store.grid.occupied).toEqual([]);
+    expect(store.hasPlacements()).toEqual(false);
+
+    store.toggleMemberPlacement(positionFor(0, 0));
+    expect(store.hasPlacements()).toEqual(true);
+
+    store.toggleMemberPlacement(positionFor(1, 1));
+    expect(store.hasPlacements()).toEqual(true);
+
+    expect(store.grid.occupied).not.toEqual([]);
+
+    store.removeAllPlacements();
+
+    expect(store.grid.occupied).toEqual([]);
+    expect(store.hasPlacements()).toEqual(false);
+  });
+
   test("toggle place member on occupied seat", () => {
     const before = Store.create(getSnapshot(store));
 

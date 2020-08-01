@@ -2,21 +2,27 @@
 
 .grade-intro.grade-easy {
   .modal-card-head,
+  .modal-card-title,
   .modal-card-foot {
-    background-color: $easy-grade-color;
+    color: $easy-grade-color-fg;
+    background-color: $easy-grade-color-bg;
   }
 }
 
 .grade-intro.grade-medium {
   .modal-card-head,
+  .modal-card-title,
   .modal-card-foot {
-    background-color: $medium-grade-color;
+    color: $medium-grade-color-fg;
+    background-color: $medium-grade-color-bg;
   }
 }
 
 .grade-intro.grade-hard {
   .modal-card-head,
+  .modal-card-title,
   .modal-card-foot {
-    background-color: $hard-grade-color;
+    color: $hard-grade-color-fg;
+    background-color: $hard-grade-color-bg;
   }
 }

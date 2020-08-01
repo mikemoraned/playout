@@ -1,5 +1,6 @@
 $duration: 1.5s;
 @import "bulma/sass/utilities/_all.sass";
+@import "../variables.scss";
 
 .button.scoring {
   transition: background-color $duration ease-in-out,
@@ -26,4 +27,24 @@ $duration: 1.5s;
   to {
     box-shadow: 0px 0px 0px 0px $success;
   }
+}
+
+.scoring-breakdown tr.team.team-a {
+  color: $team-a-color-fg;
+  background-color: $team-a-color-bg;
+}
+
+.scoring-breakdown tr.team.team-b {
+  color: $team-b-color-fg;
+  background-color: $team-b-color-bg;
+}
+
+.scoring-breakdown tr.team.team-c {
+  color: $team-c-color-fg;
+  background-color: $team-c-color-bg;
+}
+
+.scoring-breakdown tr.team.team-d {
+  color: $team-d-color-fg;
+  background-color: $team-d-color-bg;
 }

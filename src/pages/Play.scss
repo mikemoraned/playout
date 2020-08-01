@@ -7,13 +7,90 @@
 }
 
 .evaluation.grade-easy {
-  background-color: $easy-grade-color;
+  color: $easy-grade-color-fg;
+  background-color: $easy-grade-color-bg;
 }
 
 .evaluation.grade-medium {
-  background-color: $medium-grade-color;
+  color: $medium-grade-color-fg;
+  background-color: $medium-grade-color-bg;
 }
 
 .evaluation.grade-hard {
-  background-color: $hard-grade-color;
+  color: $hard-grade-color-fg;
+  background-color: $hard-grade-color-bg;
+}
+
+@mixin is-primary-team-button-bg($bg-color) {
+  $clear: rgba(255, 255, 255, 0);
+  $partial: rgba(255, 255, 255, 0.3);
+
+  background: repeating-linear-gradient(
+      45deg,
+      $clear,
+      $clear 10px,
+      $partial 10px,
+      $partial 20px
+    ),
+    linear-gradient($bg-color, $bg-color);
+}
+
+.teams-mini .button.team.team-a {
+  color: $team-a-color-fg;
+  background-color: $team-a-color-bg;
+}
+
+.teams-mini .button.team.team-a.is-primary {
+  color: $team-a-color-fg;
+  @include is-primary-team-button-bg($team-a-color-bg);
+}
+
+.teams-mini .button.team.team-b {
+  color: $team-b-color-fg;
+  background-color: $team-b-color-bg;
+}
+
+.teams-mini .button.team.team-b.is-primary {
+  color: $team-b-color-fg;
+  @include is-primary-team-button-bg($team-b-color-bg);
+}
+
+.teams-mini .button.team.team-c {
+  color: $team-c-color-fg;
+  background-color: $team-c-color-bg;
+}
+
+.teams-mini .button.team.team-c.is-primary {
+  color: $team-c-color-fg;
+  @include is-primary-team-button-bg($team-c-color-bg);
+}
+
+.teams-mini .button.team.team-d {
+  color: $team-d-color-fg;
+  background-color: $team-d-color-bg;
+}
+
+.teams-mini .button.team.team-d.is-primary {
+  color: $team-d-color-fg;
+  @include is-primary-team-button-bg($team-d-color-bg);
+}
+
+td.seat.occupied-by-team-a {
+  color: $team-a-color-fg;
+  background-color: $team-a-color-bg;
+}
+
+td.seat.occupied-by-team-b {
+  color: $team-b-color-fg;
+  background-color: $team-b-color-bg;
+}
+
+td.seat.occupied-by-team-c {
+  color: $team-c-color-fg;
+  background-color: $team-c-color-bg;
+}
+
+td.seat.occupied-by-team-d {
+  color: $team-d-color-fg;
+  background-color: $team-d-color-bg;
 }

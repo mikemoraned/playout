@@ -74,7 +74,7 @@ export const ScoringBreakdown = observer(() => {
   const teamNames = store.teams.names;
 
   return (
-    <table className="table">
+    <table className="scoring-breakdown table">
       <thead>
         <tr>
           <th>Team</th>
@@ -84,7 +84,7 @@ export const ScoringBreakdown = observer(() => {
       <tbody>
         {teamNames.map((n) => {
           return (
-            <tr key={n}>
+            <tr key={n} className={`team team-${n.toLowerCase()}`}>
               <td>{n}</td>
               <td>
                 <ScoreFaceWithScore scoring={scoring.teams[n]} />

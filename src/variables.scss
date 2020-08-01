@@ -8,6 +8,31 @@ $sc-nyanza: #defde0;
 $sc-water: #def3fd;
 $sc-lavender-web: #f0defd;
 
-$easy-grade-color: $sc-nyanza;
-$medium-grade-color: $sc-water;
-$hard-grade-color: $sc-lavender-web;
+// color blind safe colors from Bang Wong in and https://www.nature.com/articles/nmeth.1618
+// and https://davidmathlogic.com/colorblind
+$bw-black: rgb(0, 0, 0);
+$bw-orange: rgb(230, 159, 0);
+$bw-sky-blue: rgb(86, 180, 233);
+$bw-bluish-green: rgb(0, 158, 115);
+$bw-yellow: rgb(240, 228, 66);
+$bw-blue: rgb(0, 114, 178);
+$bw-vermillion: rgb(213, 94, 0);
+$bw-reddish-purple: rgb(204, 121, 167);
+
+// grade colors
+$easy-grade-color-fg: black;
+$easy-grade-color-bg: $sc-nyanza;
+$medium-grade-color-fg: black;
+$medium-grade-color-bg: $sc-water;
+$hard-grade-color-fg: black;
+$hard-grade-color-bg: $sc-lavender-web;
+
+// team colors
+$team-a-color-fg: white;
+$team-a-color-bg: $bw-orange;
+$team-b-color-fg: black;
+$team-b-color-bg: $bw-yellow;
+$team-c-color-fg: white;
+$team-c-color-bg: $bw-bluish-green;
+$team-d-color-fg: white;
+$team-d-color-bg: $bw-sky-blue;

@@ -69,7 +69,7 @@ export const Grid = observer(() => {
                 {[...Array(width).keys()].map((x) => {
                   const position = positionFor(x, y);
                   const needsMet = store.needsMetByPosition(position);
-                  console.log(position, "needs met:", needsMet);
+                  // console.log(position, "needs met:", needsMet);
                   const needsMetClass = needsMet.length > 0 ? "needs-met" : "";
                   const has_seat = store.grid.hasSeat(position);
                   const occupancy = store.grid.findOccupancy(position);

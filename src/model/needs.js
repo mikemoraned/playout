@@ -5,20 +5,20 @@ export function needs(store) {
 }
 
 function instantiateNeeds(store) {
-  console.log(
-    "occupied",
-    store.grid.occupied.map((o) => `${o.position}: ${o.member.team}`)
-  );
+  // console.log(
+  //   "occupied",
+  //   store.grid.occupied.map((o) => `${o.position}: ${o.member.team}`)
+  // );
   return store.grid.occupied.reduce((accumulatedNeeds, occupancy) => {
     const needs = needsForOccupancy(occupancy, store);
-    console.log(
-      "team",
-      occupancy.member.team,
-      "position",
-      occupancy.position,
-      "->",
-      needs
-    );
+    // console.log(
+    //   "team",
+    //   occupancy.member.team,
+    //   "position",
+    //   occupancy.position,
+    //   "->",
+    //   needs
+    // );
     return accumulatedNeeds.concat(needs);
   }, []);
 }
@@ -30,16 +30,16 @@ function needsForOccupancy(occupancy, store) {
     fromPosition,
     store.grid
   );
-  console.log("position", fromPosition, "possible", possibleNeighbourPositions);
+  // console.log("position", fromPosition, "possible", possibleNeighbourPositions);
   const availablePositions = possibleNeighbourPositions.filter((p) =>
     store.grid.hasSeat(p)
   );
-  console.log("available", availablePositions);
+  // console.log("available", availablePositions);
   const reducer = (accumulatedNeeds, availablePosition) => {
     const farp = store.teams.list.reduce((accumulatedNeeds, toTeam) => {
       const toTeamName = toTeam.name;
       const biasKind = store.teams.biases.getBias(fromTeamName, toTeamName);
-      console.log(fromTeamName, toTeamName, "->", biasKind);
+      // console.log(fromTeamName, toTeamName, "->", biasKind);
       if (biasKind) {
         return accumulatedNeeds.concat([
           {

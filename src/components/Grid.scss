@@ -38,6 +38,10 @@ $soil-color: #916443;
     border-bottom-left-radius: $border-radius;
   }
 
+  td.needs-met {
+    border: 1px solid red;
+  }
+
   // td {
   //   transition: background-color $duration ease-in-out,
   //     color $duration ease-in-out;

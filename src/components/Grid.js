@@ -68,8 +68,9 @@ export const Grid = observer(() => {
               <tr key={y}>
                 {[...Array(width).keys()].map((x) => {
                   const position = positionFor(x, y);
-                  const needs = store.needsForPosition(position);
-                  // console.log(needs);
+                  const needsMet = store.needsMetByPosition(position);
+                  console.log(position, "needs met:", needsMet);
+                  const needsMetClass = needsMet.length > 0 ? "needs-met" : "";
                   const has_seat = store.grid.hasSeat(position);
                   const occupancy = store.grid.findOccupancy(position);
                   const hasPlant = store.grid.hasDecoration(position);
@@ -83,7 +84,7 @@ export const Grid = observer(() => {
                         has_seat && !occupancy ? "has-background-info" : ""
                       } ${
                         has_seat ? "seat" : ""
-                      } ${cornerAdjacencies} ${teamOccupancyClass}`}
+                      } ${cornerAdjacencies} ${teamOccupancyClass} ${needsMetClass}`}
                       onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{

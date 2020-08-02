@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree";
 import { Teams } from "./teams/teams";
-import { Grid, positionFor } from "./grid/grid";
+import { Grid } from "./grid/grid";
 import { occupancyFor } from "./grid/occupancy";
 import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
@@ -145,12 +145,12 @@ export const Store = types
     get grade() {
       return gradeFromProblemSpec(self.toProblem());
     },
-    needsForPosition(position) {
-      if (self.grid.findOccupancy(position) !== null) {
-        return needs(self).filter((n) => n.from.position === position);
-      } else {
-        return [];
-      }
+    needsMetByPosition(position) {
+      return needs(self).filter(
+        (n) =>
+          n.to.position === position &&
+          n.from.teamName === self.teams.selected.name
+      );
     },
     toProblem() {
       const gridSpec = self.grid.toGridSpec();

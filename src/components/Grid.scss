@@ -39,25 +39,15 @@ $soil-color: #916443;
   }
 
   td.needs-met {
-    border: 1px solid red;
+    animation: rotateAnim 1.5s ease-in-out infinite alternate;
   }
-
-  td.needs-met {
-    animation: opacityAnim 2s ease-in-out infinite alternate;
-  }
-
-  // td {
-  //   transition: background-color $duration ease-in-out,
-  //     color $duration ease-in-out;
-  // }
 }
 
-@keyframes opacityAnim {
+@keyframes rotateAnim {
   from {
-    opacity: 0;
+    transform: scale(0.9) rotate(-3deg);
   }
-
   to {
-    opacity: 1;
+    transform: scale(0.9) rotate(3deg);
   }
 }

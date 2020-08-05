@@ -58,6 +58,49 @@ export default function About() {
             </div>
           </div>
         </section>
+        <section className="section">
+          <div className="columns">
+            <div className="column is-two-thirds">
+              <h2 className="title">Privacy</h2>
+              <div className="content">
+                <p>
+                  <em>No tracking of individual users is done.</em>
+                </p>
+                <p>
+                  This site is a Single Page App which keeps all data about you
+                  locally, including your preferences.
+                </p>
+                <p>
+                  All Game generation and remembering of completed Games is done
+                  locally. This may change in the future to include recording
+                  when a level is completed and with what score, and to allow
+                  richer Games to be generated server-side. However, even then,
+                  this will be done anonymously.
+                </p>
+                <p>
+                  Tracking of anonymised statistics is done, including which
+                  paths are visited and which countries people are from. This is
+                  done via{" "}
+                  <a href="https://www.netlify.com/products/analytics/">
+                    Netlify server-side log Analytics
+                  </a>{" "}
+                  and client-side via{" "}
+                  <a href="https://plausible.io/data-policy">Plausible.io</a>{" "}
+                  tracking. Neither of these track individual statistics about
+                  users but do record enough to allow an approximation of unique
+                  user counts.
+                </p>
+                <p>
+                  You can share your completed games to both Facebook and
+                  Twitter. However, the client-side SDKs for both of these are{" "}
+                  <em>not used</em>. A shareable link is generated instead. This
+                  means that information about you cannot accidentally be leaked
+                  as a side-effect of loading some Javascript on this site.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );

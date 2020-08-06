@@ -54,6 +54,10 @@ export const Biases = types
       const forwardKey = biasKey(fromTeamName, toTeamName);
       return self.biases.get(forwardKey);
     },
+    hasBias(fromTeamName, toTeamName) {
+      const bias = self.getBias(fromTeamName, toTeamName);
+      return bias !== BiasKind.NO_BIAS;
+    },
     toBiasAssignmentSpecs(teamList) {
       let specs = [];
       for (let fromIndex = 0; fromIndex < teamList.length; fromIndex++) {

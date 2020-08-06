@@ -94,3 +94,22 @@ td.seat.occupied-by-team-d {
   color: $team-d-color-fg;
   background-color: $team-d-color-bg;
 }
+
+.biases-mini,
+.tut-biases-explanation {
+  span.team.team-a {
+    color: $team-a-color-bg;
+  }
+
+  span.team.team-b {
+    color: $team-b-color-bg;
+  }
+
+  span.team.team-c {
+    color: $team-c-color-bg;
+  }
+
+  span.team.team-d {
+    color: $team-d-color-bg;
+  }
+}

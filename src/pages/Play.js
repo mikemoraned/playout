@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { Grid } from "../components/Grid";
 import { TeamsMini } from "../components/TeamsMini";
 import { Evaluation } from "../components/Evaluation";
@@ -18,6 +18,7 @@ import { faStar } from "@fortawesome/pro-regular-svg-icons";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumb } from "../components/Breadcrumb";
 import "./Play.scss";
+import { BiasesMini } from "../components/BiasesMini";
 
 const BreadcrumbList = observer(() => {
   const { store } = useContext(StoreContext);
@@ -42,6 +43,7 @@ const BreadcrumbList = observer(() => {
 });
 
 const Instance = observer(() => {
+  const biasesRef = useRef(null);
   return (
     <>
       <Breadcrumb>
@@ -65,12 +67,19 @@ const Instance = observer(() => {
                   Place Team Members in Seats <TutorialButton />
                 </span>
               </p>
-              <TeamsMini />
+              <div className="columns">
+                <div className="column is-hidden-tablet">
+                  <BiasesMini scrollToRef={biasesRef} />
+                </div>
+                <div className="column">
+                  <TeamsMini />
+                </div>
+              </div>
               <Grid />
             </section>
           </div>
           <div className="column">
-            <section className="section">
+            <section className="section team-preferences" ref={biasesRef}>
               <h1 className="title is-4">Team preferences</h1>
               <p className="subtitle is-6">
                 <span className="icon">

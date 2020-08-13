@@ -73,7 +73,7 @@ export const TutorialSetup = () => {
       content: "Place a Team Member by clicking on the Seat.",
     },
     {
-      target: ".tut-biases-explanation",
+      target: ".team-preferences",
       content: "Satisfy your Teams Preferences \u2026",
     },
     {

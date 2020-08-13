@@ -85,6 +85,11 @@ export const Teams = types
     get names() {
       return self.teams.map((t) => t.name);
     },
+    teamsWithBiasesFromTeam(fromTeam) {
+      return self.teams.filter((toTeam) => {
+        return self.biases.hasBias(fromTeam.name, toTeam.name);
+      });
+    },
     toTeamsSpec() {
       return TeamsSpec.create({
         teams: self.teams.map((t) =>

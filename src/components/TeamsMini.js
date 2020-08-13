@@ -11,16 +11,6 @@ export const TeamsMini = observer(() => {
   const { scoring } = store.evaluation;
   return (
     <div className="teams-mini buttons are-medium has-addons">
-      <button
-        className="button is-medium"
-        disabled={!store.hasPlacements()}
-        onClick={() => store.removeAllPlacements()}
-      >
-        <span className="icon">
-          <FontAwesomeIcon icon={faTrashAlt} />
-        </span>
-      </button>
-
       {store.teams.list.map((t) => {
         const isNext = store.teams.next === t.name;
         const teamScoring = scoring.teams[t.name];
@@ -40,6 +30,15 @@ export const TeamsMini = observer(() => {
           </button>
         );
       })}
+      <button
+        className="button is-medium"
+        disabled={!store.hasPlacements()}
+        onClick={() => store.removeAllPlacements()}
+      >
+        <span className="icon">
+          <FontAwesomeIcon icon={faTrashAlt} />
+        </span>
+      </button>
     </div>
   );
 });

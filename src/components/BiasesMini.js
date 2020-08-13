@@ -9,7 +9,12 @@ import { faArrowsH } from "@fortawesome/pro-solid-svg-icons";
 export const BiasesMini = observer(({ scrollToRef }) => {
   const { store } = useContext(StoreContext);
 
-  const scroll = () => window.scrollTo(0, scrollToRef.current.offsetTop);
+  const scroll = () =>
+    window.scrollTo({
+      left: 0,
+      top: scrollToRef.current.offsetTop,
+      behavior: "smooth",
+    });
 
   return (
     <div className="biases-mini is-size-6 buttons are-small has-addons is-centered is-info is-light">

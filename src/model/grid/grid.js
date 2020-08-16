@@ -64,6 +64,9 @@ export const Grid = types
     findOccupancy(position) {
       return self.occupied.find((o) => o.position === position);
     },
+    hasOccupancy(position) {
+      return self.findOccupancy(position) !== undefined;
+    },
     get totalSeats() {
       return self.seats.length;
     },

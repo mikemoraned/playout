@@ -107,9 +107,76 @@ td.seat.occupied-by-team-d {
 
   span.team.team-c {
     color: $team-c-color-bg;
+    border: 1px solid white;
   }
 
   span.team.team-d {
     color: $team-d-color-bg;
+  }
+}
+
+$contrast-color: $bw-black;
+@mixin one-providing-team($team-color-bg) {
+  background: linear-gradient(
+    45deg,
+    $team-color-bg 0%,
+    70%,
+    $contrast-color 100%
+  );
+}
+@mixin two-providing-teams($team-1-color-bg, $team-2-color-bg) {
+  background: linear-gradient(
+    45deg,
+    $team-1-color-bg 0%,
+    40%,
+    $contrast-color 50%,
+    60%,
+    $team-2-color-bg 100%
+  );
+}
+@mixin three-providing-teams(
+  $team-1-color-bg,
+  $team-2-color-bg,
+  $team-3-color-bg
+) {
+  background: linear-gradient(
+    45deg,
+    $team-1-color-bg 0%,
+    25%,
+    $contrast-color 30%,
+    35%,
+    $team-2-color-bg 50%,
+    65%,
+    $contrast-color 70%,
+    75%,
+    $team-3-color-bg 100%
+  );
+}
+
+.grid {
+  td.has-providing-teams-a {
+    @include one-providing-team($team-a-color-bg);
+  }
+  td.has-providing-teams-b {
+    @include one-providing-team($team-b-color-bg);
+  }
+  td.has-providing-teams-c {
+    @include one-providing-team($team-c-color-bg);
+  }
+  td.has-providing-teams-a-b {
+    @include two-providing-teams($team-a-color-bg, $team-b-color-bg);
+  }
+  td.has-providing-teams-b-c {
+    @include two-providing-teams($team-b-color-bg, $team-c-color-bg);
+  }
+  td.has-providing-teams-a-c {
+    @include two-providing-teams($team-a-color-bg, $team-c-color-bg);
+  }
+  td.has-providing-teams-a-b-c {
+    @include three-providing-teams(
+      $team-a-color-bg,
+      $team-b-color-bg,
+      $team-c-color-bg
+    );
   }
 }

@@ -303,8 +303,10 @@ describe("bias evaluation", () => {
 
 describe("example-based tests", () => {
   const O = "O";
+  const X = "X";
   const A = "A";
   const B = "B";
+  const C = "C";
 
   const _ = [];
 
@@ -350,6 +352,50 @@ describe("example-based tests", () => {
 
       expect(store.evaluation.scoring.teams["A"].score).toEqual(1000);
       expect(store.evaluation.scoring.teams["B"].score).toEqual(1000);
+      expect(store.evaluation.scoring.score).toEqual(1000);
+    });
+
+    test("example2", () => {
+      const store = fromPicture(
+        teamsFor(
+          [teamFor(A, 2, maximumSize)],
+          templateFor([A], defaultSize, maximumSize)
+        ),
+        [],
+        // prettier-ignore
+        [
+          [O, X, O],
+          [A, O, X],
+          [A, O, X],
+          [X, X, O],
+        ]
+      );
+
+      expect(provided(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _, _],
+            [[A], _, _],
+            [[A], _, _],
+            [_,   _, _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,  _, _],
+            [_,  _, _],
+            [_,  _, _],
+            [_,  _, _],
+          ]
+        )
+      );
+
+      expect(store.evaluation.scoring.teams["A"].score).toEqual(1000);
       expect(store.evaluation.scoring.score).toEqual(1000);
     });
   });
@@ -420,6 +466,73 @@ describe("example-based tests", () => {
       expect(store.evaluation.scoring.teams["B"].score).toEqual(expectedBScore);
       expect(store.evaluation.scoring.score).toEqual(
         Math.floor((expectedAScore + expectedBScore) / 2)
+      );
+    });
+
+    test("example2", () => {
+      const store = fromPicture(
+        teamsFor(
+          [
+            teamFor(A, 2, maximumSize),
+            teamFor(B, 2, maximumSize),
+            teamFor(C, 2, maximumSize),
+          ],
+          templateFor([A, B, C], defaultSize, maximumSize)
+        ),
+        [
+          biasSpecFrom(A, B, BiasKind.NEXT_TO),
+          biasSpecFrom(A, C, BiasKind.NEXT_TO),
+        ],
+        // prettier-ignore
+        [
+          [A, O, O],
+          [O, X, X],
+          [O, X, X],
+        ]
+      );
+
+      expect(provided(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [[A], _,   _],
+            [_,   _,   _],
+            [_,   _,   _],
+          ]
+        )
+      );
+
+      expect(provided(store, A, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,  _,   _],
+            [_,  _,   _],
+            [_,  _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,  _,  _],
+            [_,  _,  _],
+            [_,  _,  _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,       _,  _],
+            [_,  [B, C],  _],
+            [_,       _,  _],
+          ]
+        )
       );
     });
   });

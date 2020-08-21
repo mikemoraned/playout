@@ -69,6 +69,20 @@ export const Grid = observer(() => {
                 {[...Array(width).keys()].map((x) => {
                   const position = positionFor(x, y);
                   const has_seat = store.grid.hasSeat(position);
+                  const providingTeamNames = store.providingTeamOpportunitiesForPosition(
+                    position
+                  );
+                  const hasProvidingTeams = providingTeamNames.length > 0;
+                  const hasProvidingTeamsClass = hasProvidingTeams
+                    ? "has-providing-teams"
+                    : "";
+                  const orderedProvidingTeams = providingTeamNames.map((name) =>
+                    name.toLowerCase()
+                  );
+                  orderedProvidingTeams.sort();
+                  const orderedProvidingTeamsClass = hasProvidingTeams
+                    ? `has-providing-teams-${orderedProvidingTeams.join("-")}`
+                    : "";
                   const occupancy = store.grid.findOccupancy(position);
                   const hasPlant = store.grid.hasDecoration(position);
                   const cornerAdjacencies = adjacencies(store, x, y);
@@ -78,10 +92,12 @@ export const Grid = observer(() => {
                   return (
                     <td
                       className={`${
-                        has_seat && !occupancy ? "has-background-info" : ""
+                        has_seat && !occupancy && !hasProvidingTeams
+                          ? "has-background-info"
+                          : ""
                       } ${
                         has_seat ? "seat" : ""
-                      } ${cornerAdjacencies} ${teamOccupancyClass}`}
+                      } ${cornerAdjacencies} ${teamOccupancyClass} ${hasProvidingTeamsClass} ${orderedProvidingTeamsClass}`}
                       onClick={() => store.togglePosition(position)}
                       key={x}
                       style={{

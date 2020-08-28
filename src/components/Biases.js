@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { StoreContext } from "../model/contexts.js";
 import { BiasKind, canRotate } from "../model/teams/bias";
 import { ScoringBreakdown } from "./Scoring";
+import { TeamBiasIcons, TeamBiasText } from "./BiasesMini";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserSlash,
@@ -86,32 +87,25 @@ const EditableBiases = observer(() => {
 const BiasesExplanation = observer(() => {
   const { store } = useContext(StoreContext);
 
-  const teamNames = store.teams.names;
-
   return (
-    <div className="tut-biases-explanation">
-      <p>
-        All {teamNames.join(", ")} team members prefer to be next to their own
-        team-mates.
-      </p>
-      {store.teams.list.map((fromTeam) => {
-        const nextToBiases = store.teams.list.reduce((accum, toTeam) => {
-          const bias = store.teams.biases.getBias(fromTeam.name, toTeam.name);
-          if (bias === BiasKind.NEXT_TO) {
-            return accum.concat([toTeam.name]);
-          } else {
-            return accum;
-          }
-        }, []);
-        return (
-          nextToBiases.length > 0 && (
-            <div key={fromTeam.name}>
-              Team {fromTeam.name} members want to be next to{" "}
-              {nextToBiases.join(", ")} members.
-            </div>
-          )
-        );
-      })}
+    <div>
+      <table className="tut-biases-explanation">
+        <tbody>
+          {store.teams.list.map((fromTeam) => {
+            const toTeams = store.teams.teamsWithBiasesFromTeam(fromTeam);
+            return (
+              <tr key={fromTeam.name}>
+                <td className="team-bias">
+                  <TeamBiasIcons fromTeam={fromTeam} toTeams={toTeams} />
+                </td>
+                <td>
+                  <TeamBiasText fromTeam={fromTeam} toTeams={toTeams} />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
       <ScoringBreakdown />
     </div>
   );

@@ -84,7 +84,7 @@ describe("bias evaluation", () => {
       );
     });
 
-    test("a single team member placed counts towards the score", () => {
+    test("a single team member placed *does not* count towards the score", () => {
       const store = fromPicture(
         teamsFor(
           [teamFor(A, 2, maximumSize), teamFor(B, 3, maximumSize)],
@@ -101,15 +101,15 @@ describe("bias evaluation", () => {
       const availableProvisionsForA = providersFromPicture(
         // prettier-ignore
         [
-          [_, _],
-          [_, _],
+          [_,   _],
+          [_, [A]],
         ]
       );
       const providedForA = providersFromPicture(
         // prettier-ignore
         [
-          [[A], _],
-          [_,   _],
+          [_, _],
+          [_, _],
         ]
       );
       const availableProvisionsForB = providersFromPicture(
@@ -130,7 +130,7 @@ describe("bias evaluation", () => {
       const teamANumBiasesPerMember = 1;
       const teamASize = 2;
       const teamABiasesChecked = teamASize * teamANumBiasesPerMember;
-      const teamAMembersBiasedSatisfied = 1 * teamANumBiasesPerMember;
+      const teamAMembersBiasedSatisfied = 0 * teamANumBiasesPerMember;
       const teamAScore = Math.floor(
         (1000 * teamAMembersBiasedSatisfied) / teamABiasesChecked
       );
@@ -172,7 +172,10 @@ describe("bias evaluation", () => {
     test("NEXT_TO bias counts towards score for placed team members next to the other team", () => {
       const store = fromPicture(
         teamsFor(
-          [teamFor(A, 2, maximumSize), teamFor(B, 3, maximumSize)],
+          [
+            teamFor(A, teamASize, maximumSize),
+            teamFor(B, teamBSize, maximumSize),
+          ],
           templateFor([A, B, C], defaultSize, maximumSize)
         ),
         [biasSpecFrom(A, B, BiasKind.NEXT_TO)],
@@ -189,13 +192,7 @@ describe("bias evaluation", () => {
           [_, _],
         ]
       );
-      const providedForA = providersFromPicture(
-        // prettier-ignore
-        [
-          [[B], _],
-          [_,   _],
-        ]
-      );
+
       const availableProvisionsForB = providersFromPicture(
         // prettier-ignore
         [
@@ -203,35 +200,65 @@ describe("bias evaluation", () => {
           [_, _],
         ]
       );
-      const providedForB = providersFromPicture(
-        // prettier-ignore
-        [
-          [_,   _],
-          [_, [A]],
-        ]
+
+      expect(provided(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_, _],
+            [_, _],
+          ]
+        )
       );
 
-      const teamAMembersBiasedSatisfied = 1 * teamANumBiasesPerMember;
-      const teamAScore = Math.floor(
-        (1000 * teamAMembersBiasedSatisfied) / teamABiasesChecked
+      expect(provided(store, B, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_, _],
+            [_, _],
+          ]
+        )
       );
 
-      expect(store.evaluation.scoring.teams["A"].score).toEqual(teamAScore);
-
-      const teamBMembersBiasedSatisfied = 1 * teamBNumBiasesPerMember;
-      const teamBScore = Math.floor(
-        (1000 * teamBMembersBiasedSatisfied) / teamBBiasesChecked
+      expect(provided(store, A, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [[B], _],
+            [_,   _],
+          ]
+        )
       );
-      expect(store.evaluation.scoring.teams["B"].score).toEqual(teamBScore);
+
+      expect(provided(store, B, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _],
+            [_, [A]],
+          ]
+        )
+      );
+
+      const expectedAScore = Math.floor(
+        (1000 * (0 + 1)) / (teamASize + teamASize)
+      );
+      expect(store.evaluation.scoring.teams["A"].score).toEqual(expectedAScore);
+      const expectedBScore = Math.floor(
+        (1000 * (0 + 1)) / (teamBSize + teamBSize)
+      );
+      expect(store.evaluation.scoring.teams["B"].score).toEqual(expectedBScore);
+      expect(store.evaluation.scoring.score).toEqual(
+        Math.floor((expectedAScore + expectedBScore) / 2)
+      );
 
       expect(availableProvisions(store, A, BiasKind.NEXT_TO)).toEqual(
         availableProvisionsForA
       );
-      expect(provided(store, A, BiasKind.NEXT_TO)).toEqual(providedForA);
       expect(availableProvisions(store, B, BiasKind.NEXT_TO)).toEqual(
         availableProvisionsForB
       );
-      expect(provided(store, B, BiasKind.NEXT_TO)).toEqual(providedForB);
     });
 
     test("NEXT_TO bias does not count towards score if a team member is not next to the other team", () => {
@@ -276,18 +303,17 @@ describe("bias evaluation", () => {
         ]
       );
 
-      const teamAMembersBiasedSatisfied = 1 * 0 + 1 * 1;
-      const teamAScore = Math.floor(
-        (1000 * teamAMembersBiasedSatisfied) / teamABiasesChecked
+      const expectedAScore = Math.floor(
+        (1000 * (0 + 0)) / (teamASize + teamASize)
       );
-
-      expect(store.evaluation.scoring.teams["A"].score).toEqual(teamAScore);
-
-      const teamBMembersBiasedSatisfied = 1 * 0 + 1 * 0;
-      const teamBScore = Math.floor(
-        (1000 * teamBMembersBiasedSatisfied) / teamBBiasesChecked
+      expect(store.evaluation.scoring.teams["A"].score).toEqual(expectedAScore);
+      const expectedBScore = Math.floor(
+        (1000 * (0 + 0)) / (teamBSize + teamBSize)
       );
-      expect(store.evaluation.scoring.teams["B"].score).toEqual(teamBScore);
+      expect(store.evaluation.scoring.teams["B"].score).toEqual(expectedBScore);
+      expect(store.evaluation.scoring.score).toEqual(
+        Math.floor((expectedAScore + expectedBScore) / 2)
+      );
 
       expect(availableProvisions(store, A, BiasKind.NEXT_TO)).toEqual(
         availableProvisionsForA
@@ -495,9 +521,9 @@ describe("example-based tests", () => {
         providersFromPicture(
           // prettier-ignore
           [
-            [[A], _,   _],
-            [_,   _,   _],
-            [_,   _,   _],
+            [_, _, _],
+            [_, _, _],
+            [_, _, _],
           ]
         )
       );
@@ -517,9 +543,9 @@ describe("example-based tests", () => {
         providersFromPicture(
           // prettier-ignore
           [
-            [_,  _,  _],
-            [_,  _,  _],
-            [_,  _,  _],
+            [_,    _,  _],
+            [_,  [A],  _],
+            [_,    _,  _],
           ]
         )
       );

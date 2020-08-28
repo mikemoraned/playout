@@ -22,8 +22,9 @@
 }
 
 @mixin is-primary-team-button-bg($bg-color) {
+  $alpha: 0.5;
   $clear: rgba(255, 255, 255, 0);
-  $partial: rgba(255, 255, 255, 0.3);
+  $partial: rgba(255, 255, 255, $alpha);
 
   background: repeating-linear-gradient(
       45deg,

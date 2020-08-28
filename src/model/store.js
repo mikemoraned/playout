@@ -64,7 +64,6 @@ export const Store = types
         if (selectedTeam.remaining > 0 && self.grid.hasSeat(position)) {
           const member = selectedTeam.placeMember(position);
           self.grid.addOccupancy(occupancyFor(position, member));
-          self.teams.selectNextTeamWithRemainingUnplaced(selectedTeam.name);
           changeMade = true;
         } else {
           changeMade = false;

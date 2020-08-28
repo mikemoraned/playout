@@ -42,4 +42,16 @@ $soil-color: #916443;
   //   transition: background-color $duration ease-in-out,
   //     color $duration ease-in-out;
   // }
+  td.has-providing-teams {
+    animation: rotateAnim 1.5s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes rotateAnim {
+  from {
+    transform: scale(0.8) rotate(-3deg);
+  }
+  to {
+    transform: scale(0.8) rotate(3deg);
+  }
 }

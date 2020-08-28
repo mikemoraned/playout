@@ -40,28 +40,25 @@ function TeamBiasButton({ fromTeam, toTeams, onClick }) {
   );
 }
 
+export function TeamBiasIcon({ teamName }) {
+  return (
+    <span className={`icon ml-0 mr-0 team team-${teamName.toLowerCase()}`}>
+      <FontAwesomeIcon icon={faSquare} />
+    </span>
+  );
+}
+
 export function TeamBiasIcons({ fromTeam, toTeams }) {
   const otherTeams = toTeams.filter((toTeam) => toTeam.name !== fromTeam.name);
   const toTeamsWithFromTeamFirst = [fromTeam].concat(otherTeams);
   return (
     <span className="team-bias" style={{ whiteSpace: "nowrap" }}>
-      <span
-        className={`icon ml-0 mr-0 team team-${fromTeam.name.toLowerCase()}`}
-      >
-        <FontAwesomeIcon icon={faSquare} />
-      </span>
+      <TeamBiasIcon teamName={fromTeam.name} />
       <span className="icon ml-0 mr-0">
         <FontAwesomeIcon icon={faArrowsH} />
       </span>
       {toTeamsWithFromTeamFirst.map((toTeam) => {
-        return (
-          <span
-            className={`icon ml-0 mr-0 team team-${toTeam.name.toLowerCase()}`}
-            key={toTeam.name}
-          >
-            <FontAwesomeIcon icon={faSquare} />
-          </span>
-        );
+        return <TeamBiasIcon teamName={toTeam.name} key={toTeam.name} />;
       })}
     </span>
   );

@@ -6,6 +6,7 @@ import { UndoToggleMemberPlacement } from "./undo";
 import { evaluate } from "./evaluation";
 import { Problem } from "./problem";
 import { gradeFromProblemSpec } from "./grade";
+import { availableProvisionsForAnyTeamBiases } from "./explainable_evaluation";
 
 export const Mode = types
   .model("Mode", {
@@ -137,6 +138,18 @@ export const Store = types
     },
     get evaluation() {
       return evaluate(self);
+    },
+    providingTeamOpportunitiesForPosition(position) {
+      const providingTeamSet = self.opportunities
+        .filter((o) => o.position === position)
+        .reduce((set, o) => set.add(o.team), new Set());
+      return Array.from(providingTeamSet);
+    },
+    get opportunities() {
+      return availableProvisionsForAnyTeamBiases(
+        self,
+        self.teams.selected.name
+      );
     },
     get solvable() {
       return self.teams.totalMembers <= self.grid.totalSeats;

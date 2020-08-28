@@ -1,8 +1,23 @@
 import { BiasKind } from "./teams/bias";
 import { expandToNextToArea } from "./grid/grid";
 
+export function availableProvisionsForAnyTeamBiases(store, thisTeamName) {
+  return allBiasKindsForTeam(store, thisTeamName).flatMap((biasKind) =>
+    availableProvisions(store, thisTeamName, biasKind)
+  );
+}
+
+function allBiasKindsForTeam(store, thisTeamName) {
+  const biasKinds = store.teams.list.reduce(
+    (biasKinds, otherTeam) =>
+      biasKinds.add(store.teams.biases.getBias(thisTeamName, otherTeam.name)),
+    new Set()
+  );
+  return Array.from(biasKinds);
+}
+
 export function availableProvisions(store, thisTeamName, biasKind) {
-  console.log("availableProvisions", biasKind);
+  console.log("availableProvisions", thisTeamName, biasKind);
   const possibleGenericFlows = genericFlows(store, thisTeamName);
   const specialisedFlows = specialiseFlowToBiasKind(
     store,
@@ -153,8 +168,15 @@ function specialiseFlowToNextToBiasKind(
 }
 
 function findAvailableProvisions(store, specialisedFlows) {
+  const alreadyProvidedPositions = findProvided(store, specialisedFlows).reduce(
+    (positions, provided) => positions.add(provided.position),
+    new Set()
+  );
   const filterOutUnavailable = specialisedFlows.filter((flow) => {
-    return !store.grid.hasOccupancy(flow.providingPosition);
+    return (
+      !alreadyProvidedPositions.has(flow.receivingPosition) &&
+      !store.grid.hasOccupancy(flow.providingPosition)
+    );
   });
   console.log(filterOutUnavailable);
   return convertFlowsToProviders(filterOutUnavailable);
@@ -191,17 +213,25 @@ function convertFlowsToProviders(flows) {
 }
 
 function unique(positionsWithTeams) {
-  const teamForPosition = new Map();
+  const teamsForPosition = new Map();
   positionsWithTeams.forEach((positionWithTeam) => {
-    teamForPosition.set(positionWithTeam.position, positionWithTeam.team);
+    const position = positionWithTeam.position;
+    const team = positionWithTeam.team;
+    if (teamsForPosition.has(position)) {
+      teamsForPosition.set(position, teamsForPosition.get(position).add(team));
+    } else {
+      teamsForPosition.set(position, new Set().add(team));
+    }
   });
-  const positions = Array.from([...teamForPosition.keys()]);
+  const positions = Array.from([...teamsForPosition.keys()]);
   positions.sort();
-  return positions.map((position) => {
-    return {
-      position,
-      team: teamForPosition.get(position),
-    };
+  return positions.flatMap((position) => {
+    return Array.from(teamsForPosition.get(position)).map((team) => {
+      return {
+        position,
+        team,
+      };
+    });
   });
 }
 

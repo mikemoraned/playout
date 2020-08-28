@@ -60,7 +60,7 @@ export function evaluateScoringFromProvided(store) {
         totalActual += actualProvisions.length;
       }
     });
-    console.log("actual", totalActual, "possible", totalPossible);
+    console.log(thisTeamName, "actual", totalActual, "possible", totalPossible);
     const fractionComplete = totalActual / totalPossible;
     const scoreValue = Math.floor(scoreLimits.max * fractionComplete);
     const score = {
@@ -79,7 +79,7 @@ export function evaluateScoringFromProvided(store) {
 }
 
 export function provided(store, thisTeamName, biasKind) {
-  console.log("provided", biasKind);
+  console.log("provided", thisTeamName, biasKind);
   const possibleGenericFlows = genericFlows(store, thisTeamName);
   console.log("generic:", possibleGenericFlows);
   const specialisedFlows = specialiseFlowToBiasKind(
@@ -122,24 +122,12 @@ function specialiseFlowToNextToSameTeamBiasKind(
   thisTeamName,
   possibleGenericFlows
 ) {
-  const thisTeamOccupancies = store.grid.occupied.filter(
-    (o) => o.member.team === thisTeamName
-  );
-  if (thisTeamOccupancies.length === 1) {
-    return filterInSelfProvidingFlows(possibleGenericFlows).map((flow) => {
-      return {
-        ...flow,
-        providingTeam: thisTeamName,
-      };
-    });
-  } else {
-    return filterOutSelfProvidingFlows(possibleGenericFlows).map((flow) => {
-      return {
-        ...flow,
-        providingTeam: thisTeamName,
-      };
-    });
-  }
+  return filterOutSelfProvidingFlows(possibleGenericFlows).map((flow) => {
+    return {
+      ...flow,
+      providingTeam: thisTeamName,
+    };
+  });
 }
 
 function specialiseFlowToNextToBiasKind(
@@ -163,7 +151,6 @@ function specialiseFlowToNextToBiasKind(
       });
     })
     .flat();
-  console.log("nextTo, specialised", specialisedFlows);
   return specialisedFlows;
 }
 
@@ -232,12 +219,6 @@ function unique(positionsWithTeams) {
         team,
       };
     });
-  });
-}
-
-function filterInSelfProvidingFlows(flows) {
-  return flows.filter((flow) => {
-    return flow.receivingPosition === flow.providingPosition;
   });
 }
 

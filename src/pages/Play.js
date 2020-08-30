@@ -19,6 +19,7 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumb } from "../components/Breadcrumb";
 import "./Play.scss";
 import { BiasesMini } from "../components/BiasesMini";
+import { HintToggle } from "../components/HintToggle";
 
 const BreadcrumbList = observer(() => {
   const { store } = useContext(StoreContext);
@@ -64,7 +65,7 @@ const Instance = observer(() => {
                   <FontAwesomeIcon icon={faBorderAll} />
                 </span>{" "}
                 <span>
-                  Place Team Members in Seats <TutorialButton />
+                  Place Team Members <TutorialButton /> <HintToggle />
                 </span>
               </p>
               <div className="columns">

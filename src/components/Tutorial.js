@@ -81,6 +81,11 @@ export const TutorialSetup = () => {
       content: "\u2026 to maximise your overall Score.",
     },
     {
+      target: ".hint-control",
+      content:
+        "If you get stuck, ask for Hints on which Team Members are looking for which Preferences.",
+    },
+    {
       target: ".evaluation .completed",
       content: "Once you've placed all of your Team Members \u2026",
     },

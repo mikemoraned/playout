@@ -42,6 +42,7 @@ export const Store = types
     grid: Grid,
     undos: types.array(UndoToggleMemberPlacement),
     mode: Mode,
+    showOpportunities: types.boolean,
   })
   .actions((self) => ({
     selectTeam(name) {
@@ -127,6 +128,9 @@ export const Store = types
         self.toggleMemberPlacement(p);
       });
     },
+    toggleShowOpportunities() {
+      self.showOpportunities = !self.showOpportunities;
+    },
   }))
   .views((self) => ({
     canUndo() {
@@ -145,10 +149,17 @@ export const Store = types
       return Array.from(providingTeamSet);
     },
     get opportunities() {
-      return availableProvisionsForAnyTeamBiases(
-        self,
-        self.teams.selected.name
-      );
+      if (self.showOpportunities) {
+        return availableProvisionsForAnyTeamBiases(
+          self,
+          self.teams.selected.name
+        );
+      } else {
+        return [];
+      }
+    },
+    get showOpportunitiesPossible() {
+      return self.hasPlacements();
     },
     get solvable() {
       return self.teams.totalMembers <= self.grid.totalSeats;
@@ -169,5 +180,10 @@ export const Store = types
 
 export function storeFor(teams, grid) {
   const defaultMode = Mode.create({ editable: true });
-  return Store.create({ teams, grid, mode: defaultMode });
+  return Store.create({
+    teams,
+    grid,
+    mode: defaultMode,
+    showOpportunities: false,
+  });
 }

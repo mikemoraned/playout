@@ -588,6 +588,19 @@ describe("example-based tests", () => {
         )
       );
 
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
       expect(provided(store, A, BiasKind.NEXT_TO)).toEqual(
         providersFromPicture(
           // prettier-ignore
@@ -601,6 +614,19 @@ describe("example-based tests", () => {
         )
       );
 
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
       expect(provided(store, B, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
         providersFromPicture(
           // prettier-ignore
@@ -608,6 +634,19 @@ describe("example-based tests", () => {
             [_,   _,   _,   _,   _],
             [_,   _, [B],   _,   _],
             [_,   _,   _, [B],   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, B, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
             [_,   _,   _,   _,   _],
             [_,   _,   _,   _,   _],
           ]
@@ -627,6 +666,19 @@ describe("example-based tests", () => {
         )
       );
 
+      expect(availableProvisions(store, B, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
       expect(provided(store, C, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
         providersFromPicture(
           // prettier-ignore
@@ -640,6 +692,19 @@ describe("example-based tests", () => {
         )
       );
 
+      expect(availableProvisions(store, C, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
       expect(provided(store, C, BiasKind.NEXT_TO)).toEqual(
         providersFromPicture(
           // prettier-ignore
@@ -648,6 +713,19 @@ describe("example-based tests", () => {
             [[A], _,   _,   _,   _],
             [_,   _,   _,   _,   _],
             [_,   _, [B], [B],   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, C, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_, [A],   _,   _,   _],
             [_,   _,   _,   _,   _],
           ]
         )

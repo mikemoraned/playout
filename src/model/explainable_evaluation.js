@@ -19,12 +19,14 @@ function allBiasKindsForTeam(store, thisTeamName) {
 export function availableProvisions(store, thisTeamName, biasKind) {
   console.log("availableProvisions", thisTeamName, biasKind);
   const possibleGenericFlows = genericFlows(store, thisTeamName);
+  console.log("possibleGenericFlows", possibleGenericFlows);
   const specialisedFlows = specialiseFlowToBiasKind(
     store,
     biasKind,
     thisTeamName,
     possibleGenericFlows
   );
+  console.log("specialisedFlows", specialisedFlows);
   return findAvailableProvisions(store, specialisedFlows);
 }
 
@@ -168,17 +170,18 @@ function specialiseFlowToNextToBiasKind(
 }
 
 function findAvailableProvisions(store, specialisedFlows) {
-  const alreadyProvidedPositions = findProvided(store, specialisedFlows).reduce(
-    (positions, provided) => positions.add(provided.position),
-    new Set()
-  );
+  console.log("specialisedFlows", specialisedFlows);
+  const provided = findProvided(store, specialisedFlows);
+  console.log("provided", provided);
   const filterOutUnavailable = specialisedFlows.filter((flow) => {
     return (
-      !alreadyProvidedPositions.has(flow.receivingPosition) &&
-      !store.grid.hasOccupancy(flow.providingPosition)
+      !provided.some(
+        (p) =>
+          p.position === flow.receivingPosition && p.team === flow.providingTeam
+      ) && !store.grid.hasOccupancy(flow.providingPosition)
     );
   });
-  console.log(filterOutUnavailable);
+  console.log("filterOutUnavailable", filterOutUnavailable);
   return convertFlowsToProviders(filterOutUnavailable);
 }
 

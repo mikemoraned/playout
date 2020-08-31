@@ -1,5 +1,5 @@
 import { BiasKind } from "./teams/bias";
-import { expandToNextToArea } from "./grid/grid";
+import { expandToNextToArea, positionCompare } from "./grid/grid";
 
 export function availableProvisionsForAnyTeamBiases(store, thisTeamName) {
   return allBiasKindsForTeam(store, thisTeamName).flatMap((biasKind) =>
@@ -41,27 +41,33 @@ export function evaluateScoringFromProvided(store) {
     const possibleGenericFlows = genericFlows(store, thisTeamName);
     let totalPossible = 0;
     let totalActual = 0;
-    store.teams.list.forEach((otherTeam) => {
-      const otherTeamName = otherTeam.name;
-      console.log("otherTeamName", otherTeamName);
-      const biasKind = store.teams.biases.getBias(thisTeamName, otherTeamName);
-      if (biasKind === BiasKind.NO_BIAS) {
-        // doesn't affect score at all
-      } else {
-        console.log("biasKind", biasKind);
-        totalPossible += thisTeam.size;
-        const specialisedFlows = specialiseFlowToBiasKind(
-          store,
-          biasKind,
-          thisTeamName,
-          possibleGenericFlows
+    [BiasKind.NEXT_TO_SAME_TEAM, BiasKind.NEXT_TO].forEach((biasKind) => {
+      console.log("biasKind", biasKind);
+      const otherTeamsWithThisBias = store.teams.list.filter((otherTeam) => {
+        const otherTeamName = otherTeam.name;
+        return (
+          store.teams.biases.getBias(thisTeamName, otherTeamName) === biasKind
         );
-        const actualProvisions = findProvided(store, specialisedFlows);
-        totalActual += actualProvisions.length;
-      }
+      });
+      totalPossible += otherTeamsWithThisBias.length * thisTeam.size;
+      const specialisedFlows = specialiseFlowToBiasKind(
+        store,
+        biasKind,
+        thisTeamName,
+        possibleGenericFlows
+      );
+      const actualProviders = findProvided(store, specialisedFlows);
+      totalActual += actualProviders.length;
     });
-    console.log(thisTeamName, "actual", totalActual, "possible", totalPossible);
-    const fractionComplete = totalActual / totalPossible;
+    console.log(
+      thisTeamName,
+      "totalActual",
+      totalActual,
+      "totalPossible",
+      totalPossible
+    );
+    const fractionComplete =
+      totalPossible === 0 ? 0.0 : totalActual / totalPossible;
     const scoreValue = Math.floor(scoreLimits.max * fractionComplete);
     const score = {
       ...scoreLimits,
@@ -90,6 +96,13 @@ export function provided(store, thisTeamName, biasKind) {
   );
   console.log("specialised:", specialisedFlows);
   const provided = findProvided(store, specialisedFlows);
+  provided.sort((lhs, rhs) => {
+    if (lhs.position === rhs.position) {
+      return lhs.team.localeCompare(rhs.team);
+    } else {
+      return positionCompare(lhs.position, rhs.position);
+    }
+  });
   console.log("provided:", provided);
   return provided;
 }

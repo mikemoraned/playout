@@ -1,12 +1,14 @@
 import { BiasKind } from "./teams/bias";
 import { biasSpecFrom } from "./teams/bias_assignment_spec";
-import { positionFor } from "./grid/grid";
+import { positionFor, positionCompare } from "./grid/grid";
 import { storeFor } from "./store";
 import { teamsFor } from "./teams/teams";
 import { teamFor } from "./teams/team";
 import { templateFor } from "./teams/template";
 import { gridFor } from "./grid/grid";
 import { availableProvisions, provided } from "./explainable_evaluation";
+import { parseProblemFrom } from "./problem";
+import { TeamSpec } from "./teams/team_spec";
 
 describe("bias evaluation", () => {
   const O = "O";
@@ -162,13 +164,8 @@ describe("bias evaluation", () => {
   });
 
   describe("with NEXT_TO biases", () => {
-    const teamANumBiasesPerMember = 2;
     const teamASize = 2;
-    const teamABiasesChecked = teamASize * teamANumBiasesPerMember;
-
-    const teamBNumBiasesPerMember = 2;
     const teamBSize = 3;
-    const teamBBiasesChecked = teamBSize * teamBNumBiasesPerMember;
     test("NEXT_TO bias counts towards score for placed team members next to the other team", () => {
       const store = fromPicture(
         teamsFor(
@@ -562,6 +559,192 @@ describe("example-based tests", () => {
       );
     });
   });
+
+  describe("examples from play-testing", () => {
+    test("example1", () => {
+      const store = fromSpecsAndPicture(
+        "5x5_5wXgAA--v2",
+        "A3B2C4_ABntACntBCnt_v1",
+        // prettier-ignore
+        [
+          [C, A, A, O, O],
+          [C, A, B, O, O],
+          [O, O, O, B, O],
+          [X, X, C, C, O],
+          [O, O, O, O, O],
+        ]
+      );
+
+      expect(provided(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_, [A], [A],   _,   _],
+            [_, [A],   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(provided(store, A, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_, [B,C], [B],   _,   _],
+            [_, [B,C],   _,   _,   _],
+            [_,     _,   _,   _,   _],
+            [_,     _,   _,   _,   _],
+            [_,     _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, A, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(provided(store, B, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _, [B],   _,   _],
+            [_,   _,   _, [B],   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, B, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(provided(store, B, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _, [A],   _,   _],
+            [_,   _,   _, [C],   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, B, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(provided(store, C, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [[C], _,   _,   _,   _],
+            [[C], _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _, [C], [C],   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, C, BiasKind.NEXT_TO_SAME_TEAM)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(provided(store, C, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [[A], _,   _,   _,   _],
+            [[A], _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _, [B], [B],   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      expect(availableProvisions(store, C, BiasKind.NEXT_TO)).toEqual(
+        providersFromPicture(
+          // prettier-ignore
+          [
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_,   _,   _,   _,   _],
+            [_, [A],   _,   _,   _],
+            [_,   _,   _,   _,   _],
+          ]
+        )
+      );
+
+      // A -> A, B, C
+      const expectedAScore = Math.floor((1000 * (3 + 3 + 2)) / (3 + 3 + 3));
+      expect(store.evaluation.scoring.teams["A"].score).toEqual(expectedAScore);
+      // B -> B, A, C
+      const expectedBScore = Math.floor((1000 * (2 + 1 + 1)) / (2 + 2 + 2));
+      expect(store.evaluation.scoring.teams["B"].score).toEqual(expectedBScore);
+      // C -> C, A, B
+      const expectedCScore = Math.floor((1000 * (4 + 2 + 2)) / (4 + 4 + 4));
+      expect(store.evaluation.scoring.teams["C"].score).toEqual(expectedCScore);
+      expect(store.evaluation.scoring.score).toEqual(
+        Math.floor((expectedAScore + expectedBScore + expectedCScore) / 3)
+      );
+    });
+  });
 });
 
 describe("fromPicture", () => {
@@ -735,9 +918,24 @@ function fromPicture(teams, biasSpecs, picture) {
   const width = picture[0].length;
   const height = picture.length;
   const store = storeFor(teams, gridFor(width, height));
-  for (let y = 0; y < height; y++) {
+  applyPictureToStore(store, picture);
+  applyBiasSpecsToStore(store, biasSpecs);
+
+  return store;
+}
+
+function fromSpecsAndPicture(gridSpec, teamsSpec, picture) {
+  const problem = parseProblemFrom(gridSpec, teamsSpec);
+  const store = problem.toStore();
+  applyPictureToStore(store, picture);
+
+  return store;
+}
+
+function applyPictureToStore(store, picture) {
+  for (let y = 0; y < store.grid.height; y++) {
     const row = picture[y];
-    for (let x = 0; x < width; x++) {
+    for (let x = 0; x < store.grid.width; x++) {
       const ch = row[x];
       const position = positionFor(x, y);
       if (ch === SPACE) {
@@ -752,7 +950,9 @@ function fromPicture(teams, biasSpecs, picture) {
       }
     }
   }
+}
 
+function applyBiasSpecsToStore(store, biasSpecs) {
   biasSpecs.forEach((biasSpec) => {
     store.teams.biases.setBias(
       biasSpec.from_name,
@@ -760,26 +960,31 @@ function fromPicture(teams, biasSpecs, picture) {
       biasSpec.bias_kind
     );
   });
-
-  return store;
 }
 
 function providersFromPicture(picture) {
   const width = picture[0].length;
   const height = picture.length;
-  const opportunities = [];
+  const providers = [];
   for (let y = 0; y < height; y++) {
     const row = picture[y];
     for (let x = 0; x < width; x++) {
       const position = positionFor(x, y);
       const providingTeams = row[x];
       providingTeams.forEach((team) => {
-        opportunities.push({
+        providers.push({
           position,
           team,
         });
       });
     }
   }
-  return opportunities;
+  providers.sort((lhs, rhs) => {
+    if (lhs.position === rhs.position) {
+      return lhs.team.localeCompare(rhs.team);
+    } else {
+      return positionCompare(lhs.position, rhs.position);
+    }
+  });
+  return providers;
 }

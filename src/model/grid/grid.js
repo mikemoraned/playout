@@ -153,6 +153,17 @@ export function positionFor(x, y) {
   return `${x}_${y}`;
 }
 
+export function positionCompare(lhs, rhs) {
+  const [lhsX, lhsY] = coordsFromPosition(lhs);
+  const [rhsX, rhsY] = coordsFromPosition(rhs);
+
+  if (lhsX === rhsX) {
+    return lhsY - rhsY;
+  } else {
+    return lhsX - rhsX;
+  }
+}
+
 export function coordsFromPosition(position) {
   const [xString, yString] = position.split("_");
   return [parseInt(xString), parseInt(yString)];

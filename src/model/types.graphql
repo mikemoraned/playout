@@ -9,6 +9,7 @@ type User {
 
 type CompletedProblem {
   score: Int!
+  timestampISO: String! # timestamp in ISO format
   problem: GradedProblem!
 }
 

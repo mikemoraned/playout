@@ -20,7 +20,7 @@ function useSetting(key, booleanDefaultValue) {
 }
 
 function useRecentlyCompleted() {
-  const fullKey = "v1_recently_completed";
+  const fullKey = "v2_recently_completed";
   const [recentlyCompleted, setRecentlyCompleted] = React.useState(
     () => JSON.parse(localStorage.getItem(fullKey)) || []
   );
@@ -122,6 +122,7 @@ export const GraphQLProvider = ({ children }) => {
           const {
             problemSpec: { gridSpec, teamsSpec },
             score,
+            timestampISO,
           } = args;
           const completedProblem = parseProblemFrom(gridSpec, teamsSpec);
           const grade = gradeFromProblemSpec(completedProblem);
@@ -132,6 +133,7 @@ export const GraphQLProvider = ({ children }) => {
               current_user @client {
                 recentlyCompleted @client {
                   score
+                  timestampISO
                   problem {
                     grade
                     problemSpec {
@@ -147,6 +149,7 @@ export const GraphQLProvider = ({ children }) => {
           const newRecentlyCompleted = {
             __typename: "CompletedProblem",
             score,
+            timestampISO,
             problem: {
               __typename: "GradedProblem",
               grade: grade.name,

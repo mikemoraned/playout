@@ -103,7 +103,7 @@ function RecentlyCompleted() {
       return (
         <section className="section">
           <div className="container">
-            <h1 className="title is-4">Recently Completed</h1>
+            <h1 className="title is-4">Most Recently Completed</h1>
             {recentlyCompleted.map((completedProblem, index) => {
               const {
                 gridSpec,
@@ -113,9 +113,12 @@ function RecentlyCompleted() {
               return (
                 <article className="message is-link" key={index}>
                   <div className="message-header">
-                    {DateTime.fromISO(
-                      completedProblem.timestampISO
-                    ).toRelative()}
+                    <span>
+                      {DateTime.fromISO(
+                        completedProblem.timestampISO
+                      ).toRelative()}
+                      , scored {completedProblem.score}
+                    </span>
                   </div>
                   <div className="message-body">
                     <div className="buttons">

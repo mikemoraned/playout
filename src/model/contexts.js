@@ -19,6 +19,22 @@ function useSetting(key, booleanDefaultValue) {
   return [state, setState];
 }
 
+function useRecentlyCompleted() {
+  const fullKey = "v2_recently_completed";
+  const [recentlyCompleted, setRecentlyCompleted] = React.useState(
+    () => JSON.parse(localStorage.getItem(fullKey)) || []
+  );
+  function addRecentlyCompleted(newRecentlyCompleted) {
+    setRecentlyCompleted((prevRecentlyCompleted) =>
+      [newRecentlyCompleted].concat(prevRecentlyCompleted)
+    );
+  }
+  useEffect(() => {
+    localStorage.setItem(fullKey, JSON.stringify(recentlyCompleted));
+  }, [fullKey, recentlyCompleted]);
+  return [recentlyCompleted, addRecentlyCompleted];
+}
+
 export const TutorialContext = React.createContext(null);
 
 export const TutorialProvider = ({ children }) => {
@@ -58,6 +74,7 @@ export const StoreProvider = ({ initialStore, children }) => {
 };
 
 export const GraphQLProvider = ({ children }) => {
+  const [recentlyCompleted, addRecentlyCompleted] = useRecentlyCompleted();
   const typeDefs = loader("./types.graphql");
   function gradedProblem(name) {
     const grade = Grade.create({ name });
@@ -77,7 +94,7 @@ export const GraphQLProvider = ({ children }) => {
     data: {
       current_user: {
         __typename: "User",
-        recentlyCompleted: [],
+        recentlyCompleted,
       },
     },
   });
@@ -105,6 +122,7 @@ export const GraphQLProvider = ({ children }) => {
           const {
             problemSpec: { gridSpec, teamsSpec },
             score,
+            timestampISO,
           } = args;
           const completedProblem = parseProblemFrom(gridSpec, teamsSpec);
           const grade = gradeFromProblemSpec(completedProblem);
@@ -115,6 +133,7 @@ export const GraphQLProvider = ({ children }) => {
               current_user @client {
                 recentlyCompleted @client {
                   score
+                  timestampISO
                   problem {
                     grade
                     problemSpec {
@@ -127,27 +146,30 @@ export const GraphQLProvider = ({ children }) => {
             }
           `;
           const previousData = cache.readQuery({ query });
+          const newRecentlyCompleted = {
+            __typename: "CompletedProblem",
+            score,
+            timestampISO,
+            problem: {
+              __typename: "GradedProblem",
+              grade: grade.name,
+              problemSpec: {
+                __typename: "ProblemSpec",
+                gridSpec,
+                teamsSpec,
+              },
+            },
+          };
           const nextData = {
             current_user: {
               __typename: "User",
-              recentlyCompleted: [
-                {
-                  __typename: "CompletedProblem",
-                  score,
-                  problem: {
-                    __typename: "GradedProblem",
-                    grade: grade.name,
-                    problemSpec: {
-                      __typename: "ProblemSpec",
-                      gridSpec,
-                      teamsSpec,
-                    },
-                  },
-                },
-              ].concat(previousData.current_user.recentlyCompleted),
+              recentlyCompleted: [newRecentlyCompleted].concat(
+                previousData.current_user.recentlyCompleted
+              ),
             },
           };
           cache.writeQuery({ query, data: nextData });
+          addRecentlyCompleted(newRecentlyCompleted);
 
           const nextProblem = grade.randomProblemSpec();
           return {

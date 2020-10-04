@@ -11,6 +11,7 @@ import {
   faFacebook,
   faFacebookSquare,
 } from "@fortawesome/free-brands-svg-icons";
+import { DateTime } from "luxon";
 import "./Start.scss";
 
 function VisitGameButton({ path, grade, name }) {
@@ -82,6 +83,7 @@ function RecentlyCompleted() {
         current_user @client {
           recentlyCompleted @client {
             score
+            timestampISO
             problem {
               grade
               problemSpec {
@@ -101,7 +103,7 @@ function RecentlyCompleted() {
       return (
         <section className="section">
           <div className="container">
-            <h1 className="title is-4">Recently Completed</h1>
+            <h1 className="title is-4">Most Recently Completed</h1>
             {recentlyCompleted.map((completedProblem, index) => {
               const {
                 gridSpec,
@@ -110,6 +112,14 @@ function RecentlyCompleted() {
               const path = `/play/${gridSpec}/${teamsSpec}`;
               return (
                 <article className="message is-link" key={index}>
+                  <div className="message-header">
+                    <span>
+                      {DateTime.fromISO(
+                        completedProblem.timestampISO
+                      ).toRelative()}
+                      , scored {completedProblem.score}
+                    </span>
+                  </div>
                   <div className="message-body">
                     <div className="buttons">
                       <VisitGameButton

@@ -4,6 +4,7 @@ import { NavLink, Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faUserCog } from "@fortawesome/pro-duotone-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 export function Navigation({ version }) {
   const [activeMobile, setActiveMobile] = useState(false);
@@ -47,6 +48,11 @@ export function Navigation({ version }) {
               <FontAwesomeIcon icon={faInfoCircle} size="2x" />
             </span>
           </NavLink>
+          <a href="https://twitter.com/playoutgame" className="navbar-item">
+            <span className="icon">
+              <FontAwesomeIcon icon={faTwitter} size="2x" />
+            </span>
+          </a>
           <NavLink to="/settings" className="navbar-item">
             <span className="icon is-medium">
               <FontAwesomeIcon icon={faUserCog} size="2x" />

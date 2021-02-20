@@ -19,7 +19,7 @@ export function Footer() {
                 <span className="icon is-small">
                   <FontAwesomeIcon icon={faCopyright} />
                 </span>{" "}
-                2020 by <a href="https://www.houseofmoran.com/">Mike Moran</a>.
+                2021 by <a href="https://www.houseofmoran.com/">Mike Moran</a>.
                 The source code is licensed under{" "}
                 <a href="https://github.com/mikemoraned/playout/blob/master/LICENSE">
                   Apache 2.0
